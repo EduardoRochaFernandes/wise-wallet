@@ -43,7 +43,7 @@ if ($inApp) {
 
 <?php if ($inApp): ?>
 <script <?= nonce_attr() ?>>
-(async function(){
+document.addEventListener('DOMContentLoaded', async function(){
   try {
     const c = await WW.api('/api/crypto.php');
     document.getElementById('crypto-widget').innerHTML = (c.coins||[]).map(x =>
@@ -54,7 +54,7 @@ if ($inApp) {
     document.getElementById('fx-widget').innerHTML = Object.entries(f.rates||{}).map(([k,v]) =>
       `<div class="flex justify-between"><span>${k}</span><strong class="text-ink">${(+v).toFixed(2)}</strong></div>`).join('');
   } catch(e){ document.getElementById('fx-widget').textContent='Indisponível.'; }
-})();
+});
 </script>
 <?php endif; ?>
 <?php

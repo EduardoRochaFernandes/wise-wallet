@@ -64,9 +64,9 @@ require __DIR__ . '/../app/views/partials/app_head.php';
 
 <script type="application/json" id="div-data" <?= nonce_attr() ?>><?= json_encode($div, JSON_UNESCAPED_UNICODE) ?></script>
 <script <?= nonce_attr() ?>>
-(function(){ const D = JSON.parse(document.getElementById('div-data').textContent);
+document.addEventListener('DOMContentLoaded', function(){ const D = JSON.parse(document.getElementById('div-data').textContent);
   if (D.values.length) WW.donutChart('#chart-div', D.labels, D.values);
   else document.getElementById('chart-div').innerHTML='<p class="text-soft text-sm py-8 text-center">Sem ativos.</p>';
-})();
+});
 </script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';

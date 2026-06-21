@@ -23,6 +23,7 @@ desktop.ini
 .DS_Store
 .idea/
 .vscode/
+.claude/
 *.log
 *.tmp
 

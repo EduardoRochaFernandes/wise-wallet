@@ -60,13 +60,13 @@ require __DIR__ . '/../app/views/partials/app_head.php';
 
 <script type="application/json" id="an-data" <?= nonce_attr() ?>><?= json_encode($data + ['health' => $health['score']], JSON_UNESCAPED_UNICODE) ?></script>
 <script <?= nonce_attr() ?>>
-(function(){ const D = JSON.parse(document.getElementById('an-data').textContent);
+document.addEventListener('DOMContentLoaded', function(){ const D = JSON.parse(document.getElementById('an-data').textContent);
   WW.areaChart('#c-cash', D.cashflow.labels, [{name:'Receitas',data:D.cashflow.income},{name:'Despesas',data:D.cashflow.expense}]);
   WW.gaugeChart('#c-health', D.health);
   D.expense.values.length ? WW.donutChart('#c-exp', D.expense.labels, D.expense.values) : document.getElementById('c-exp').innerHTML='<p class="text-soft text-sm py-8 text-center">Sem dados.</p>';
   D.income.values.length ? WW.barChart('#c-inc', D.income.labels, [{name:'Receitas',data:D.income.values}]) : document.getElementById('c-inc').innerHTML='<p class="text-soft text-sm py-8 text-center">Sem dados.</p>';
   WW.barChart('#c-week', D.weekday.labels, [{name:'Gastos',data:D.weekday.values}]);
   D.networth.values.length ? WW.areaChart('#c-nw', D.networth.labels, [{name:'Património',data:D.networth.values}]) : document.getElementById('c-nw').innerHTML='<p class="text-soft text-sm py-8 text-center">Sem dados.</p>';
-})();
+});
 </script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';

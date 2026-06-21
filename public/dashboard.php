@@ -136,7 +136,7 @@ $delta = function (float $v): string {
 
 <script type="application/json" id="dash-data" <?= nonce_attr() ?>><?= json_encode($payload, JSON_UNESCAPED_UNICODE) ?></script>
 <script <?= nonce_attr() ?>>
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
   const D = JSON.parse(document.getElementById('dash-data').textContent);
   WW.areaChart('#chart-cashflow', D.cashflow.labels, [
     { name: 'Receitas', data: D.cashflow.income },
@@ -145,6 +145,6 @@ $delta = function (float $v): string {
   WW.gaugeChart('#chart-health', D.health);
   if (D.expenseCat.values.length) WW.donutChart('#chart-expense', D.expenseCat.labels, D.expenseCat.values);
   else document.getElementById('chart-expense').innerHTML = '<p class="text-soft text-sm py-8 text-center">Sem despesas este mês.</p>';
-})();
+});
 </script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';
