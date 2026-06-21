@@ -1,0 +1,15 @@
+# Normalize line endings across platforms
+* text=auto eol=lf
+
+# Scripts that must keep platform-native endings
+*.bat   text eol=crlf
+*.sh    text eol=lf
+
+# Treat vendored/minified assets as generated (collapse diffs)
+public/assets/js/apexcharts.min.js linguist-vendored -diff
+package-lock.json                  -diff linguist-generated
+
+# Binary
+*.png binary
+*.jpg binary
+*.ico binary

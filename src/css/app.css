@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ════════════════════════════════════════════════════════════════
+   Design tokens — dark is the default; `.light` on <html> flips it.
+   Values are space-separated RGB triplets so Tailwind's
+   rgb(var(--token) / <alpha>) helper works.
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  --bg: 9 11 20;
+  --surface: 17 21 34;
+  --surface-2: 26 31 48;
+  --ink: 226 232 240;
+  --ink-soft: 148 163 184;
+  --line: 39 45 66;
+  --brand: 99 102 241;
+  --pos: 34 197 94;
+  --neg: 239 68 68;
+  --warn: 245 158 11;
+}
+html.light {
+  --bg: 247 248 251;
+  --surface: 255 255 255;
+  --surface-2: 241 245 249;
+  --ink: 15 23 42;
+  --ink-soft: 100 116 139;
+  --line: 226 232 240;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--ink));
+    font-feature-settings: "cv02","cv03","cv04","cv11";
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .3s ease, color .3s ease;
+  }
+  ::selection { background: rgb(var(--brand) / .35); }
+
+  /* Custom scrollbar */
+  * { scrollbar-width: thin; scrollbar-color: rgb(var(--line)) transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--line)); border-radius: 9999px;
+    border: 2px solid transparent; background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover { background: rgb(var(--brand) / .6); background-clip: content-box; }
+
+  h1,h2,h3 { letter-spacing: -0.02em; }
+}
+
+@layer components {
+  /* ── Buttons ───────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+           transition-all duration-200 select-none focus:outline-none focus-visible:ring-2
+           focus-visible:ring-brand-400 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn text-white;
+    background-image: linear-gradient(135deg, rgb(99 102 241), rgb(139 92 246));
+    box-shadow: 0 8px 24px -10px rgb(99 102 241 / .8);
+  }
+  .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .btn-ghost {
+    @apply btn border;
+    background: rgb(var(--surface-2));
+    border-color: rgb(var(--line));
+    color: rgb(var(--ink));
+  }
+  .btn-ghost:hover { background: rgb(var(--line) / .5); }
+  .btn-danger { @apply btn text-white; background: rgb(var(--neg)); }
+  .btn-sm { @apply px-3 py-1.5 text-xs rounded-lg; }
+
+  /* ── Surfaces ──────────────────────────────────────────────── */
+  .card {
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--line));
+    @apply rounded-2xl shadow-card;
+  }
+  .card-pad { @apply p-5 sm:p-6; }
+  .stat-card { @apply card card-pad relative overflow-hidden; }
+  .stat-card::after {
+    content: ""; position: absolute; inset: 0 0 auto auto;
+    width: 120px; height: 120px; border-radius: 9999px;
+    background: radial-gradient(circle, rgb(var(--brand) / .18), transparent 70%);
+    transform: translate(30%,-30%); pointer-events: none;
+  }
+
+  /* ── Forms ─────────────────────────────────────────────────── */
+  .label { @apply block text-sm font-medium mb-1.5; color: rgb(var(--ink-soft)); }
+  .input, .select, .textarea {
+    @apply w-full rounded-xl px-3.5 py-2.5 text-sm transition;
+    background: rgb(var(--surface-2));
+    border: 1px solid rgb(var(--line));
+    color: rgb(var(--ink));
+  }
+  .input:focus, .select:focus, .textarea:focus {
+    @apply outline-none ring-2 ring-brand-500/60;
+    border-color: rgb(var(--brand));
+  }
+  .field-error { @apply text-xs mt-1; color: rgb(var(--neg)); }
+
+  /* ── Badges & pills ────────────────────────────────────────── */
+  .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold; }
+  .badge-pos { background: rgb(var(--pos) / .15); color: rgb(var(--pos)); }
+  .badge-neg { background: rgb(var(--neg) / .15); color: rgb(var(--neg)); }
+  .badge-warn { background: rgb(var(--warn) / .15); color: rgb(var(--warn)); }
+  .badge-brand { background: rgb(var(--brand) / .15); color: rgb(var(--brand)); }
+
+  /* Rarity tints for achievements */
+  .rarity-common    { color:#94a3b8; border-color:#94a3b8; }
+  .rarity-rare      { color:#38bdf8; border-color:#38bdf8; }
+  .rarity-epic      { color:#a855f7; border-color:#a855f7; }
+  .rarity-legendary { color:#f59e0b; border-color:#f59e0b; }
+
+  /* ── Sidebar nav ───────────────────────────────────────────── */
+  .nav-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition;
+    color: rgb(var(--ink-soft));
+  }
+  .nav-link:hover { background: rgb(var(--surface-2)); color: rgb(var(--ink)); }
+  .nav-link.is-active {
+    color: #fff;
+    background-image: linear-gradient(135deg, rgb(99 102 241 / .9), rgb(139 92 246 / .9));
+  }
+
+  /* ── Progress ──────────────────────────────────────────────── */
+  .progress { @apply h-2 w-full overflow-hidden rounded-full; background: rgb(var(--line)); }
+  .progress > span { @apply block h-full rounded-full transition-all duration-700; }
+
+  /* ── Table ─────────────────────────────────────────────────── */
+  .table { @apply w-full text-sm; }
+  .table th { @apply text-left font-semibold px-4 py-3; color: rgb(var(--ink-soft)); }
+  .table td { @apply px-4 py-3 border-t; border-color: rgb(var(--line)); }
+  .table tbody tr:hover { background: rgb(var(--surface-2) / .6); }
+
+  /* ── Modal & toast ─────────────────────────────────────────── */
+  .modal-backdrop { @apply fixed inset-0 z-50 grid place-items-center p-4; background: rgb(0 0 0 / .6); backdrop-filter: blur(4px); }
+  .modal { @apply card w-full max-w-lg p-6 animate-fade-up; }
+  .toast {
+    @apply fixed z-[60] bottom-6 right-6 card card-pad max-w-sm flex items-start gap-3 animate-fade-up;
+  }
+
+  .kbd {
+    @apply inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-mono;
+    background: rgb(var(--surface-2)); border: 1px solid rgb(var(--line));
+  }
+}
+
+@layer utilities {
+  /* Private mode — blur sensitive figures until hover */
+  .private .sensitive { filter: blur(8px); transition: filter .2s; }
+  .private .sensitive:hover { filter: none; }
+
+  .text-pos { color: rgb(var(--pos)); }
+  .text-neg { color: rgb(var(--neg)); }
+  .text-soft { color: rgb(var(--ink-soft)); }
+  .bg-grid {
+    background-image:
+      linear-gradient(rgb(var(--line) / .4) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--line) / .4) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .glass { background: rgb(var(--surface) / .7); backdrop-filter: blur(12px); }
+}
+
+/* Top scroll-progress bar */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0;
+  background-image: linear-gradient(90deg, rgb(99 102 241), rgb(139 92 246));
+  z-index: 100; transition: width .1s linear;
+}
