@@ -29,3 +29,9 @@ desktop.ini
 
 # ── XAMPP / runtime artifacts ──────────────────────────────────
 /storage/sessions/
+
+# Scratch / test artifacts
+/d.txt
+/l.html
+/*.cookie
+jar*.txt
