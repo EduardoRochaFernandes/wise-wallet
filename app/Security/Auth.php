@@ -106,7 +106,7 @@ final class Auth
         }
 
         $user = Database::one(
-            "SELECT id, name, password_hash, role, is_active FROM users WHERE email = ? LIMIT 1",
+            "SELECT id, name, password_hash, role, is_active, totp_enabled, totp_secret FROM users WHERE email = ? LIMIT 1",
             [$email]
         );
 
@@ -139,10 +139,23 @@ final class Auth
         }
 
         RateLimit::record($email, true);
+
+        // Second factor required → defer full login until the TOTP code is verified.
+        if ((int) ($user['totp_enabled'] ?? 0) === 1) {
+            $_SESSION['pending_2fa'] = (int) $user['id'];
+            return [false, '__2FA__'];
+        }
+        return self::completeLogin($user);
+    }
+
+    /** Finalize a session (shared by password-only and 2FA logins). */
+    private static function completeLogin(array $user): array
+    {
         Session::regenerate();
         $_SESSION['user_id'] = (int) $user['id'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['fp'] = self::fp();
+        unset($_SESSION['pending_2fa']);
 
         // Login alert when the IP has never been seen for this account.
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
@@ -154,8 +167,20 @@ final class Auth
         }
         Database::run("UPDATE users SET last_login_at = NOW(), locked_until = NULL WHERE id = ?", [$user['id']]);
         Audit::log('login_success', (int) $user['id']);
-
         return [true, 'Sessão iniciada.'];
+    }
+
+    /** Verify the TOTP code for a pending 2FA login. */
+    public static function verify2fa(string $code): array
+    {
+        $uid = $_SESSION['pending_2fa'] ?? null;
+        if (!$uid) { return [false, 'A sessão de verificação expirou. Inicie sessão novamente.']; }
+        $user = Database::one("SELECT id, name, role, is_active, totp_secret FROM users WHERE id = ?", [$uid]);
+        if (!$user || (int) $user['is_active'] !== 1 || !Totp::verify((string) $user['totp_secret'], $code)) {
+            Audit::log('2fa_failed', (int) $uid);
+            return [false, 'Código de verificação inválido.'];
+        }
+        return self::completeLogin($user);
     }
 
     /**
@@ -167,6 +192,9 @@ final class Auth
         $exists = Database::scalar("SELECT id FROM users WHERE email = ? LIMIT 1", [$email]);
         if ($exists) {
             return [false, 'Já existe uma conta com este email.'];
+        }
+        if (Pwned::isCompromised($password)) {
+            return [false, 'Essa palavra-passe apareceu em fugas de dados conhecidas. Escolhe outra mais segura.'];
         }
 
         $userId = Database::insert(

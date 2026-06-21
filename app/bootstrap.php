@@ -22,6 +22,8 @@ require __DIR__ . '/Security/Csrf.php';
 require __DIR__ . '/Security/Validator.php';
 require __DIR__ . '/Security/RateLimit.php';
 require __DIR__ . '/Security/Audit.php';
+require __DIR__ . '/Security/Totp.php';
+require __DIR__ . '/Security/Pwned.php';
 require __DIR__ . '/Security/Auth.php';
 
 // Services / models are loaded on demand.

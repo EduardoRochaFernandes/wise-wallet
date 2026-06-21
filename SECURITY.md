@@ -37,6 +37,48 @@ potential impact. We aim to acknowledge within 72 hours.
 - **Output:** all dynamic output escaped with `htmlspecialchars` (XSS defence).
 - **Secrets:** kept in `.env` (git-ignored); never committed.
 
+## Implemented controls (v2.0)
+
+**Authentication & accounts**
+- [x] Argon2id hashing (64 MB / t=4 / p=2) + rehash-on-login
+- [x] TOTP two-factor authentication (RFC 6238, pure PHP)
+- [x] Breached-password rejection (HaveIBeenPwned k-anonymity, keyless)
+- [x] Brute-force rate limiting + escalating account lockout
+- [x] Login alert on first sign-in from a new IP
+- [x] Constant-time credential comparison (`hash_equals`)
+
+**Session**
+- [x] HttpOnly + SameSite=Lax cookies, Secure on HTTPS
+- [x] Idle timeout + periodic id regeneration + regen on login
+- [x] Device fingerprint binding (invalidates stolen sessions)
+- [x] `session.use_strict_mode` / `use_only_cookies`
+
+**Request / API**
+- [x] CSRF synchronizer token on every mutation (form + `X-CSRF-Token`)
+- [x] Global per-IP API rate limiting (429 + Retry-After)
+- [x] WAF-lite signature blocking (XSS / SQLi / traversal) → `security_events`
+- [x] IP deny-list + admin IP allow-list
+- [x] RBAC (user/admin) + per-resource ownership checks (anti-IDOR)
+- [x] Strict server-side validation/sanitization (`Validator`)
+- [x] CSV/formula-injection-safe export
+
+**Transport / headers**
+- [x] Nonce-based CSP + `report-uri` collector
+- [x] HSTS, X-Frame-Options DENY, X-Content-Type-Options, Referrer-Policy,
+      Permissions-Policy, COOP/CORP
+- [x] `X-Powered-By` removed
+
+**Data / output**
+- [x] PDO prepared statements only
+- [x] Output escaping everywhere (`e()`)
+- [x] Secrets in `.env` (git-ignored), never committed
+- [x] `/.well-known/security.txt`
+- [x] Audit log + security-event log surfaced in the admin panel
+
+> EDR/XDR is an OS/endpoint agent and lives *outside* the application; deploy it
+> at the host level (e.g. Defender for Endpoint, CrowdStrike) alongside a WAF/CDN
+> (Cloudflare) and a reverse proxy for network-layer protection.
+
 ## Hardening checklist for production
 
 - [ ] Set `APP_ENV=production`, `APP_DEBUG=false` in `.env`.
