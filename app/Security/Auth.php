@@ -91,6 +91,13 @@ final class Auth
     {
         $email = strtolower(trim($email));
 
+        // Hard lockout window (set after repeated failures).
+        $locked = Database::scalar("SELECT locked_until FROM users WHERE email=? AND locked_until > NOW()", [$email]);
+        if ($locked) {
+            Audit::log('login_locked', null, ['email' => $email]);
+            return [false, 'Conta temporariamente bloqueada por segurança. Tente novamente mais tarde.'];
+        }
+
         $wait = RateLimit::lockedFor($email);
         if ($wait > 0) {
             Audit::log('login_blocked', null, ['email' => $email]);
@@ -109,6 +116,14 @@ final class Auth
 
         if (!$user || !$ok) {
             RateLimit::record($email, false);
+            if ($user) {
+                $fails = (int) Database::scalar(
+                    "SELECT COUNT(*) FROM login_attempts WHERE identifier=? AND success=0 AND attempted_at > (NOW() - INTERVAL 15 MINUTE)",
+                    [$email]);
+                if ($fails >= 10) {
+                    Database::run("UPDATE users SET locked_until = NOW() + INTERVAL 15 MINUTE WHERE id=?", [$user['id']]);
+                }
+            }
             Audit::log('login_failed', $user['id'] ?? null, ['email' => $email]);
             return [false, 'Credenciais inválidas.'];
         }
@@ -127,7 +142,17 @@ final class Auth
         Session::regenerate();
         $_SESSION['user_id'] = (int) $user['id'];
         $_SESSION['user_role'] = $user['role'];
-        Database::run("UPDATE users SET last_login_at = NOW() WHERE id = ?", [$user['id']]);
+        $_SESSION['fp'] = self::fp();
+
+        // Login alert when the IP has never been seen for this account.
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        $seen = Database::scalar("SELECT id FROM audit_log WHERE user_id=? AND action='login_success' AND ip=? LIMIT 1", [$user['id'], $ip]);
+        if (!$seen) {
+            Database::run(
+                "INSERT INTO notifications (user_id,type,title,body,icon,created_at) VALUES (?,?,?,?,?,NOW())",
+                [$user['id'], 'security', 'Novo início de sessão', 'Sessão iniciada a partir de um novo dispositivo/IP (' . $ip . ').', 'shield']);
+        }
+        Database::run("UPDATE users SET last_login_at = NOW(), locked_until = NULL WHERE id = ?", [$user['id']]);
         Audit::log('login_success', (int) $user['id']);
 
         return [true, 'Sessão iniciada.'];
@@ -191,6 +216,26 @@ final class Auth
             json_out(['error' => 'Recurso não encontrado.'], 404);
         }
         exit('404 — Não encontrado.');
+    }
+
+    /** Session fingerprint = hash(user-agent + app key). */
+    private static function fp(): string
+    {
+        return hash('sha256', ($_SERVER['HTTP_USER_AGENT'] ?? '') . '|' . ww_config('APP_KEY', 'ww'));
+    }
+
+    /** Invalidate the session if the device fingerprint changes (token theft defence). */
+    public static function enforceFingerprint(): void
+    {
+        if (!isset($_SESSION['user_id'])) { return; }
+        $current = self::fp();
+        if (!isset($_SESSION['fp'])) { $_SESSION['fp'] = $current; return; }
+        if (!hash_equals($_SESSION['fp'], $current)) {
+            Audit::log('session_fp_mismatch', (int) $_SESSION['user_id']);
+            self::logout();
+            if (self::wantsJson()) { json_out(['error' => 'Sessão inválida.'], 401); }
+            redirect('/login.php');
+        }
     }
 
     private static function wantsJson(): bool

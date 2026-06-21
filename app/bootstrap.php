@@ -38,5 +38,10 @@ spl_autoload_register(static function (string $class): void {
 Session::start();
 Headers::send(Session::nonce());
 
+// Request firewall: IP filtering, API rate limiting, WAF-lite signatures.
+Firewall::guard();
+// Bind the session to the device fingerprint (token-theft defence).
+Auth::enforceFingerprint();
+
 // Global CSRF guard for POST/PUT/PATCH/DELETE.
 Csrf::check();

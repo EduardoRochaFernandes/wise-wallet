@@ -34,6 +34,7 @@ final class Headers
             // ApexCharts injects <style> at runtime → allow inline styles only.
             "style-src 'self' 'unsafe-inline'",
             "upgrade-insecure-requests",
+            "report-uri /api/csp-report.php",
         ]);
 
         header('Content-Security-Policy: ' . $csp);

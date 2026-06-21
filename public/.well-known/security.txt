@@ -1,0 +1,6 @@
+Contact: mailto:security@wisewallet.local
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: pt, en
+Canonical: http://localhost:8000/.well-known/security.txt
+Policy: http://localhost:8000/SECURITY.md
+# WiseWallet 2.0 — report vulnerabilities privately. See SECURITY.md.
