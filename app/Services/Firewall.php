@@ -106,6 +106,24 @@ final class Firewall
         }
     }
 
+    /** Generic sliding-window limiter usable by any flow. True if allowed. */
+    public static function allow(string $key, int $max, int $window): bool
+    {
+        $now = time();
+        try {
+            Database::run(
+                "INSERT INTO rate_limits (rl_key, hits, window_start) VALUES (?, 1, ?)
+                 ON DUPLICATE KEY UPDATE
+                   hits = IF(window_start < ?, 1, hits + 1),
+                   window_start = IF(window_start < ?, ?, window_start)",
+                [$key, $now, $now - $window, $now - $window, $now]
+            );
+            return (int) Database::scalar("SELECT hits FROM rate_limits WHERE rl_key=?", [$key]) <= $max;
+        } catch (Throwable $e) {
+            return true; // fail open
+        }
+    }
+
     /* ── helpers ──────────────────────────────────────────────── */
     private static function list(string $key): array
     {
