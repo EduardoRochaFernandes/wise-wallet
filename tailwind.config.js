@@ -9,20 +9,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand palette — indigo/violet, deliberately no gold/yellow accent.
+        // Deliberate palette — deep pine green accent (no "VibeCode purple").
         brand: {
-          50:  '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
+          50:  '#eef4f0',
+          100: '#d7e7dd',
+          200: '#afceba',
+          300: '#80b093',
+          400: '#4f8e6c',
+          500: '#2f6f4f',
+          600: '#1f5a3f',
+          700: '#194a34',
+          800: '#153c2b',
+          900: '#113021',
         },
-        // Semantic surface tokens are driven by CSS variables (see app.css)
+        // Semantic surface tokens driven by CSS variables (see app.css)
+        paper: 'rgb(var(--paper) / <alpha-value>)',
         surface: 'rgb(var(--surface) / <alpha-value>)',
         'surface-2': 'rgb(var(--surface-2) / <alpha-value>)',
         ink: 'rgb(var(--ink) / <alpha-value>)',
@@ -30,32 +31,32 @@ module.exports = {
         line: 'rgb(var(--line) / <alpha-value>)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-      },
-      boxShadow: {
-        glow: '0 0 40px -10px rgba(99, 102, 241, 0.45)',
-        card: '0 1px 3px rgba(0,0,0,0.08), 0 8px 24px -12px rgba(0,0,0,0.25)',
+        // Body is a grotesque system stack — deliberately NOT Inter.
+        sans: ['"Segoe UI"', 'system-ui', '-apple-system', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+        // Display is a serif for editorial authority.
+        display: ['Georgia', '"Iowan Old Style"', '"Times New Roman"', 'serif'],
+        mono: ['"Cascadia Mono"', 'Consolas', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
-        xl: '0.875rem',
-        '2xl': '1.25rem',
+        DEFAULT: '4px',
+        sm: '3px',
+        md: '5px',
+        lg: '6px',
+        xl: '8px',
+        '2xl': '10px',
+      },
+      boxShadow: {
+        card: '0 1px 2px rgba(26, 25, 22, 0.05)',
+        pop: '0 8px 30px -12px rgba(26, 25, 22, 0.25)',
       },
       keyframes: {
         'fade-up': {
-          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        float: {
-          '0%,100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        shimmer: {
-          '100%': { transform: 'translateX(100%)' },
         },
       },
       animation: {
-        'fade-up': 'fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
-        float: 'float 6s ease-in-out infinite',
+        'fade-up': 'fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

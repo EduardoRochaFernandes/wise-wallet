@@ -62,9 +62,9 @@ final class Auth
     {
         if (!self::check()) {
             if (self::wantsJson()) {
-                json_out(['error' => 'Não autenticado.'], 401);
+                json_out(['error' => 'Not authenticated.'], 401);
             }
-            flash('error', 'Inicie sessão para continuar.');
+            flash('error', 'Please sign in to continue.');
             redirect('/login.php');
         }
         // Account could have been deactivated mid-session.
@@ -80,7 +80,7 @@ final class Auth
         self::requireAuth();
         if (!self::isAdmin()) {
             http_response_code(403);
-            exit('403 — Acesso negado.');
+            exit('403 — Access denied.');
         }
     }
 
@@ -95,14 +95,14 @@ final class Auth
         $locked = Database::scalar("SELECT locked_until FROM users WHERE email=? AND locked_until > NOW()", [$email]);
         if ($locked) {
             Audit::log('login_locked', null, ['email' => $email]);
-            return [false, 'Conta temporariamente bloqueada por segurança. Tente novamente mais tarde.'];
+            return [false, 'Account temporarily locked for security. Please try again later.'];
         }
 
         $wait = RateLimit::lockedFor($email);
         if ($wait > 0) {
             Audit::log('login_blocked', null, ['email' => $email]);
             $mins = (int) ceil($wait / 60);
-            return [false, "Demasiadas tentativas. Tente novamente em {$mins} minuto(s)."];
+            return [false, "Too many attempts. Try again in {$mins} minute(s)."];
         }
 
         $user = Database::one(
@@ -125,11 +125,11 @@ final class Auth
                 }
             }
             Audit::log('login_failed', $user['id'] ?? null, ['email' => $email]);
-            return [false, 'Credenciais inválidas.'];
+            return [false, 'Invalid credentials.'];
         }
 
         if ((int) $user['is_active'] !== 1) {
-            return [false, 'Conta desativada. Contacte o suporte.'];
+            return [false, 'Account disabled. Please contact support.'];
         }
 
         // Upgrade the hash if parameters changed.
@@ -167,18 +167,18 @@ final class Auth
         }
         Database::run("UPDATE users SET last_login_at = NOW(), locked_until = NULL WHERE id = ?", [$user['id']]);
         Audit::log('login_success', (int) $user['id']);
-        return [true, 'Sessão iniciada.'];
+        return [true, 'Signed in.'];
     }
 
     /** Verify the TOTP code for a pending 2FA login. */
     public static function verify2fa(string $code): array
     {
         $uid = $_SESSION['pending_2fa'] ?? null;
-        if (!$uid) { return [false, 'A sessão de verificação expirou. Inicie sessão novamente.']; }
+        if (!$uid) { return [false, 'Your verification session expired. Please sign in again.']; }
         $user = Database::one("SELECT id, name, role, is_active, totp_secret FROM users WHERE id = ?", [$uid]);
         if (!$user || (int) $user['is_active'] !== 1 || !Totp::verify((string) $user['totp_secret'], $code)) {
             Audit::log('2fa_failed', (int) $uid);
-            return [false, 'Código de verificação inválido.'];
+            return [false, 'Invalid verification code.'];
         }
         return self::completeLogin($user);
     }
@@ -191,15 +191,15 @@ final class Auth
         $email = strtolower(trim($email));
         $exists = Database::scalar("SELECT id FROM users WHERE email = ? LIMIT 1", [$email]);
         if ($exists) {
-            return [false, 'Já existe uma conta com este email.'];
+            return [false, 'An account with this email already exists.'];
         }
         if (Pwned::isCompromised($password)) {
-            return [false, 'Essa palavra-passe apareceu em fugas de dados conhecidas. Escolhe outra mais segura.'];
+            return [false, 'That password appeared in known data breaches. Please choose a stronger one.'];
         }
 
         $userId = Database::insert(
             "INSERT INTO users (name, email, password_hash, role, currency, theme, is_active, created_at)
-             VALUES (?, ?, ?, 'user', 'EUR', 'dark', 1, NOW())",
+             VALUES (?, ?, ?, 'user', 'EUR', 'light', 1, NOW())",
             [$name, $email, self::hash($password)]
         );
 
@@ -213,9 +213,9 @@ final class Auth
     {
         Database::run(
             "INSERT INTO accounts (user_id, name, type, balance, currency, created_at)
-             VALUES (?, 'Conta à Ordem', 'checking', 0, 'EUR', NOW()),
-                    (?, 'Poupança', 'savings', 0, 'EUR', NOW()),
-                    (?, 'Dinheiro', 'cash', 0, 'EUR', NOW())",
+             VALUES (?, 'Checking', 'checking', 0, 'EUR', NOW()),
+                    (?, 'Savings', 'savings', 0, 'EUR', NOW()),
+                    (?, 'Cash', 'cash', 0, 'EUR', NOW())",
             [$userId, $userId, $userId]
         );
     }
@@ -241,9 +241,9 @@ final class Auth
         }
         http_response_code(404);
         if (self::wantsJson()) {
-            json_out(['error' => 'Recurso não encontrado.'], 404);
+            json_out(['error' => 'Resource not found.'], 404);
         }
-        exit('404 — Não encontrado.');
+        exit('404 — Not found.');
     }
 
     /** Session fingerprint = hash(user-agent + app key). */
@@ -261,7 +261,7 @@ final class Auth
         if (!hash_equals($_SESSION['fp'], $current)) {
             Audit::log('session_fp_mismatch', (int) $_SESSION['user_id']);
             self::logout();
-            if (self::wantsJson()) { json_out(['error' => 'Sessão inválida.'], 401); }
+            if (self::wantsJson()) { json_out(['error' => 'Invalid session.'], 401); }
             redirect('/login.php');
         }
     }

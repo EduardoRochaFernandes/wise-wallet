@@ -19,7 +19,7 @@ switch ($method) {
             "INSERT INTO goals (user_id,name,target_amount,current_amount,deadline,color,icon,notes,created_at)
              VALUES (?,?,?,?,?,?,?,?,NOW())",
             [$uid, $v->get('name'), round((float) $body['target_amount'], 2), round((float) ($body['current_amount'] ?? 0), 2),
-             !empty($body['deadline']) ? $body['deadline'] : null, $body['color'] ?? '#6366f1', $body['icon'] ?? 'target',
+             !empty($body['deadline']) ? $body['deadline'] : null, $body['color'] ?? '#1f5a3f', $body['icon'] ?? 'target',
              ($body['notes'] ?? '') !== '' ? $body['notes'] : null]
         );
         Achievements::evaluate($uid);

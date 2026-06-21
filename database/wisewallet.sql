@@ -51,7 +51,7 @@ CREATE TABLE `users` (
   `password_hash` VARCHAR(255) NOT NULL,
   `role`          ENUM('user','admin') NOT NULL DEFAULT 'user',
   `currency`      CHAR(3) NOT NULL DEFAULT 'EUR',
-  `theme`         ENUM('dark','light') NOT NULL DEFAULT 'dark',
+  `theme`         ENUM('dark','light') NOT NULL DEFAULT 'light',
   `privacy_mode`  TINYINT(1) NOT NULL DEFAULT 0,
   `points`        INT NOT NULL DEFAULT 0,
   `is_active`     TINYINT(1) NOT NULL DEFAULT 1,

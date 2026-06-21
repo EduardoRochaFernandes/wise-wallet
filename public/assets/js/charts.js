@@ -12,7 +12,7 @@
     return v ? `rgb(${v})` : '#888';
   };
 
-  const palette = ['#6366f1', '#22c55e', '#f97316', '#0ea5e9', '#ec4899', '#a855f7', '#14b8a6', '#f59e0b', '#ef4444', '#64748b'];
+  const palette = ['#1f5a3f', '#9e6b2a', '#2f6f7f', '#a53a2a', '#4f8e6c', '#7c6f64', '#b5852a', '#3f6b5a', '#6b6f4a', '#8a8378'];
 
   WW.chartBase = () => ({
     chart: { fontFamily: 'Inter, sans-serif', toolbar: { show: false }, foreColor: cssVar('--ink-soft'), animations: { easing: 'easeinout', speed: 600 } },
@@ -78,7 +78,7 @@
         },
       } },
       labels: ['Saúde Financeira'],
-      fill: { type: 'gradient', gradient: { shade: 'dark', shadeIntensity: 0.4, gradientToColors: ['#6366f1'], stops: [0, 100] } },
+      fill: { type: 'gradient', gradient: { shade: 'light', shadeIntensity: 0.3, gradientToColors: ['#2f6f4f'], stops: [0, 100] } },
     });
 
   /* Re-theme all charts when the theme switches */

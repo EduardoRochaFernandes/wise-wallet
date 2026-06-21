@@ -6,8 +6,8 @@ $articles = Database::all(
 );
 
 $seo = [
-    'title'       => 'WiseWallet — Finanças pessoais inteligentes do euro à reforma',
-    'description' => 'Regista, entende, planeia, simula e aprende sobre o teu dinheiro num só lugar. Orçamentos, objetivos, investimentos, 8 simuladores e educação financeira. Grátis e seguro.',
+    'title'       => 'WiseWallet — a clear ledger for your whole financial life',
+    'description' => 'Record income and spending, set budgets and goals, track investments, and run real simulations — in one fast, private place. Free and secure.',
     'jsonld'      => [
         '@context' => 'https://schema.org',
         '@type'    => 'SoftwareApplication',
@@ -15,165 +15,147 @@ $seo = [
         'applicationCategory' => 'FinanceApplication',
         'operatingSystem'     => 'Web',
         'offers'   => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'EUR'],
-        'description' => 'Plataforma de finanças pessoais: transações, orçamentos, objetivos, investimentos, simuladores e educação financeira.',
+        'description' => 'Personal-finance platform: transactions, budgets, goals, investments, simulators and financial education.',
     ],
 ];
 require __DIR__ . '/../app/views/partials/public_head.php';
 
+// One repeated primitive: the "ledger row" (label + meaning).
 $features = [
-    ['arrow-left-right', 'Transações unificadas', 'Receitas, despesas e transferências com categoria, conta, etiquetas e notas. Adição em 3 segundos.'],
-    ['landmark', 'Contas múltiplas', 'À ordem, poupança, cartão, dinheiro, cripto e investimento — saldo sempre vivo.'],
-    ['target', 'Orçamentos vivos', 'Limites por categoria com alertas verde → laranja → vermelho.'],
-    ['star', 'Objetivos com marcos', 'Metas com marcos automáticos aos 25/50/75% e contagem de dias.'],
-    ['trending-up', 'Investimentos reais', 'Ações, ETF, cripto e mais, com ganho/perda, ROI e diversificação.'],
-    ['brain', 'Score de Saúde Financeira', 'Um número de 0 a 100 que resume a tua vida financeira inteira.'],
+    ['Transactions', 'Income, expenses and transfers with categories, accounts, tags and notes. Balances stay in sync automatically.'],
+    ['Accounts', 'Current, savings, card, cash, crypto and investment accounts — each balance updated on every entry.'],
+    ['Budgets', 'A monthly limit per category, with quiet warnings as you approach it.'],
+    ['Goals', 'Targets with deadlines and automatic 25 / 50 / 75% milestones.'],
+    ['Investments', 'Stocks, ETFs, crypto, bonds and more — with gain/loss, ROI and diversification.'],
+    ['Insights', 'Twelve-month cash flow, spend by category and weekday, and a Financial Health Score from 0 to 100.'],
 ];
-$cycle = [
-    ['Registar', 'arrow-left-right', 'Capturas a tua realidade financeira.'],
-    ['Entender', 'brain', 'Os dados viram padrões e insight.'],
-    ['Planear', 'target', 'Controlas orçamentos, metas e faturas.'],
-    ['Simular', 'calculator', 'Testas decisões antes de as tomares.'],
-    ['Aprender', 'book-open', 'A educação fecha o ciclo.'],
+$tools = [
+    'Mortgage', 'Personal loan', 'Savings', 'Retirement',
+    'Investment', 'Portuguese income tax', 'Car leasing', 'Emergency fund',
 ];
 ?>
-<!-- ── HERO ─────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-media">
-    <div class="hero-aurora"></div>
-    <?php /* Drop a theme-matched loop at public/assets/video/hero.mp4 and it appears automatically; until then the animated aurora is the background. */ ?>
-    <?php if (is_file(WW_PUBLIC . '/assets/video/hero.mp4')): ?>
-    <video autoplay muted loop playsinline preload="auto">
-      <source src="<?= asset('/assets/video/hero.mp4') ?>" type="video/mp4">
-    </video>
-    <?php endif; ?>
-  </div>
-  <div class="hero-veil"></div>
-
-  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 text-center py-24">
-    <span class="badge-brand mb-6 inline-flex reveal"><?= icon('sparkles','w-4 h-4') ?> A tua vida financeira, num só lugar</span>
-    <h1 class="text-5xl sm:text-7xl font-extrabold leading-[1.02] reveal">
-      Vê o teu dinheiro<br>como <span class="text-gradient">nunca o viste</span>
-    </h1>
-    <p class="text-lg sm:text-xl text-soft mt-7 max-w-2xl mx-auto reveal">
-      Do café de hoje à reforma de amanhã. Regista, entende, planeia, simula e aprende —
-      num produto único onde cada peça alimenta a seguinte.
+<!-- ── Hero (left-aligned, with a real statement preview) ─────── -->
+<section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+  <div class="reveal">
+    <p class="eyebrow mb-5">Personal finance, kept honestly</p>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl leading-[1.05]">A clear ledger for your whole financial life.</h1>
+    <p class="text-lg text-soft mt-6 max-w-xl">
+      Record income and spending, set budgets and goals, track investments and run
+      real simulations — in one fast, private place. Free, and yours.
     </p>
-    <div class="flex flex-wrap gap-3 justify-center mt-9 reveal">
-      <a href="/register.php" class="btn-primary text-base px-6 py-3">Começar grátis <?= icon('chevron-right','w-4 h-4') ?></a>
-      <a href="/login.php" class="btn-ghost text-base px-6 py-3">Ver demonstração</a>
+    <div class="flex flex-wrap items-center gap-4 mt-8">
+      <a href="/register.php" class="btn-primary px-5 py-2.5">Start keeping the books</a>
+      <a href="/login.php" class="text-sm font-medium text-accent hover:underline">Try the demo account &rarr;</a>
     </div>
-    <div class="mt-20 flex justify-center text-soft scroll-cue reveal"><?= icon('arrow-down','w-6 h-6') ?></div>
+    <p class="text-xs text-soft mt-6">Eight simulators · twelve-month analysis · Argon2id, CSRF &amp; CSP security.</p>
   </div>
-</section>
 
-<!-- ── Marquee ──────────────────────────────────────────────── -->
-<div class="marquee py-6 border-y" style="border-color:rgb(var(--line))">
-  <div class="marquee-track text-soft font-semibold uppercase tracking-widest text-sm">
-    <?php for ($i = 0; $i < 2; $i++): ?>
-      <span>Transações</span><span>•</span><span>Orçamentos</span><span>•</span><span>Objetivos</span><span>•</span><span>Investimentos</span><span>•</span><span>8 Simuladores</span><span>•</span><span>Score de Saúde</span><span>•</span><span>Educação</span><span>•</span><span>Segurança Argon2id</span><span>•</span>
-    <?php endfor; ?>
-  </div>
-</div>
-
-<!-- ── Cycle ────────────────────────────────────────────────── -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-  <div class="text-center max-w-2xl mx-auto mb-12 reveal">
-    <h2 class="text-3xl sm:text-4xl font-bold">Um ciclo, não uma lista de features</h2>
-    <p class="text-soft mt-3">Registar → Entender → Planear → Simular → Aprender. E voltas ao início mais capaz.</p>
-  </div>
-  <div class="grid grid-cols-2 lg:grid-cols-5 gap-3" data-reveal-stagger>
-    <?php foreach ($cycle as [$t, $ic, $d]): ?>
-      <div class="card card-pad lift text-left">
-        <div class="w-11 h-11 rounded-xl grid place-items-center mb-3 text-white" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><?= icon($ic) ?></div>
-        <div class="font-bold"><?= $t ?></div>
-        <div class="text-xs text-soft mt-1"><?= $d ?></div>
+  <!-- Statement preview -->
+  <div class="reveal">
+    <div class="card overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-3 border-b" style="border-color:rgb(var(--line))">
+        <span class="font-display font-semibold">This month</span>
+        <span class="badge-brand">Checking</span>
       </div>
-    <?php endforeach; ?>
-  </div>
-</section>
-
-<!-- ── Stats (count-up) ─────────────────────────────────────── -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 pb-8">
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4" data-reveal-stagger>
-    <?php foreach ([['8','','Simuladores'],['17','','Conquistas'],['100','%','Open-source'],['0','€','Para sempre']] as [$n,$suf,$l]): ?>
-      <div class="stat-card text-center lift">
-        <div class="text-4xl font-extrabold text-brand-400"><span data-count="<?= $n ?>" data-suffix="<?= $suf ?>">0<?= $suf ?></span></div>
-        <div class="text-sm text-soft mt-1"><?= $l ?></div>
-      </div>
-    <?php endforeach; ?>
-  </div>
-</section>
-
-<!-- ── Features ─────────────────────────────────────────────── -->
-<section id="features" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-  <div class="text-center max-w-2xl mx-auto mb-12 reveal">
-    <h2 class="text-3xl sm:text-4xl font-bold">Tudo o que precisas, ligado entre si</h2>
-    <p class="text-soft mt-3">Os teus dados tornam-se compreensão, planos e melhores decisões.</p>
-  </div>
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal-stagger>
-    <?php foreach ($features as [$ic, $t, $d]): ?>
-      <div class="card card-pad lift">
-        <div class="w-12 h-12 rounded-xl grid place-items-center mb-4 text-brand-400" style="background:rgb(var(--brand) / .15)"><?= icon($ic,'w-6 h-6') ?></div>
-        <h3 class="font-bold text-lg"><?= $t ?></h3>
-        <p class="text-soft text-sm mt-2"><?= $d ?></p>
-      </div>
-    <?php endforeach; ?>
-  </div>
-</section>
-
-<!-- ── Simulators ───────────────────────────────────────────── -->
-<section id="simuladores" class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-  <div class="card card-pad sm:p-12 relative overflow-hidden bg-grid reveal-scale reveal">
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(50% 80% at 100% 0%, rgb(168 85 247 / .2), transparent 70%)"></div>
-    <div class="relative grid lg:grid-cols-2 gap-8 items-center">
-      <div>
-        <span class="badge-brand mb-4 inline-flex"><?= icon('calculator','w-4 h-4') ?> 8 simuladores</span>
-        <h2 class="text-3xl sm:text-4xl font-bold">Testa o "e se?" com números honestos</h2>
-        <p class="text-soft mt-3">Crédito habitação, pessoal, poupança, reforma, investimento, IRS (escalões PT), leasing e fundo de emergência — fórmulas reais e gráficos.</p>
-        <a href="/simulators.php" class="btn-primary mt-6">Explorar simuladores <?= icon('chevron-right','w-4 h-4') ?></a>
-      </div>
-      <div class="grid grid-cols-2 gap-3" data-reveal-stagger>
-        <?php foreach ([['home','Crédito habitação'],['piggy-bank','Poupança'],['umbrella','Fundo emergência'],['landmark','IRS Portugal']] as [$ic,$t]): ?>
-          <div class="rounded-xl p-4 lift" style="background:rgb(var(--surface-2))">
-            <div class="text-brand-400 mb-2"><?= icon($ic) ?></div>
-            <div class="text-sm font-semibold"><?= $t ?></div>
+      <div class="divide-y text-sm" style="--tw-divide-opacity:1">
+        <?php
+        $rows = [
+            ['Salary', '+1,850.00', 'pos'],
+            ['Rent', '−650.00', 'neg'],
+            ['Groceries', '−213.75', 'neg'],
+            ['Freelance', '+320.00', 'pos'],
+            ['Subscriptions', '−50.97', 'neg'],
+        ];
+        foreach ($rows as [$label, $amt, $cls]): ?>
+          <div class="flex items-center justify-between px-5 py-3" style="border-color:rgb(var(--line))">
+            <span><?= e($label) ?></span>
+            <span class="amount font-medium text-<?= $cls ?>"><?= e($amt) ?> &euro;</span>
           </div>
+        <?php endforeach; ?>
+      </div>
+      <div class="flex items-center justify-between px-5 py-3 border-t" style="border-color:rgb(var(--line));background:rgb(var(--surface-2))">
+        <span class="text-soft">Net this month</span>
+        <span class="amount font-display font-semibold text-pos">+1,255.28 &euro;</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-px mt-px text-center text-xs">
+      <div class="card-pad py-3"><div class="font-display text-xl font-semibold">41%</div><div class="text-soft mt-0.5">savings rate</div></div>
+      <div class="card-pad py-3"><div class="font-display text-xl font-semibold">78</div><div class="text-soft mt-0.5">health score</div></div>
+      <div class="card-pad py-3"><div class="font-display text-xl font-semibold">5</div><div class="text-soft mt-0.5">accounts</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="rule max-w-6xl mx-auto"></div>
+
+<!-- ── Features as a ledger of capabilities ──────────────────── -->
+<section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+  <div class="grid lg:grid-cols-[1fr_2fr] gap-10">
+    <div class="reveal">
+      <p class="eyebrow mb-4">What's inside</p>
+      <h2 class="text-3xl sm:text-4xl">Everything connects.</h2>
+      <p class="text-soft mt-4 max-w-sm">Each part feeds the next — your records become understanding, plans and better decisions.</p>
+    </div>
+    <div class="divide-y" data-reveal-stagger style="border-color:rgb(var(--line))">
+      <?php foreach ($features as [$name, $desc]): ?>
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6 py-5" style="border-color:rgb(var(--line))">
+          <h3 class="font-display text-lg font-semibold"><?= e($name) ?></h3>
+          <p class="text-soft text-sm leading-relaxed"><?= e($desc) ?></p>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tools / simulators ────────────────────────────────────── -->
+<section id="tools" class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+  <div class="card card-pad sm:p-10">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <div class="reveal">
+        <p class="eyebrow mb-4">Decide with numbers</p>
+        <h2 class="text-3xl sm:text-4xl">Eight honest simulators.</h2>
+        <p class="text-soft mt-4 max-w-md">Test the "what if" before you commit — real formulas, plain results, a chart for each.</p>
+        <a href="/simulators.php" class="btn-outline btn-sm mt-6">Open the simulators</a>
+      </div>
+      <div class="grid grid-cols-2 gap-px" data-reveal-stagger>
+        <?php foreach ($tools as $tname): ?>
+          <div class="px-4 py-3 text-sm border-t sm:border-t-0 sm:border-l" style="border-color:rgb(var(--line))"><?= e($tname) ?></div>
         <?php endforeach; ?>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Education ────────────────────────────────────────────── -->
-<section id="educacao" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-  <div class="flex items-end justify-between mb-8 reveal">
+<!-- ── Guides ────────────────────────────────────────────────── -->
+<section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+  <div class="flex items-end justify-between mb-6 reveal">
     <div>
-      <h2 class="text-3xl sm:text-4xl font-bold">Aprende enquanto geres</h2>
-      <p class="text-soft mt-2">Quem entende, decide melhor.</p>
+      <p class="eyebrow mb-3">Learn as you go</p>
+      <h2 class="text-3xl sm:text-4xl">Guides</h2>
     </div>
-    <a href="/blog.php" class="btn-ghost btn-sm">Ver blog</a>
+    <a href="/blog.php" class="text-sm font-medium text-accent hover:underline">All guides &rarr;</a>
   </div>
-  <div class="grid md:grid-cols-3 gap-5" data-reveal-stagger>
+  <div class="divide-y" data-reveal-stagger style="border-color:rgb(var(--line))">
     <?php foreach ($articles as $a): ?>
-      <a href="/article.php?slug=<?= e($a['slug']) ?>" class="card card-pad lift block">
-        <div class="badge-brand text-xs mb-3"><?= (int) $a['reading_minutes'] ?> min de leitura</div>
-        <h3 class="font-bold text-lg leading-snug"><?= e($a['title']) ?></h3>
-        <p class="text-soft text-sm mt-2"><?= e($a['excerpt']) ?></p>
-        <span class="text-brand-400 text-sm font-medium mt-3 inline-flex items-center gap-1">Ler artigo <?= icon('chevron-right','w-4 h-4') ?></span>
+      <a href="/article.php?slug=<?= e($a['slug']) ?>" class="grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-8 py-5 group" style="border-color:rgb(var(--line))">
+        <div>
+          <h3 class="font-display text-lg font-semibold group-hover:text-accent"><?= e($a['title']) ?></h3>
+          <p class="text-soft text-sm mt-1 max-w-2xl"><?= e($a['excerpt']) ?></p>
+        </div>
+        <div class="text-soft text-xs whitespace-nowrap sm:text-right pt-1"><?= (int) $a['reading_minutes'] ?> min read</div>
       </a>
     <?php endforeach; ?>
   </div>
 </section>
 
-<!-- ── Final CTA ────────────────────────────────────────────── -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-  <div class="card card-pad sm:p-16 text-center relative overflow-hidden reveal">
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(60% 120% at 50% 100%, rgb(99 102 241 / .28), transparent 70%)"></div>
-    <div class="relative">
-      <h2 class="text-3xl sm:text-5xl font-extrabold">Pronto para dominar o teu dinheiro?</h2>
-      <p class="text-soft mt-4 max-w-xl mx-auto">Junta-te à WiseWallet e transforma a forma como vês as tuas finanças. Grátis, para sempre.</p>
-      <a href="/register.php" class="btn-primary mt-8 inline-flex text-base px-6 py-3">Criar a minha conta <?= icon('chevron-right','w-4 h-4') ?></a>
+<!-- ── CTA ───────────────────────────────────────────────────── -->
+<section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+  <div class="card card-pad sm:p-12 flex flex-col sm:flex-row sm:items-center justify-between gap-6 reveal">
+    <div>
+      <h2 class="text-2xl sm:text-3xl">Start keeping the books.</h2>
+      <p class="text-soft mt-2">Free forever. No card. Your data stays yours.</p>
     </div>
+    <a href="/register.php" class="btn-primary px-5 py-2.5 whitespace-nowrap">Create your account</a>
   </div>
 </section>
 

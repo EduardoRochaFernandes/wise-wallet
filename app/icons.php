@@ -55,9 +55,9 @@ function icon(string $name, string $class = 'w-5 h-5'): string
     return '<svg class="' . e($class) . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $body . '</svg>';
 }
 
-/** Brand logo mark (gradient wallet glyph). */
+/** Brand logo mark (flat accent square with wallet glyph). */
 function logo_mark(string $class = 'w-9 h-9'): string
 {
-    return '<span class="inline-grid place-items-center rounded-xl text-white ' . e($class) . '" style="background-image:linear-gradient(135deg,#6366f1,#8b5cf6)">'
+    return '<span class="inline-grid place-items-center rounded text-white ' . e($class) . '" style="background:rgb(var(--accent))">'
         . icon('wallet', 'w-5 h-5') . '</span>';
 }

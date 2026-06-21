@@ -22,7 +22,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
   <?php foreach ($accounts as $a): $neg = (float) $a['balance'] < 0; ?>
     <div class="card card-pad relative">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-xl grid place-items-center text-white" style="background:<?= e($a['color'] ?: '#6366f1') ?>"><?= icon('landmark') ?></div>
+        <div class="w-11 h-11 rounded-xl grid place-items-center text-white" style="background:<?= e($a['color'] ?: '#1f5a3f') ?>"><?= icon('landmark') ?></div>
         <div class="flex-1 min-w-0">
           <div class="font-bold truncate"><?= e($a['name']) ?></div>
           <div class="text-xs text-soft"><?= e($typeLabels[$a['type']] ?? $a['type']) ?></div>
@@ -46,7 +46,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
         </select></div>
         <div><label class="label">Saldo inicial (€)</label><input name="balance" type="number" step="0.01" value="0" class="input"></div>
       </div>
-      <div><label class="label">Cor</label><input name="color" type="color" value="#6366f1" class="input h-11 p-1"></div>
+      <div><label class="label">Cor</label><input name="color" type="color" value="#1f5a3f" class="input h-11 p-1"></div>
       <div class="flex gap-2 pt-1"><button type="submit" class="btn-primary flex-1">Criar conta</button><button type="button" class="btn-ghost" data-modal-close>Cancelar</button></div>
     </form>
   </div>

@@ -32,7 +32,7 @@
 
   /* ── Toast notifications ──────────────────────────────────── */
   WW.toast = (msg, type = 'info') => {
-    const colors = { success: 'var(--pos)', error: 'var(--neg)', info: 'var(--brand)', warn: 'var(--warn)' };
+    const colors = { success: 'var(--pos)', error: 'var(--neg)', info: 'var(--accent)', warn: 'var(--warn)' };
     const el = document.createElement('div');
     el.className = 'toast';
     el.style.borderLeft = `4px solid rgb(${colors[type] || colors.info})`;
@@ -47,12 +47,11 @@
     const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
     if (!el) return;
     const action = o.modal
-      ? `<button class="btn-primary mt-4 inline-flex" data-modal-open="${o.modal}">${o.cta} ›</button>`
-      : `<a href="${o.href}" class="btn-primary mt-4 inline-flex">${o.cta} ›</a>`;
+      ? `<button class="btn-primary btn-sm mt-4 inline-flex" data-modal-open="${o.modal}">${o.cta}</button>`
+      : `<a href="${o.href}" class="btn-primary btn-sm mt-4 inline-flex">${o.cta}</a>`;
     el.innerHTML =
-      `<div class="text-center py-10 px-4">
-         <div class="w-14 h-14 mx-auto rounded-2xl grid place-items-center mb-4" style="background:rgb(var(--brand) / .12);color:rgb(var(--brand))">✨</div>
-         <h3 class="font-bold text-lg">${o.title}</h3>
+      `<div class="text-center py-12 px-4">
+         <h3 class="font-display text-lg font-semibold">${o.title}</h3>
          <p class="text-soft text-sm mt-1 max-w-sm mx-auto">${o.text || ''}</p>
          ${action}
        </div>`;
@@ -101,23 +100,23 @@
 
   /* ── Command palette (Ctrl/⌘ + K) ─────────────────────────── */
   const COMMANDS = [
-    ['Dashboard', '/dashboard.php', '📊'],
-    ['Transações', '/transactions.php', '💸'],
-    ['Contas', '/accounts.php', '🏦'],
-    ['Orçamentos', '/budgets.php', '🎯'],
-    ['Objetivos', '/goals.php', '⭐'],
-    ['Faturas', '/bills.php', '📅'],
-    ['Subscrições', '/subscriptions.php', '🔁'],
-    ['Investimentos', '/investments.php', '📈'],
-    ['Análise', '/analytics.php', '🧠'],
-    ['Simuladores', '/simulators.php', '🧮'],
-    ['Conquistas', '/achievements.php', '🏆'],
-    ['Notícias', '/news.php', '📰'],
-    ['Blog', '/blog.php', '📚'],
-    ['Definições', '/settings.php', '⚙️'],
-    ['Alternar tema', 'action:theme', '🎨'],
-    ['Modo privado', 'action:privacy', '🙈'],
-    ['Terminar sessão', '/logout.php', '🚪'],
+    ['Dashboard', '/dashboard.php'],
+    ['Transactions', '/transactions.php'],
+    ['Accounts', '/accounts.php'],
+    ['Budgets', '/budgets.php'],
+    ['Goals', '/goals.php'],
+    ['Bills', '/bills.php'],
+    ['Subscriptions', '/subscriptions.php'],
+    ['Investments', '/investments.php'],
+    ['Insights', '/analytics.php'],
+    ['Simulators', '/simulators.php'],
+    ['Achievements', '/achievements.php'],
+    ['Market news', '/news.php'],
+    ['Guides', '/blog.php'],
+    ['Settings', '/settings.php'],
+    ['Toggle theme', 'action:theme'],
+    ['Privacy mode', 'action:privacy'],
+    ['Sign out', '/logout.php'],
   ];
 
   function initPalette() {
@@ -128,10 +127,10 @@
     let active = 0, filtered = COMMANDS;
 
     const render = () => {
-      list.innerHTML = filtered.map(([label, , icon], i) =>
-        `<button data-i="${i}" class="cmdk-item w-full text-left flex items-center gap-3 rounded-lg px-3 py-2.5 ${i === active ? 'bg-[rgb(var(--surface-2))]' : ''}">
-           <span>${icon}</span><span class="text-sm">${label}</span></button>`).join('') ||
-        `<div class="px-3 py-6 text-center text-soft text-sm">Sem resultados</div>`;
+      list.innerHTML = filtered.map(([label], i) =>
+        `<button data-i="${i}" class="cmdk-item w-full text-left flex items-center gap-3 rounded px-3 py-2.5 ${i === active ? 'bg-[rgb(var(--surface-2))]' : ''}">
+           <span class="text-sm">${label}</span></button>`).join('') ||
+        `<div class="px-3 py-6 text-center text-soft text-sm">No results</div>`;
     };
     const open = () => { root.classList.remove('hidden'); input.value = ''; filtered = COMMANDS; active = 0; render(); input.focus(); };
     const close = () => root.classList.add('hidden');
@@ -179,12 +178,12 @@
       const del = e.target.closest('[data-del]');
       if (!del) return;
       e.preventDefault();
-      if (!confirm(del.dataset.confirm || 'Tens a certeza que queres eliminar?')) return;
+      if (!confirm(del.dataset.confirm || 'Are you sure you want to delete this?')) return;
       try {
         await WW.api(del.dataset.del, { method: 'DELETE', body: { id: del.dataset.id } });
-        WW.toast('Eliminado', 'success');
+        WW.toast('Deleted', 'success');
         setTimeout(() => location.reload(), 400);
-      } catch (err) { WW.toast(err.message || 'Erro ao eliminar', 'error'); }
+      } catch (err) { WW.toast(err.message || 'Could not delete', 'error'); }
     });
 
     // API forms: <form data-api-form="/api/x.php" data-method="POST">
@@ -198,10 +197,10 @@
       if (btn) btn.disabled = true;
       try {
         await WW.api(form.dataset.apiForm, { method: form.dataset.method || 'POST', body });
-        WW.toast('Guardado com sucesso', 'success');
+        WW.toast('Saved', 'success');
         setTimeout(() => location.reload(), 450);
       } catch (err) {
-        WW.toast(err.message || 'Erro ao guardar', 'error');
+        WW.toast(err.message || 'Could not save', 'error');
         if (btn) btn.disabled = false;
       }
     });

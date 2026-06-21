@@ -35,7 +35,7 @@ require __DIR__ . '/../../app/views/partials/admin_nav.php';
       <div><label class="label">Tipo</label><select name="type" class="select"><option value="expense">Despesa</option><option value="income">Receita</option></select></div>
       <div class="grid grid-cols-2 gap-3">
         <div><label class="label">Ícone</label><input name="icon" class="input" value="tag" placeholder="lucide name"></div>
-        <div><label class="label">Cor</label><input name="color" type="color" value="#6366f1" class="input h-11 p-1"></div>
+        <div><label class="label">Cor</label><input name="color" type="color" value="#1f5a3f" class="input h-11 p-1"></div>
       </div>
       <button class="btn-primary w-full">Criar</button>
     </form>

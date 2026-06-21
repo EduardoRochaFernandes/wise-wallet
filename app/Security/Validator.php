@@ -1,7 +1,6 @@
 <?php
 /**
  * WiseWallet 2.0 — Server-side input validation & sanitization.
- *
  * Every endpoint validates here BEFORE touching the database. Collects all
  * errors so the UI can show them at once, and exposes typed/clean values.
  */
@@ -29,7 +28,7 @@ final class Validator
     {
         $v = $this->val($field);
         if ($v === null || $v === '' || (is_array($v) && count($v) === 0)) {
-            $this->errors[$field] = "{$label} é obrigatório.";
+            $this->errors[$field] = "{$label} is required.";
         } else {
             $this->clean[$field] = $v;
         }
@@ -40,7 +39,7 @@ final class Validator
     {
         $v = $this->val($field);
         if ($v !== null && $v !== '' && !filter_var($v, FILTER_VALIDATE_EMAIL)) {
-            $this->errors[$field] = "{$label} inválido.";
+            $this->errors[$field] = "{$label} is invalid.";
         } elseif ($v) {
             $this->clean[$field] = strtolower($v);
         }
@@ -51,7 +50,7 @@ final class Validator
     {
         $v = (string) $this->val($field);
         if ($v !== '' && mb_strlen($v) < $len) {
-            $this->errors[$field] = "{$label} tem de ter pelo menos {$len} caracteres.";
+            $this->errors[$field] = "{$label} must be at least {$len} characters.";
         }
         return $this;
     }
@@ -60,13 +59,13 @@ final class Validator
     {
         $v = (string) $this->val($field);
         if (mb_strlen($v) > $len) {
-            $this->errors[$field] = "{$label} não pode exceder {$len} caracteres.";
+            $this->errors[$field] = "{$label} must be at most {$len} characters.";
         }
         return $this;
     }
 
     /** Strong-ish password: ≥8 chars, upper, lower and a digit. */
-    public function password(string $field, string $label = 'Palavra-passe'): self
+    public function password(string $field, string $label = 'Password'): self
     {
         $v = (string) $this->val($field);
         if ($v === '') {
@@ -76,7 +75,7 @@ final class Validator
             || !preg_match('/[A-Z]/', $v)
             || !preg_match('/[a-z]/', $v)
             || !preg_match('/\d/', $v)) {
-            $this->errors[$field] = "{$label} deve ter 8+ caracteres, com maiúscula, minúscula e número.";
+            $this->errors[$field] = "{$label} must be 8+ characters with an uppercase letter, a lowercase letter and a number.";
         }
         return $this;
     }
@@ -84,7 +83,7 @@ final class Validator
     public function matches(string $field, string $other, string $label): self
     {
         if ($this->val($field) !== $this->val($other)) {
-            $this->errors[$field] = "{$label} não coincide.";
+            $this->errors[$field] = "{$label} does not match.";
         }
         return $this;
     }
@@ -93,7 +92,7 @@ final class Validator
     {
         $v = $this->val($field);
         if ($v !== null && $v !== '' && !is_numeric($v)) {
-            $this->errors[$field] = "{$label} tem de ser um número.";
+            $this->errors[$field] = "{$label} must be a number.";
         } elseif (is_numeric($v)) {
             $this->clean[$field] = $v + 0;
         }
@@ -105,7 +104,7 @@ final class Validator
     {
         $v = $this->val($field);
         if ($v !== null && $v !== '' && !in_array($v, $allowed, true)) {
-            $this->errors[$field] = "{$label} inválido.";
+            $this->errors[$field] = "{$label} is invalid.";
         }
         return $this;
     }
@@ -116,7 +115,7 @@ final class Validator
         if ($v) {
             $d = DateTime::createFromFormat('Y-m-d', $v);
             if (!$d || $d->format('Y-m-d') !== $v) {
-                $this->errors[$field] = "{$label} tem uma data inválida.";
+                $this->errors[$field] = "{$label} has an invalid date.";
             }
         }
         return $this;

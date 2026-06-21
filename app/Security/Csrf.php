@@ -51,7 +51,7 @@ final class Csrf
         if (!self::validate($token)) {
             http_response_code(419);
             header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(['error' => 'CSRF token inválido ou em falta.']);
+            echo json_encode(['error' => 'Invalid or missing CSRF token.']);
             exit;
         }
     }

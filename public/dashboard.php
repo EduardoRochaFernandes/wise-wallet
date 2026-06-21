@@ -10,8 +10,8 @@ $expenseCat = Finance::byCategory($uid, 'expense', 30);
 $recent = Finance::transactions($uid, [], 6, 0);
 $budgets = array_slice(Finance::budgets($uid), 0, 4);
 $goals = array_slice(array_filter(Finance::goals($uid), fn($g) => $g['status'] === 'active'), 0, 3);
-
 $txCount = Finance::transactionsCount($uid);
+
 $payload = ['cashflow' => $cashflow, 'expenseCat' => $expenseCat, 'health' => $health['score'], 'empty' => $txCount === 0];
 
 $title = 'Dashboard';
@@ -20,64 +20,61 @@ require __DIR__ . '/../app/views/partials/app_head.php';
 
 $delta = function (float $v): string {
     $cls = $v >= 0 ? 'text-pos' : 'text-neg';
-    $sign = $v >= 0 ? '↑' : '↓';
-    return "<span class=\"$cls text-sm font-semibold\">$sign " . number_format(abs($v), 1, ',', ' ') . '%</span>';
+    $sign = $v >= 0 ? '+' : '−';
+    return "<span class=\"$cls text-sm font-medium\">$sign" . number_format(abs($v), 1, '.', ',') . '%</span>';
 };
 ?>
-<!-- Stat cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-  <div class="stat-card">
-    <div class="text-soft text-sm">Património líquido</div>
-    <div class="text-3xl font-extrabold mt-1 sensitive"><?= money($s['net_worth']) ?></div>
-    <div class="text-soft text-xs mt-2">Soma de todas as contas</div>
+<!-- Stat row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-px mb-6 rounded-lg overflow-hidden border" style="border-color:rgb(var(--line))">
+  <div class="card-pad" style="background:rgb(var(--surface))">
+    <div class="text-soft text-xs uppercase tracking-wide">Net worth</div>
+    <div class="font-display text-2xl font-semibold mt-1 amount sensitive"><?= money($s['net_worth']) ?></div>
+    <div class="text-soft text-xs mt-1">Across all accounts</div>
   </div>
-  <div class="stat-card">
-    <div class="text-soft text-sm">Receitas (mês)</div>
-    <div class="text-3xl font-extrabold mt-1 text-pos sensitive"><?= money($s['income_month']) ?></div>
-    <div class="mt-2"><?= $delta($s['income_delta']) ?> <span class="text-soft text-xs">vs mês anterior</span></div>
+  <div class="card-pad" style="background:rgb(var(--surface))">
+    <div class="text-soft text-xs uppercase tracking-wide">Income · month</div>
+    <div class="font-display text-2xl font-semibold mt-1 text-pos amount sensitive"><?= money($s['income_month']) ?></div>
+    <div class="mt-1"><?= $delta($s['income_delta']) ?> <span class="text-soft text-xs">vs last month</span></div>
   </div>
-  <div class="stat-card">
-    <div class="text-soft text-sm">Despesas (mês)</div>
-    <div class="text-3xl font-extrabold mt-1 text-neg sensitive"><?= money($s['expense_month']) ?></div>
-    <div class="mt-2"><?= $delta(-$s['expense_delta']) ?> <span class="text-soft text-xs">vs mês anterior</span></div>
+  <div class="card-pad" style="background:rgb(var(--surface))">
+    <div class="text-soft text-xs uppercase tracking-wide">Expenses · month</div>
+    <div class="font-display text-2xl font-semibold mt-1 text-neg amount sensitive"><?= money($s['expense_month']) ?></div>
+    <div class="mt-1"><?= $delta(-$s['expense_delta']) ?> <span class="text-soft text-xs">vs last month</span></div>
   </div>
-  <div class="stat-card">
-    <div class="text-soft text-sm">Taxa de poupança</div>
-    <div class="text-3xl font-extrabold mt-1 text-brand-400"><?= number_format($s['savings_rate'], 1, ',', ' ') ?>%</div>
-    <div class="progress mt-3"><span style="width:<?= min(100, $s['savings_rate']) ?>%;background:rgb(var(--brand))"></span></div>
+  <div class="card-pad" style="background:rgb(var(--surface))">
+    <div class="text-soft text-xs uppercase tracking-wide">Savings rate</div>
+    <div class="font-display text-2xl font-semibold mt-1"><?= number_format($s['savings_rate'], 1, '.', ',') ?>%</div>
+    <div class="progress mt-3"><span style="width:<?= min(100, $s['savings_rate']) ?>%"></span></div>
   </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-  <!-- Cashflow -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
   <div class="card card-pad lg:col-span-2">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="font-bold text-lg">Fluxo de caixa · 12 meses</h2>
-      <a href="/analytics.php" class="btn-ghost btn-sm">Ver análise</a>
+      <h2 class="font-display font-semibold text-lg">Cash flow · 12 months</h2>
+      <a href="/analytics.php" class="btn-ghost btn-sm">View insights</a>
     </div>
     <div id="chart-cashflow"></div>
   </div>
-  <!-- Health score -->
   <div class="card card-pad">
-    <h2 class="font-bold text-lg mb-1">Saúde Financeira</h2>
+    <h2 class="font-display font-semibold text-lg mb-1">Financial health</h2>
     <div id="chart-health"></div>
     <div class="space-y-2 mt-2" <?= $txCount === 0 ? 'hidden' : '' ?>>
       <?php foreach ($health['components'] as $c): ?>
         <div>
-          <div class="flex justify-between text-xs mb-1"><span class="text-soft"><?= e($c['label']) ?></span><span><?= $c['value'] ?>/<?= $c['max'] ?></span></div>
-          <div class="progress"><span style="width:<?= $c['max'] ? ($c['value'] / $c['max'] * 100) : 0 ?>%;background:rgb(var(--brand))"></span></div>
+          <div class="flex justify-between text-xs mb-1"><span class="text-soft"><?= e($c['label']) ?></span><span class="amount"><?= $c['value'] ?>/<?= $c['max'] ?></span></div>
+          <div class="progress"><span style="width:<?= $c['max'] ? ($c['value'] / $c['max'] * 100) : 0 ?>%"></span></div>
         </div>
       <?php endforeach; ?>
     </div>
   </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-  <!-- Recent transactions -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
   <div class="card card-pad lg:col-span-2">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="font-bold text-lg">Transações recentes</h2>
-      <a href="/transactions.php" class="btn-ghost btn-sm">Ver todas</a>
+      <h2 class="font-display font-semibold text-lg">Recent transactions</h2>
+      <a href="/transactions.php" class="btn-ghost btn-sm">View all</a>
     </div>
     <div class="overflow-x-auto">
       <table class="table">
@@ -85,53 +82,48 @@ $delta = function (float $v): string {
         <?php foreach ($recent as $t): $exp = $t['type'] === 'expense'; ?>
           <tr>
             <td>
-              <div class="font-medium"><?= e($t['description'] ?: ($t['category_name'] ?? 'Transação')) ?></div>
-              <div class="text-xs text-soft"><?= e($t['category_name'] ?? ($t['type'] === 'transfer' ? 'Transferência' : '—')) ?> · <?= e($t['account_name']) ?></div>
+              <div class="font-medium"><?= e($t['description'] ?: ($t['category_name'] ?? 'Transaction')) ?></div>
+              <div class="text-xs text-soft"><?= e($t['category_name'] ?? ($t['type'] === 'transfer' ? 'Transfer' : '—')) ?> · <?= e($t['account_name']) ?></div>
             </td>
-            <td class="text-right text-xs text-soft whitespace-nowrap"><?= date('d/m', strtotime($t['occurred_on'])) ?></td>
-            <td class="text-right font-semibold whitespace-nowrap <?= $exp ? 'text-neg' : ($t['type'] === 'income' ? 'text-pos' : '') ?>">
+            <td class="text-right text-xs text-soft whitespace-nowrap"><?= date('d M', strtotime($t['occurred_on'])) ?></td>
+            <td class="text-right font-medium whitespace-nowrap amount <?= $exp ? 'text-neg' : ($t['type'] === 'income' ? 'text-pos' : '') ?>">
               <span class="sensitive"><?= ($exp ? '−' : ($t['type'] === 'income' ? '+' : '')) . money($t['amount']) ?></span>
             </td>
           </tr>
         <?php endforeach; ?>
-        <?php if (!$recent): ?><tr><td class="text-soft text-center py-8">Sem transações ainda. Usa o botão <strong>Adicionar</strong>.</td></tr><?php endif; ?>
+        <?php if (!$recent): ?><tr><td class="text-soft text-center py-8">No transactions yet — use the <strong>Add</strong> button to record one.</td></tr><?php endif; ?>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- Side: expense donut + budgets + goals -->
-  <div class="space-y-4">
-    <div class="card card-pad">
-      <h2 class="font-bold text-lg mb-2">Despesas por categoria</h2>
-      <div id="chart-expense"></div>
-    </div>
+  <div class="card card-pad">
+    <h2 class="font-display font-semibold text-lg mb-2">Spending by category</h2>
+    <div id="chart-expense"></div>
   </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-  <!-- Budgets -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
   <div class="card card-pad">
-    <div class="flex items-center justify-between mb-3"><h2 class="font-bold text-lg">Orçamentos</h2><a href="/budgets.php" class="btn-ghost btn-sm">Gerir</a></div>
-    <?php foreach ($budgets as $b): $col = $b['status'] === 'over' ? 'var(--neg)' : ($b['status'] === 'warn' ? 'var(--warn)' : 'var(--pos)'); ?>
+    <div class="flex items-center justify-between mb-3"><h2 class="font-display font-semibold text-lg">Budgets</h2><a href="/budgets.php" class="btn-ghost btn-sm">Manage</a></div>
+    <?php foreach ($budgets as $b): $col = $b['status'] === 'over' ? 'var(--neg)' : ($b['status'] === 'warn' ? 'var(--warn)' : 'var(--accent)'); ?>
       <div class="mb-3">
-        <div class="flex justify-between text-sm mb-1"><span><?= e($b['category_name']) ?></span><span class="text-soft sensitive"><?= money($b['spent']) ?> / <?= money($b['amount']) ?></span></div>
+        <div class="flex justify-between text-sm mb-1"><span><?= e($b['category_name']) ?></span><span class="text-soft amount sensitive"><?= money($b['spent']) ?> / <?= money($b['amount']) ?></span></div>
         <div class="progress"><span style="width:<?= $b['pct'] ?>%;background:rgb(<?= $col ?>)"></span></div>
       </div>
     <?php endforeach; ?>
-    <?php if (!$budgets): ?><p class="text-soft text-sm py-4">Sem orçamentos. <a href="/budgets.php" class="text-brand-400">Cria o primeiro</a>.</p><?php endif; ?>
+    <?php if (!$budgets): ?><p class="text-soft text-sm py-4">No budgets yet. <a href="/budgets.php" class="text-accent">Create your first</a>.</p><?php endif; ?>
   </div>
-  <!-- Goals -->
   <div class="card card-pad">
-    <div class="flex items-center justify-between mb-3"><h2 class="font-bold text-lg">Objetivos</h2><a href="/goals.php" class="btn-ghost btn-sm">Gerir</a></div>
+    <div class="flex items-center justify-between mb-3"><h2 class="font-display font-semibold text-lg">Goals</h2><a href="/goals.php" class="btn-ghost btn-sm">Manage</a></div>
     <?php foreach ($goals as $g): ?>
       <div class="mb-3">
-        <div class="flex justify-between text-sm mb-1"><span><?= e($g['name']) ?></span><span class="text-soft"><?= $g['pct'] ?>%</span></div>
-        <div class="progress"><span style="width:<?= $g['pct'] ?>%;background:<?= e($g['color']) ?>"></span></div>
-        <div class="text-xs text-soft mt-1 sensitive"><?= money($g['current_amount']) ?> de <?= money($g['target_amount']) ?><?= $g['days_left'] !== null ? ' · ' . max(0, $g['days_left']) . ' dias' : '' ?></div>
+        <div class="flex justify-between text-sm mb-1"><span><?= e($g['name']) ?></span><span class="text-soft amount"><?= $g['pct'] ?>%</span></div>
+        <div class="progress"><span style="width:<?= $g['pct'] ?>%"></span></div>
+        <div class="text-xs text-soft mt-1 sensitive"><?= money($g['current_amount']) ?> of <?= money($g['target_amount']) ?><?= $g['days_left'] !== null ? ' · ' . max(0, $g['days_left']) . ' days left' : '' ?></div>
       </div>
     <?php endforeach; ?>
-    <?php if (!$goals): ?><p class="text-soft text-sm py-4">Sem objetivos ativos. <a href="/goals.php" class="text-brand-400">Define um</a>.</p><?php endif; ?>
+    <?php if (!$goals): ?><p class="text-soft text-sm py-4">No active goals. <a href="/goals.php" class="text-accent">Set one</a>.</p><?php endif; ?>
   </div>
 </div>
 
@@ -140,18 +132,18 @@ $delta = function (float $v): string {
 document.addEventListener('DOMContentLoaded', function () {
   const D = JSON.parse(document.getElementById('dash-data').textContent);
   if (D.empty) {
-    WW.emptyState('#chart-cashflow', { title: 'Ainda sem movimentos', text: 'Regista a tua primeira transação para veres o teu fluxo de caixa de 12 meses.', cta: 'Adicionar transação', href: '/transactions.php' });
-    WW.emptyState('#chart-health', { title: 'Score por revelar', text: 'Adiciona transações, orçamentos e objetivos para calcular a tua Saúde Financeira.', cta: 'Começar agora', href: '/transactions.php' });
-    WW.emptyState('#chart-expense', { title: 'Sem despesas', text: 'As tuas despesas por categoria aparecem aqui.', cta: 'Adicionar despesa', href: '/transactions.php' });
+    WW.emptyState('#chart-cashflow', { title: 'No activity yet', text: 'Record your first transaction to see a 12-month cash flow.', cta: 'Add a transaction', href: '/transactions.php' });
+    WW.emptyState('#chart-health', { title: 'Score pending', text: 'Add transactions, budgets and goals to compute your Financial Health Score.', cta: 'Get started', href: '/transactions.php' });
+    WW.emptyState('#chart-expense', { title: 'No spending', text: 'Your spending by category will appear here.', cta: 'Add an expense', href: '/transactions.php' });
     return;
   }
   WW.areaChart('#chart-cashflow', D.cashflow.labels, [
-    { name: 'Receitas', data: D.cashflow.income },
-    { name: 'Despesas', data: D.cashflow.expense },
+    { name: 'Income', data: D.cashflow.income },
+    { name: 'Expenses', data: D.cashflow.expense },
   ]);
   WW.gaugeChart('#chart-health', D.health);
   if (D.expenseCat.values.length) WW.donutChart('#chart-expense', D.expenseCat.labels, D.expenseCat.values);
-  else WW.emptyState('#chart-expense', { title: 'Sem despesas este mês', text: 'Regista despesas para veres a distribuição por categoria.', cta: 'Adicionar despesa', href: '/transactions.php' });
+  else WW.emptyState('#chart-expense', { title: 'No spending this month', text: 'Record expenses to see the category breakdown.', cta: 'Add an expense', href: '/transactions.php' });
 });
 </script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';
