@@ -11,7 +11,8 @@ $recent = Finance::transactions($uid, [], 6, 0);
 $budgets = array_slice(Finance::budgets($uid), 0, 4);
 $goals = array_slice(array_filter(Finance::goals($uid), fn($g) => $g['status'] === 'active'), 0, 3);
 
-$payload = ['cashflow' => $cashflow, 'expenseCat' => $expenseCat, 'health' => $health['score']];
+$txCount = Finance::transactionsCount($uid);
+$payload = ['cashflow' => $cashflow, 'expenseCat' => $expenseCat, 'health' => $health['score'], 'empty' => $txCount === 0];
 
 $title = 'Dashboard';
 $nav = 'dashboard';
@@ -60,7 +61,7 @@ $delta = function (float $v): string {
   <div class="card card-pad">
     <h2 class="font-bold text-lg mb-1">Saúde Financeira</h2>
     <div id="chart-health"></div>
-    <div class="space-y-2 mt-2">
+    <div class="space-y-2 mt-2" <?= $txCount === 0 ? 'hidden' : '' ?>>
       <?php foreach ($health['components'] as $c): ?>
         <div>
           <div class="flex justify-between text-xs mb-1"><span class="text-soft"><?= e($c['label']) ?></span><span><?= $c['value'] ?>/<?= $c['max'] ?></span></div>
@@ -138,13 +139,19 @@ $delta = function (float $v): string {
 <script <?= nonce_attr() ?>>
 document.addEventListener('DOMContentLoaded', function () {
   const D = JSON.parse(document.getElementById('dash-data').textContent);
+  if (D.empty) {
+    WW.emptyState('#chart-cashflow', { title: 'Ainda sem movimentos', text: 'Regista a tua primeira transação para veres o teu fluxo de caixa de 12 meses.', cta: 'Adicionar transação', href: '/transactions.php' });
+    WW.emptyState('#chart-health', { title: 'Score por revelar', text: 'Adiciona transações, orçamentos e objetivos para calcular a tua Saúde Financeira.', cta: 'Começar agora', href: '/transactions.php' });
+    WW.emptyState('#chart-expense', { title: 'Sem despesas', text: 'As tuas despesas por categoria aparecem aqui.', cta: 'Adicionar despesa', href: '/transactions.php' });
+    return;
+  }
   WW.areaChart('#chart-cashflow', D.cashflow.labels, [
     { name: 'Receitas', data: D.cashflow.income },
     { name: 'Despesas', data: D.cashflow.expense },
   ]);
   WW.gaugeChart('#chart-health', D.health);
   if (D.expenseCat.values.length) WW.donutChart('#chart-expense', D.expenseCat.labels, D.expenseCat.values);
-  else document.getElementById('chart-expense').innerHTML = '<p class="text-soft text-sm py-8 text-center">Sem despesas este mês.</p>';
+  else WW.emptyState('#chart-expense', { title: 'Sem despesas este mês', text: 'Regista despesas para veres a distribuição por categoria.', cta: 'Adicionar despesa', href: '/transactions.php' });
 });
 </script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';

@@ -42,6 +42,22 @@
     setTimeout(() => el.remove(), 3600);
   };
 
+  /* ── Empty-state CTA (used when a chart/list has no data) ─── */
+  WW.emptyState = (sel, o) => {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const action = o.modal
+      ? `<button class="btn-primary mt-4 inline-flex" data-modal-open="${o.modal}">${o.cta} ›</button>`
+      : `<a href="${o.href}" class="btn-primary mt-4 inline-flex">${o.cta} ›</a>`;
+    el.innerHTML =
+      `<div class="text-center py-10 px-4">
+         <div class="w-14 h-14 mx-auto rounded-2xl grid place-items-center mb-4" style="background:rgb(var(--brand) / .12);color:rgb(var(--brand))">✨</div>
+         <h3 class="font-bold text-lg">${o.title}</h3>
+         <p class="text-soft text-sm mt-1 max-w-sm mx-auto">${o.text || ''}</p>
+         ${action}
+       </div>`;
+  };
+
   /* ── CSRF-aware fetch helper for the JSON API ─────────────── */
   WW.csrf = () => ($('meta[name="csrf-token"]') || {}).content || '';
   WW.api = async (url, { method = 'GET', body = null, json = true } = {}) => {

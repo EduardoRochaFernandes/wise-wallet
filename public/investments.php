@@ -66,7 +66,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
 <script <?= nonce_attr() ?>>
 document.addEventListener('DOMContentLoaded', function(){ const D = JSON.parse(document.getElementById('div-data').textContent);
   if (D.values.length) WW.donutChart('#chart-div', D.labels, D.values);
-  else document.getElementById('chart-div').innerHTML='<p class="text-soft text-sm py-8 text-center">Sem ativos.</p>';
+  else WW.emptyState('#chart-div', { title: 'Carteira vazia', text: 'Adiciona o teu primeiro ativo para veres a diversificação.', cta: 'Adicionar ativo', modal: '#m-inv' });
 });
 </script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';

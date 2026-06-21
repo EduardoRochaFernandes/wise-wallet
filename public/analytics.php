@@ -58,9 +58,14 @@ require __DIR__ . '/../app/views/partials/app_head.php';
 
 <div class="card card-pad mt-4"><h2 class="font-bold text-lg mb-3">Evolução do património líquido</h2><div id="c-nw"></div></div>
 
-<script type="application/json" id="an-data" <?= nonce_attr() ?>><?= json_encode($data + ['health' => $health['score']], JSON_UNESCAPED_UNICODE) ?></script>
+<script type="application/json" id="an-data" <?= nonce_attr() ?>><?= json_encode($data + ['health' => $health['score'], 'empty' => Finance::transactionsCount($uid) === 0], JSON_UNESCAPED_UNICODE) ?></script>
 <script <?= nonce_attr() ?>>
 document.addEventListener('DOMContentLoaded', function(){ const D = JSON.parse(document.getElementById('an-data').textContent);
+  if (D.empty) {
+    [['#c-cash','Sem fluxo de caixa'],['#c-health','Score por revelar'],['#c-exp','Sem despesas'],['#c-inc','Sem receitas'],['#c-week','Sem gastos'],['#c-nw','Sem histórico']].forEach(([sel,t]) =>
+      WW.emptyState(sel, { title: t, text: 'Regista transações para desbloquear esta análise.', cta: 'Adicionar transação', href: '/transactions.php' }));
+    return;
+  }
   WW.areaChart('#c-cash', D.cashflow.labels, [{name:'Receitas',data:D.cashflow.income},{name:'Despesas',data:D.cashflow.expense}]);
   WW.gaugeChart('#c-health', D.health);
   D.expense.values.length ? WW.donutChart('#c-exp', D.expense.labels, D.expense.values) : document.getElementById('c-exp').innerHTML='<p class="text-soft text-sm py-8 text-center">Sem dados.</p>';

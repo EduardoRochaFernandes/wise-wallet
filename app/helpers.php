@@ -92,3 +92,17 @@ function nav_active(string $page, string $current): string
 {
     return $page === $current ? ' is-active' : '';
 }
+
+/**
+ * Reusable empty-state block with a call-to-action.
+ * Used instead of empty/placeholder charts & lists when a user has no data yet.
+ */
+function empty_state(string $title, string $text, string $ctaLabel, string $ctaHref, string $iconName = 'sparkles'): string
+{
+    return '<div class="text-center py-10 px-4">'
+        . '<div class="w-14 h-14 mx-auto rounded-2xl grid place-items-center mb-4 text-brand-400" style="background:rgb(var(--brand) / .12)">' . icon($iconName, 'w-7 h-7') . '</div>'
+        . '<h3 class="font-bold text-lg">' . e($title) . '</h3>'
+        . '<p class="text-soft text-sm mt-1 max-w-sm mx-auto">' . e($text) . '</p>'
+        . '<a href="' . e($ctaHref) . '" class="btn-primary mt-4 inline-flex">' . e($ctaLabel) . ' ' . icon('chevron-right', 'w-4 h-4') . '</a>'
+        . '</div>';
+}

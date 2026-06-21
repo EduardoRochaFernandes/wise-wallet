@@ -55,17 +55,25 @@ if ($format === 'pdf') {
     exit;
 }
 
-// Default: CSV
+// Default: CSV — neutralize spreadsheet formula injection (=, +, -, @, tab, CR).
+$csvSafe = static function ($v): string {
+    $v = (string) $v;
+    if ($v !== '' && strpbrk($v[0], "=+-@\t\r") !== false) {
+        $v = "'" . $v; // force the cell to be treated as text
+    }
+    return $v;
+};
 header('Content-Type: text/csv; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
 header('Content-Disposition: attachment; filename="wisewallet-transacoes-' . date('Ymd') . '.csv"');
 $fp = fopen('php://output', 'w');
 fprintf($fp, "\xEF\xBB\xBF"); // UTF-8 BOM for Excel
 fputcsv($fp, ['Data', 'Tipo', 'Descrição', 'Categoria', 'Conta', 'Valor', 'Notas']);
 foreach ($rows as $t) {
-    fputcsv($fp, [
+    fputcsv($fp, array_map($csvSafe, [
         $t['occurred_on'], $t['type'], $t['description'], $t['category_name'] ?? '',
         $t['account_name'] ?? '', number_format((float) $t['amount'], 2, '.', ''), $t['notes'] ?? '',
-    ]);
+    ]));
 }
 fclose($fp);
 exit;
