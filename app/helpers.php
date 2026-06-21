@@ -93,6 +93,14 @@ function nav_active(string $page, string $current): string
     return $page === $current ? ' is-active' : '';
 }
 
+/** Versioned asset URL (cache-busting via file mtime). */
+function asset(string $path): string
+{
+    $full = WW_PUBLIC . $path;
+    $v = is_file($full) ? (string) filemtime($full) : '2';
+    return $path . '?v=' . $v;
+}
+
 /**
  * Reusable empty-state block with a call-to-action.
  * Used instead of empty/placeholder charts & lists when a user has no data yet.

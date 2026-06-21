@@ -38,9 +38,9 @@ $unread = (int) (Database::scalar("SELECT COUNT(*) FROM notifications WHERE user
 <title><?= e($title) ?> · WiseWallet</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="data:image/svg+xml,<?= rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#6366f1"/><path d="M6 9h11v9H6z" fill="none" stroke="#fff" stroke-width="1.6"/></svg>') ?>">
-<link rel="stylesheet" href="/assets/css/app.css">
+<link rel="stylesheet" href="<?= asset('/assets/css/app.css') ?>">
 <script <?= nonce_attr() ?>>
-(function(){try{var t=localStorage.getItem('ww-theme');if(t){var d=document.documentElement;d.classList.toggle('light',t==='light');d.classList.toggle('dark',t!=='light');}}catch(e){}})();
+document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ww-theme');if(t){var d=document.documentElement;d.classList.toggle('light',t==='light');d.classList.toggle('dark',t!=='light');}}catch(e){}})();
 </script>
 </head>
 <body class="<?= $privacy ? 'private' : '' ?>">

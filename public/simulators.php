@@ -47,5 +47,5 @@ require __DIR__ . '/../app/views/partials/app_head.php';
   </div>
 </div>
 
-<script src="/assets/js/simulators.js"></script>
+<script src="<?= asset('/assets/js/simulators.js') ?>"></script>
 <?php require __DIR__ . '/../app/views/partials/app_foot.php';

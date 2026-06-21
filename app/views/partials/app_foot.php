@@ -46,9 +46,9 @@
   </div>
 </div>
 
-<script src="/assets/js/apexcharts.min.js"></script>
-<script src="/assets/js/app.js"></script>
-<script src="/assets/js/charts.js"></script>
+<script src="<?= asset('/assets/js/apexcharts.min.js') ?>"></script>
+<script src="<?= asset('/assets/js/app.js') ?>"></script>
+<script src="<?= asset('/assets/js/charts.js') ?>"></script>
 <script <?= nonce_attr() ?>>
 (function () {
   const modal = document.getElementById('qa-modal');
