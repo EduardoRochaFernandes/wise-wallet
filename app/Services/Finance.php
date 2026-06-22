@@ -216,7 +216,7 @@ final class Finance
         foreach ($rows as $r) { $byDow[(int) $r['dow']] = round((float) $r['total'], 2); }
         // MySQL DAYOFWEEK: 1=Sun..7=Sat → reorder to Mon..Sun
         $order = [2, 3, 4, 5, 6, 7, 1];
-        $labels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+        $labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         return ['labels' => $labels, 'values' => array_map(fn($d) => $byDow[$d], $order)];
     }
 
@@ -342,11 +342,11 @@ final class Finance
         $stability = ($s['net_worth'] > 0 ? 6 : 0) + ($overdue === 0 ? 4 : 0);
 
         $components = [
-            ['label' => 'Taxa de poupança', 'value' => round($savings, 1), 'max' => 30],
-            ['label' => 'Orçamentos',        'value' => round($budgetScore, 1), 'max' => 25],
-            ['label' => 'Objetivos',         'value' => round($goalScore, 1), 'max' => 20],
-            ['label' => 'Diversificação',    'value' => round($divScore, 1), 'max' => 15],
-            ['label' => 'Estabilidade',      'value' => round($stability, 1), 'max' => 10],
+            ['label' => 'Savings rate',    'value' => round($savings, 1), 'max' => 30],
+            ['label' => 'Budgets',         'value' => round($budgetScore, 1), 'max' => 25],
+            ['label' => 'Goals',           'value' => round($goalScore, 1), 'max' => 20],
+            ['label' => 'Diversification', 'value' => round($divScore, 1), 'max' => 15],
+            ['label' => 'Stability',       'value' => round($stability, 1), 'max' => 10],
         ];
         $score = (int) round($savings + $budgetScore + $goalScore + $divScore + $stability);
         return ['score' => max(0, min(100, $score)), 'components' => $components];

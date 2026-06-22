@@ -15,42 +15,44 @@ $articles = Database::all($sql, $params);
 $cats = Database::all("SELECT * FROM article_categories ORDER BY name");
 
 if ($inApp) {
-    $title = 'Blog'; $nav = 'blog';
+    $title = 'Guides'; $nav = 'blog';
     require __DIR__ . '/../app/views/partials/app_head.php';
 } else {
-    $seo = ['title' => 'Blog · Educação financeira · WiseWallet', 'description' => 'Artigos práticos sobre orçamentos, poupança, investimento e crédito.'];
+    $seo = ['title' => 'Guides · Financial education · WiseWallet', 'description' => 'Practical guides on budgeting, saving, investing and credit.'];
     $activeNav = 'blog';
     require __DIR__ . '/../app/views/partials/public_head.php';
 }
 ?>
-<section class="max-w-6xl mx-auto <?= $inApp ? '' : 'px-4 sm:px-6 py-12' ?>">
+<section class="max-w-5xl mx-auto <?= $inApp ? '' : 'px-4 sm:px-6 py-14' ?>">
   <?php if (!$inApp): ?>
-    <div class="text-center mb-10">
-      <h1 class="text-4xl font-extrabold">Aprende sobre o teu dinheiro</h1>
-      <p class="text-soft mt-3">Educação financeira prática. Quem entende, decide melhor.</p>
+    <div class="mb-10">
+      <p class="eyebrow mb-3">Learn as you go</p>
+      <h1 class="font-display text-4xl font-semibold">Money, explained simply.</h1>
+      <p class="text-soft mt-3 max-w-xl">Practical financial education — the more you understand, the better you decide.</p>
     </div>
   <?php endif; ?>
 
   <div class="flex flex-wrap gap-2 mb-6">
-    <a href="/blog.php" class="btn-sm <?= $catSlug === '' ? 'btn-primary' : 'btn-ghost' ?>">Todos</a>
+    <a href="/blog.php" class="btn-sm <?= $catSlug === '' ? 'btn-primary' : 'btn-ghost' ?>">All</a>
     <?php foreach ($cats as $c): ?>
       <a href="/blog.php?cat=<?= e($c['slug']) ?>" class="btn-sm <?= $catSlug === $c['slug'] ? 'btn-primary' : 'btn-ghost' ?>"><?= e($c['name']) ?></a>
     <?php endforeach; ?>
   </div>
 
-  <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+  <div class="divide-y" style="border-color:rgb(var(--line))">
     <?php foreach ($articles as $a): ?>
-      <a href="/article.php?slug=<?= e($a['slug']) ?>" class="card card-pad hover:shadow-glow transition-shadow block">
-        <div class="flex items-center gap-2 mb-3">
-          <?php if ($a['cat_name']): ?><span class="badge-brand text-xs"><?= e($a['cat_name']) ?></span><?php endif; ?>
-          <span class="text-xs text-soft"><?= (int) $a['reading_minutes'] ?> min</span>
+      <a href="/article.php?slug=<?= e($a['slug']) ?>" class="grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-8 py-6 group" style="border-color:rgb(var(--line))">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <?php if ($a['cat_name']): ?><span class="badge-brand text-xs"><?= e($a['cat_name']) ?></span><?php endif; ?>
+          </div>
+          <h2 class="font-display text-xl font-semibold group-hover:text-accent"><?= e($a['title']) ?></h2>
+          <p class="text-soft text-sm mt-1.5 max-w-2xl"><?= e($a['excerpt']) ?></p>
         </div>
-        <h2 class="font-bold text-lg leading-snug"><?= e($a['title']) ?></h2>
-        <p class="text-soft text-sm mt-2"><?= e($a['excerpt']) ?></p>
-        <div class="text-xs text-soft mt-4"><?= e($a['author'] ?? 'WiseWallet') ?> · <?= $a['published_at'] ? date('d/m/Y', strtotime($a['published_at'])) : '' ?></div>
+        <div class="text-soft text-xs sm:text-right pt-1 whitespace-nowrap"><?= e($a['author'] ?? 'WiseWallet') ?> · <?= (int) $a['reading_minutes'] ?> min read</div>
       </a>
     <?php endforeach; ?>
-    <?php if (!$articles): ?><p class="text-soft col-span-3 text-center py-10">Sem artigos nesta categoria.</p><?php endif; ?>
+    <?php if (!$articles): ?><p class="text-soft py-10 text-center">No articles in this category.</p><?php endif; ?>
   </div>
 </section>
 <?php

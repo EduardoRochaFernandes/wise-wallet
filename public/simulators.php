@@ -4,36 +4,34 @@ Auth::requireAuth();
 
 // key => [label, icon, [ [name,label,default,step], ... ] ]
 $sims = [
-    'mortgage'   => ['Crédito Habitação', 'home', [['amount', 'Montante (€)', 150000, '1000'], ['rate', 'Taxa anual (%)', 3.5, '0.1'], ['years', 'Prazo (anos)', 30, '1']]],
-    'personal'   => ['Crédito Pessoal', 'wallet', [['amount', 'Montante (€)', 10000, '500'], ['rate', 'TAEG (%)', 7.9, '0.1'], ['months', 'Meses', 60, '1']]],
-    'savings'    => ['Poupança', 'piggy-bank', [['initial', 'Inicial (€)', 1000, '100'], ['monthly', 'Reforço mensal (€)', 200, '10'], ['rate', 'Retorno anual (%)', 5, '0.1'], ['years', 'Anos', 15, '1']]],
-    'retirement' => ['Reforma', 'umbrella', [['age', 'Idade atual', 30, '1'], ['retage', 'Idade reforma', 67, '1'], ['current', 'Poupado (€)', 5000, '500'], ['monthly', 'Reforço/mês (€)', 200, '10'], ['rate', 'Retorno (%)', 5, '0.1'], ['income', 'Renda desejada/mês (€)', 1000, '50'], ['duration', 'Anos de reforma', 25, '1']]],
-    'investment' => ['Investimento', 'trending-up', [['initial', 'Montante (€)', 10000, '500'], ['rate', 'Retorno anual (%)', 7, '0.1'], ['years', 'Anos', 20, '1'], ['inflation', 'Inflação (%)', 2.5, '0.1']]],
-    'irs'        => ['IRS Portugal', 'landmark', [['income', 'Rendimento bruto anual (€)', 25000, '500']]],
-    'leasing'    => ['Leasing Auto', 'trending-up', [['price', 'Preço (€)', 30000, '500'], ['entry', 'Entrada (%)', 10, '1'], ['residual', 'Valor residual (%)', 20, '1'], ['months', 'Meses', 48, '1'], ['rate', 'Taxa anual (%)', 6, '0.1']]],
-    'emergency'  => ['Fundo de Emergência', 'shield', [['expenses', 'Despesas mensais (€)', 1200, '50'], ['months', 'Meses alvo', 6, '1'], ['current', 'Já poupado (€)', 1500, '100'], ['save', 'Poupança/mês (€)', 250, '10']]],
+    'mortgage'   => ['Mortgage', 'home', [['amount', 'Amount (€)', 150000, '1000'], ['rate', 'Annual rate (%)', 3.5, '0.1'], ['years', 'Term (years)', 30, '1']]],
+    'personal'   => ['Personal loan', 'wallet', [['amount', 'Amount (€)', 10000, '500'], ['rate', 'APR (%)', 7.9, '0.1'], ['months', 'Months', 60, '1']]],
+    'savings'    => ['Savings', 'piggy-bank', [['initial', 'Initial (€)', 1000, '100'], ['monthly', 'Monthly top-up (€)', 200, '10'], ['rate', 'Annual return (%)', 5, '0.1'], ['years', 'Years', 15, '1']]],
+    'retirement' => ['Retirement', 'umbrella', [['age', 'Current age', 30, '1'], ['retage', 'Retirement age', 67, '1'], ['current', 'Saved (€)', 5000, '500'], ['monthly', 'Top-up / mo (€)', 200, '10'], ['rate', 'Return (%)', 5, '0.1'], ['income', 'Income / mo (€)', 1000, '50'], ['duration', 'Years in retirement', 25, '1']]],
+    'investment' => ['Investment', 'trending-up', [['initial', 'Amount (€)', 10000, '500'], ['rate', 'Annual return (%)', 7, '0.1'], ['years', 'Years', 20, '1'], ['inflation', 'Inflation (%)', 2.5, '0.1']]],
+    'irs'        => ['Income tax (PT)', 'landmark', [['income', 'Gross annual income (€)', 25000, '500']]],
+    'leasing'    => ['Car leasing', 'trending-up', [['price', 'Price (€)', 30000, '500'], ['entry', 'Down payment (%)', 10, '1'], ['residual', 'Residual value (%)', 20, '1'], ['months', 'Months', 48, '1'], ['rate', 'Annual rate (%)', 6, '0.1']]],
+    'emergency'  => ['Emergency fund', 'shield', [['expenses', 'Monthly expenses (€)', 1200, '50'], ['months', 'Target months', 6, '1'], ['current', 'Already saved (€)', 1500, '100'], ['save', 'Saving / mo (€)', 250, '10']]],
 ];
 
-$title = 'Simuladores';
+$title = 'Simulators';
 $nav = 'simulators';
 require __DIR__ . '/../app/views/partials/app_head.php';
 ?>
-<p class="text-soft mb-5 max-w-2xl">Testa decisões antes de as tomares — fórmulas reais com gráficos. Os valores são estimativas educativas e não constituem aconselhamento financeiro.</p>
+<p class="text-soft mb-5 max-w-2xl">Test the "what if" before you commit — real formulas with charts. Figures are educational estimates and not financial advice.</p>
 
-<div class="grid lg:grid-cols-[240px_1fr] gap-4">
-  <!-- Tabs -->
+<div class="grid lg:grid-cols-[220px_1fr] gap-5">
   <div class="card card-pad h-fit space-y-1">
     <?php foreach ($sims as $key => [$label, $ic, $fields]): ?>
-      <button class="nav-link w-full" data-sim="<?= $key ?>"><?= icon($ic) ?><span><?= $label ?></span></button>
+      <button class="nav-link w-full" data-sim="<?= $key ?>"><?= icon($ic, 'w-4 h-4') ?><span><?= $label ?></span></button>
     <?php endforeach; ?>
   </div>
 
-  <!-- Panels -->
   <div>
     <?php foreach ($sims as $key => [$label, $ic, $fields]): ?>
       <div id="panel-<?= $key ?>" class="sim-panel hidden">
         <div class="card card-pad mb-4">
-          <h2 class="font-bold text-xl mb-4"><?= e($label) ?></h2>
+          <h2 class="font-display font-semibold text-xl mb-4"><?= e($label) ?></h2>
           <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <?php foreach ($fields as [$n, $l, $def, $step]): ?>
               <div><label class="label"><?= e($l) ?></label><input type="number" name="<?= e($n) ?>" value="<?= e((string) $def) ?>" step="<?= e($step) ?>" class="input"></div>
