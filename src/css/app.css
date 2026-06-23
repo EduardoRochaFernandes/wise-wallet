@@ -144,6 +144,11 @@ body.private [data-icon="eye-off"] { display: none; }
 /* Lock background scroll while a modal/palette is open */
 body.modal-open { overflow: hidden; }
 
+/* Desktop sidebar: pinned, full-height, with its own scroll (robust override) */
+@media (min-width: 1024px) {
+  #sidebar { position: sticky; top: 0; height: 100vh; height: 100dvh; transform: none !important; }
+}
+
 /* Hairline top reading-progress bar */
 #scroll-progress {
   position: fixed; top: 0; left: 0; height: 2px; width: 0;
