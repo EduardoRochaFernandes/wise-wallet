@@ -21,15 +21,15 @@
 }
 html.dark {
   --paper: 21 20 17;
-  --surface: 29 27 23;
-  --surface-2: 38 35 30;
-  --ink: 240 237 230;
-  --ink-soft: 160 153 142;
-  --line: 56 52 45;
-  --accent: 99 173 133;
-  --pos: 99 173 133;
-  --neg: 214 122 102;
-  --warn: 201 168 96;
+  --surface: 30 28 24;
+  --surface-2: 41 38 33;
+  --ink: 242 239 233;
+  --ink-soft: 193 186 175;   /* lighter muted text for readability */
+  --line: 60 56 49;
+  --accent: 124 201 161;     /* brighter green in dark mode */
+  --pos: 124 201 161;
+  --neg: 226 138 118;
+  --warn: 214 182 110;
 }
 
 @layer base {
@@ -115,8 +115,8 @@ html.dark {
   .table tbody tr:hover { background: rgb(var(--surface-2) / .6); }
 
   /* ── Modal / toast ─────────────────────────────────────────── */
-  .modal-backdrop { @apply fixed inset-0 z-50 grid place-items-center p-4; background: rgb(26 25 22 / .45); }
-  .modal { @apply card w-full max-w-lg p-6 shadow-pop animate-fade-up; }
+  .modal-backdrop { @apply fixed inset-0 z-50 grid place-items-center p-4 overflow-y-auto; background: rgb(26 25 22 / .5); backdrop-filter: blur(2px); }
+  .modal { @apply card w-full max-w-lg p-6 shadow-pop animate-fade-up; max-height: 90dvh; overflow-y: auto; }
   .toast { @apply fixed z-[60] bottom-6 right-6 card card-pad max-w-sm flex items-start gap-3 shadow-pop animate-fade-up; }
 
   .kbd { @apply inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-mono; background: rgb(var(--surface-2)); border: 1px solid rgb(var(--line)); }
@@ -135,6 +135,14 @@ html.dark {
   .text-accent { color: rgb(var(--accent)); }
   .rule { border-top: 1px solid rgb(var(--line)); }
 }
+
+/* Theme & privacy toggle icon swapping (no JS needed) */
+html:not(.dark) [data-icon="sun"] { display: none; }
+html.dark [data-icon="moon"] { display: none; }
+body:not(.private) [data-icon="eye"] { display: none; }
+body.private [data-icon="eye-off"] { display: none; }
+/* Lock background scroll while a modal/palette is open */
+body.modal-open { overflow: hidden; }
 
 /* Hairline top reading-progress bar */
 #scroll-progress {

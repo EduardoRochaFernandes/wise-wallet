@@ -637,6 +637,17 @@ INSERT INTO `notifications` (`user_id`,`type`,`title`,`body`,`icon`,`is_read`) V
 (2,'budget','Budget warning','You have used 78% of your Groceries budget this month.','alert-triangle',0),
 (2,'bill','Bill due soon','Your rent is due in 5 days.','calendar',1);
 
+-- Sample market-news cache (so the news page has content offline).
+INSERT INTO `news_cache` (`source`,`title`,`url`,`summary`,`published_at`,`fetched_at`) VALUES
+('Reuters','ECB holds interest rates steady as inflation cools','https://www.reuters.com/markets/europe/','The European Central Bank kept its key rate unchanged, citing easing price pressures across the euro area.', NOW() - INTERVAL 2 HOUR, NOW()),
+('Financial Times','Global equities rally on strong technology earnings','https://www.ft.com/markets','Major indices climbed after upbeat results from large-cap tech lifted investor sentiment.', NOW() - INTERVAL 5 HOUR, NOW()),
+('Bloomberg','Euro firms against the dollar ahead of data','https://www.bloomberg.com/markets','The single currency advanced as traders positioned for upcoming inflation figures.', NOW() - INTERVAL 8 HOUR, NOW()),
+('CNBC','Bitcoin tops $42,000 amid renewed institutional demand','https://www.cnbc.com/markets/','The largest cryptocurrency extended gains as inflows into spot products picked up.', NOW() - INTERVAL 11 HOUR, NOW()),
+('Investopedia','How to build a recession-proof budget','https://www.investopedia.com/personal-finance/','A practical framework for prioritising essentials, savings and an emergency buffer.', NOW() - INTERVAL 1 DAY, NOW()),
+('Morningstar','ETFs vs index funds: what investors should know','https://www.morningstar.com/','A clear comparison of costs, taxes and flexibility between the two popular vehicles.', NOW() - INTERVAL 1 DAY - INTERVAL 3 HOUR, NOW()),
+('The Economist','The quiet power of compound interest','https://www.economist.com/finance-and-economics','Why time in the market tends to beat timing the market for long-term savers.', NOW() - INTERVAL 2 DAY, NOW()),
+('Banco de Portugal','Household savings rate edges higher','https://www.bportugal.pt/en','Recent data points to a modest rise in the share of disposable income being saved.', NOW() - INTERVAL 2 DAY - INTERVAL 6 HOUR, NOW());
+
 -- ════════════════════════════════════════════════════════════════════════
 --  End of WiseWallet 2.0 schema + seed
 -- ════════════════════════════════════════════════════════════════════════

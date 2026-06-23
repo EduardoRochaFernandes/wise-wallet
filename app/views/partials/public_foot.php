@@ -4,7 +4,6 @@
     <div class="md:col-span-2">
       <a href="/index.php" class="flex items-center gap-2.5 mb-3"><?= logo_mark('w-8 h-8') ?><span class="font-display text-lg font-semibold">WiseWallet</span></a>
       <p class="text-soft text-sm max-w-sm">A complete ledger for your personal finances — record it, understand it, plan it, and learn from it.</p>
-      <p class="text-xs text-soft mt-4">Built with PHP, MySQL and Tailwind. Production-grade security.</p>
     </div>
     <div>
       <h4 class="font-semibold mb-3 text-sm">Product</h4>
@@ -23,7 +22,7 @@
     </div>
   </div>
   <div class="border-t py-5 text-center text-xs text-soft" style="border-color:rgb(var(--line))">
-    &copy; <?= date('Y') ?> WiseWallet — a personal-finance demo project.
+    <a href="/privacy" class="hover:text-[rgb(var(--ink))]">Privacy &amp; about this project</a>
   </div>
 </footer>
 <script src="<?= asset('/assets/js/app.js') ?>"></script>

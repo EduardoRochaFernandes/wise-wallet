@@ -1,7 +1,4 @@
     </main>
-    <footer class="px-6 py-4 text-center text-xs text-soft border-t" style="border-color:rgb(var(--line))">
-      WiseWallet — secured with Argon2id, CSRF and a nonce-based CSP. &copy; <?= date('Y') ?>
-    </footer>
   </div>
 </div>
 

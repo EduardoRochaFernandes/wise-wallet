@@ -58,7 +58,7 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
 
 <div class="min-h-screen lg:grid lg:grid-cols-[244px_1fr]">
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-[244px] -translate-x-full lg:translate-x-0 transition-transform duration-300 border-r flex flex-col" style="background:rgb(var(--surface));border-color:rgb(var(--line))">
+  <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-[244px] h-screen lg:h-screen -translate-x-full lg:translate-x-0 transition-transform duration-300 border-r flex flex-col" style="background:rgb(var(--surface));border-color:rgb(var(--line))">
     <div class="flex items-center gap-2.5 px-5 h-16 border-b" style="border-color:rgb(var(--line))">
       <?= logo_mark('w-8 h-8') ?>
       <span class="font-display text-lg font-semibold">WiseWallet</span>
@@ -99,8 +99,8 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
       <button id="nav-open" class="lg:hidden btn-ghost btn-sm p-2" aria-label="Menu"><?= icon('menu', 'w-4 h-4') ?></button>
       <h1 class="text-xl font-semibold flex-1 truncate"><?= e($title) ?></h1>
       <button data-open-cmdk class="btn-ghost btn-sm hidden sm:inline-flex" title="Search"><?= icon('search', 'w-4 h-4') ?><span class="kbd ml-1">Ctrl K</span></button>
-      <button data-privacy-toggle class="btn-ghost btn-sm p-2" title="Privacy mode" aria-label="Privacy mode"><?= icon('eye', 'w-4 h-4') ?></button>
-      <button data-theme-toggle class="btn-ghost btn-sm p-2" title="Toggle theme" aria-label="Toggle theme"><?= icon('sun', 'w-4 h-4') ?></button>
+      <button data-privacy-toggle class="btn-ghost btn-sm p-2" title="Privacy mode" aria-label="Privacy mode"><span data-icon="eye"><?= icon('eye', 'w-4 h-4') ?></span><span data-icon="eye-off"><?= icon('eye-off', 'w-4 h-4') ?></span></button>
+      <button data-theme-toggle class="btn-ghost btn-sm p-2" title="Toggle theme" aria-label="Toggle theme"><span data-icon="sun"><?= icon('sun', 'w-4 h-4') ?></span><span data-icon="moon"><?= icon('moon', 'w-4 h-4') ?></span></button>
       <a href="/achievements.php" class="btn-ghost btn-sm p-2 relative" title="Notifications" aria-label="Notifications">
         <?= icon('bell', 'w-4 h-4') ?>
         <?php if ($unread > 0): ?><span class="absolute -top-1 -right-1 w-4 h-4 text-[10px] grid place-items-center rounded-full text-white" style="background:rgb(var(--neg))"><?= $unread ?></span><?php endif; ?>

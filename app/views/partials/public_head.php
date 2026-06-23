@@ -32,7 +32,7 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
       <a href="/news.php" class="hover:text-[rgb(var(--ink))]<?= ($activeNav ?? '')==='news'?' text-[rgb(var(--ink))] font-medium':'' ?>">Market news</a>
     </nav>
     <div class="flex-1"></div>
-    <button data-theme-toggle class="btn-ghost btn-sm p-2" title="Toggle theme" aria-label="Toggle theme"><?= icon('sun', 'w-4 h-4') ?></button>
+    <button data-theme-toggle class="btn-ghost btn-sm p-2" title="Toggle theme" aria-label="Toggle theme"><span data-icon="sun"><?= icon('sun', 'w-4 h-4') ?></span><span data-icon="moon"><?= icon('moon', 'w-4 h-4') ?></span></button>
     <?php if (Auth::check()): ?>
       <a href="/dashboard.php" class="btn-primary btn-sm">Open app</a>
     <?php else: ?>

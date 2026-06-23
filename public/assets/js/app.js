@@ -10,18 +10,20 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  /* ── Theme (dark default) ─────────────────────────────────── */
+  /* ── Theme (light default; icons swap via CSS) ────────────── */
   WW.applyTheme = (t) => {
-    document.documentElement.classList.toggle('light', t === 'light');
-    document.documentElement.classList.toggle('dark', t !== 'light');
+    document.documentElement.classList.toggle('dark', t === 'dark');
     try { localStorage.setItem('ww-theme', t); } catch (e) {}
-    $$('[data-theme-icon]').forEach((el) => {
-      el.textContent = t === 'light' ? '🌙' : '☀️';
-    });
   };
   WW.toggleTheme = () => {
-    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
-    WW.applyTheme(next);
+    WW.applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
+  };
+
+  /* ── Lock page scroll while any modal / palette is open ───── */
+  WW.refreshScrollLock = () => {
+    const cmdk = document.getElementById('cmdk');
+    const open = document.querySelector('.modal-backdrop:not(.hidden)') || (cmdk && !cmdk.classList.contains('hidden'));
+    document.body.classList.toggle('modal-open', !!open);
   };
 
   /* ── Privacy mode (blur sensitive figures) ────────────────── */
@@ -215,5 +217,9 @@
     initSidebar();
     initPalette();
     initDeclarative();
+    // Any click/keypress may open or close a modal — refresh the scroll lock after it.
+    const refresh = () => setTimeout(WW.refreshScrollLock, 0);
+    document.addEventListener('click', refresh);
+    document.addEventListener('keydown', refresh);
   });
 })();

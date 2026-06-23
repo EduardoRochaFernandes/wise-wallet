@@ -2,7 +2,7 @@
 require __DIR__ . '/../app/bootstrap.php';
 $inApp = Auth::check();
 
-$news = News::latest(14);
+$news = MarketNews::latest(14);
 $items = $news['data'] ?? [];
 
 if ($inApp) {
@@ -30,10 +30,10 @@ if ($inApp) {
   <?php endif; ?>
 
   <div class="divide-y" style="border-color:rgb(var(--line))">
-    <?php foreach ($items as $n): ?>
-      <a href="<?= e($n['url']) ?>" target="_blank" rel="noopener noreferrer nofollow" class="block py-5 group" style="border-color:rgb(var(--line))">
-        <div class="text-xs text-soft mb-1"><?= e($n['source']) ?><?= $n['published_at'] ? ' · ' . e(date('d M H:i', strtotime($n['published_at']))) : '' ?></div>
-        <h3 class="font-medium group-hover:text-accent"><?= e($n['title']) ?></h3>
+    <?php foreach ($items as $n): $url = $n['url'] ?? ''; if ($url === '') continue; ?>
+      <a href="<?= e($url) ?>" target="_blank" rel="noopener noreferrer nofollow" class="block py-5 group" style="border-color:rgb(var(--line))">
+        <div class="text-xs text-soft mb-1"><?= e($n['source'] ?? 'News') ?><?= !empty($n['published_at']) ? ' · ' . e(date('d M H:i', strtotime($n['published_at']))) : '' ?></div>
+        <h3 class="font-medium group-hover:text-accent"><?= e($n['title'] ?? '') ?></h3>
         <?php if (!empty($n['summary'])): ?><p class="text-soft text-sm mt-1"><?= e($n['summary']) ?>…</p><?php endif; ?>
       </a>
     <?php endforeach; ?>
