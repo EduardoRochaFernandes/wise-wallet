@@ -65,11 +65,11 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
       <span class="font-display text-lg font-semibold">WiseWallet</span>
     </div>
     <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-4">
-      <?php foreach ($navGroups as $group => $items): ?>
+      <?php foreach ($navGroups as $group => $navGroupItems): ?>
         <div>
           <div class="px-2 mb-1 text-[11px] font-semibold tracking-wide" style="color:rgb(var(--ink-soft))"><?= e($group) ?></div>
           <div class="space-y-0.5">
-            <?php foreach ($items as [$key, $label, $ic, $href]): ?>
+            <?php foreach ($navGroupItems as [$key, $label, $ic, $href]): ?>
               <a href="<?= $href ?>" class="nav-link<?= nav_active($key, $nav) ?>"><?= icon($ic, 'w-4 h-4') ?><span><?= e($label) ?></span></a>
             <?php endforeach; ?>
           </div>

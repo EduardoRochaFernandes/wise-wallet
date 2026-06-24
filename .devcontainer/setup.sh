@@ -12,6 +12,9 @@ npm install --no-audit --no-fund
 echo "==> Building CSS + vendoring assets..."
 npm run build
 
+echo "==> Refreshing CA bundle for live news/FX/crypto..."
+php scripts/refresh-ca-bundle.php || true
+
 echo "==> Writing .env for the container's MariaDB service..."
 if [ ! -f .env ]; then
   cp .env.example .env

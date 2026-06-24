@@ -50,11 +50,17 @@ final class ApiClient
 
     private static function caBundle(): ?string
     {
+        // Our project-local bundle (storage/cacert.pem) takes priority: it's
+        // kept current and, on machines running an HTTPS-scanning antivirus
+        // (e.g. Avast/AVG Web Shield, which transparently re-signs outbound
+        // TLS with its own root cert), that root is appended to it too — see
+        // scripts/update-ca-bundle.php. Stale system bundles are only a
+        // fallback for environments without our bundle present.
         foreach ([
+            WW_ROOT . '/storage/cacert.pem',
             ini_get('curl.cainfo'),
             'C:/xampp/apache/bin/curl-ca-bundle.crt',
             'C:/xampp/php/extras/ssl/cacert.pem',
-            WW_ROOT . '/storage/cacert.pem',
         ] as $p) {
             if ($p && is_file($p)) { return $p; }
         }

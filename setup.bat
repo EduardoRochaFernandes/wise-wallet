@@ -32,6 +32,10 @@ echo [3/6] Configurar ambiente (.env)...
 "%PHP%" scripts\setup-env.php || goto :err
 
 echo.
+echo Updating CA bundle for live news/FX/crypto (skips gracefully if offline)...
+"%PHP%" scripts\refresh-ca-bundle.php
+
+echo.
 echo [4/6] Arrancar MySQL e aguardar...
 for /f %%R in ('"%PHP%" -r "echo @fsockopen('127.0.0.1',3306,$e,$s,1)?1:0;"') do set "DBUP=%%R"
 if "!DBUP!"=="0" (

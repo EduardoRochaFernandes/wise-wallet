@@ -25,6 +25,9 @@ npm run build
 echo; echo "[3/6] Configurar ambiente (.env)..."
 "$PHP" scripts/setup-env.php
 
+echo; echo "Updating CA bundle for live news/FX/crypto (skips gracefully if offline)..."
+"$PHP" scripts/refresh-ca-bundle.php || true
+
 echo; echo "[4/6] Arrancar MySQL e aguardar..."
 if [ "$("$PHP" -r "echo @fsockopen('127.0.0.1',3306,\$e,\$s,1)?1:0;")" = "0" ]; then
   if [ -n "$MYSQLD" ]; then
