@@ -16,6 +16,6 @@
     "tailwindcss": "^3.4.4"
   },
   "dependencies": {
-    "apexcharts": "^3.49.1"
+    "apexcharts": "^5.15.2"
   }
 }
