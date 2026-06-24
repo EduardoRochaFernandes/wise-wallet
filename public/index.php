@@ -28,6 +28,8 @@ $features = [
     ['Goals', 'Targets with deadlines and automatic 25 / 50 / 75% milestones.'],
     ['Investments', 'Stocks, ETFs, crypto, bonds and more — with gain/loss, ROI and diversification.'],
     ['Insights', 'Twelve-month cash flow, spend by category and weekday, and a Financial Health Score from 0 to 100.'],
+    ['Achievements', 'Twenty-five milestones that unlock as you actually use the platform — not just for opening the app.'],
+    ['Notifications', 'Email and in-app alerts for new sign-ins, bills due, budget warnings, and unlocked achievements.'],
 ];
 $tools = [
     'Mortgage', 'Personal loan', 'Savings', 'Retirement',
@@ -86,7 +88,24 @@ $tools = [
   </div>
 </section>
 
-<div class="rule max-w-6xl mx-auto"></div>
+<!-- ── Scenic band ──────────────────────────────────────────── -->
+<section class="hero-band reveal">
+  <div class="hero-band-media">
+    <?php if (is_file(WW_PUBLIC . '/assets/video/hero.mp4')): ?>
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="<?= asset('/assets/video/hero.mp4') ?>" type="video/mp4">
+      </video>
+    <?php else: ?>
+      <img src="https://images.unsplash.com/photo-1507709364617-197d5065ed49?fm=jpg&amp;q=70&amp;w=2000&amp;auto=format&amp;fit=crop"
+           alt="The Ribeira riverside in Porto, Portugal" loading="lazy">
+    <?php endif; ?>
+  </div>
+  <div class="hero-band-veil"></div>
+  <div class="hero-band-copy">
+    <p class="eyebrow mb-3" style="color:#cbd9cf">Built in Portugal</p>
+    <p class="font-display text-2xl sm:text-3xl text-white max-w-md">A ledger as honest and unhurried as a walk along the Douro.</p>
+  </div>
+</section>
 
 <!-- ── Features as a ledger of capabilities ──────────────────── -->
 <section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
