@@ -3,7 +3,9 @@
    ════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
-  const WW = window.WW || {};
+  // NOTE: do not snapshot window.WW here — this script loads before app.js/
+  // charts.js define it, so a top-level `const WW = window.WW || {}` would
+  // capture a permanently-empty object. Reference window.WW live instead.
   const fmt = (v) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(isFinite(v) ? v : 0);
   const fmt2 = (v) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR' }).format(isFinite(v) ? v : 0);
   const pct = (v) => (isFinite(v) ? v : 0).toFixed(2) + '%';
@@ -104,9 +106,9 @@
   function draw(el, key, spec) {
     if (charts[key]) { try { charts[key].destroy(); } catch (e) {} charts[key] = null; }
     if (!spec) { el.innerHTML = ''; return; }
-    if (spec.type === 'donut') charts[key] = WW.donutChart(el, spec.labels, spec.values);
-    else if (spec.type === 'area') charts[key] = WW.areaChart(el, spec.labels, spec.series);
-    else charts[key] = WW.barChart(el, spec.labels, spec.series);
+    if (spec.type === 'donut') charts[key] = window.WW.donutChart(el, spec.labels, spec.values);
+    else if (spec.type === 'area') charts[key] = window.WW.areaChart(el, spec.labels, spec.series);
+    else charts[key] = window.WW.barChart(el, spec.labels, spec.series);
   }
 
   function compute(key) {

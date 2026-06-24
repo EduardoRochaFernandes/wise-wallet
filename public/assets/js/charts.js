@@ -7,9 +7,15 @@
   const WW = (window.WW = window.WW || {});
   if (typeof ApexCharts === 'undefined') return;
 
+  // Our CSS vars are space-separated triplets ("31 90 63") for Tailwind's
+  // rgb(var(--x) / <alpha>) trick. ApexCharts' internal color math expects
+  // classic comma-separated rgb(), and silently breaks (zero-size slice
+  // paths) if fed the space syntax — so always emit commas here.
   const cssVar = (name) => {
     const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    return v ? `rgb(${v})` : '#888';
+    if (!v) return '#888';
+    const parts = v.split(/\s+/).join(',');
+    return `rgb(${parts})`;
   };
 
   const palette = ['#1f5a3f', '#9e6b2a', '#2f6f7f', '#a53a2a', '#4f8e6c', '#7c6f64', '#b5852a', '#3f6b5a', '#6b6f4a', '#8a8378'];
