@@ -46,6 +46,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
   <div class="flex items-center justify-between p-4 gap-2 flex-wrap">
     <div class="text-sm text-soft"><strong class="text-ink"><?= $total ?></strong> transactions</div>
     <div class="flex gap-2">
+      <a href="/api/export.php?format=xlsx" class="btn-ghost btn-sm">Export Excel</a>
       <a href="/api/export.php?format=csv" class="btn-ghost btn-sm">Export CSV</a>
       <a href="/api/export.php?format=pdf" class="btn-ghost btn-sm">Export PDF</a>
       <button class="js-quick-add btn-primary btn-sm"><?= icon('plus','w-4 h-4') ?> New</button>
