@@ -44,7 +44,7 @@ require __DIR__ . '/../../app/views/partials/admin_nav.php';
             <div class="inline-flex gap-1">
               <form method="post" class="inline"><?= Csrf::field() ?><input type="hidden" name="id" value="<?= $u['id'] ?>"><input type="hidden" name="action" value="toggle"><button class="btn-ghost btn-sm"><?= $u['is_active'] ? 'Disable' : 'Enable' ?></button></form>
               <form method="post" class="inline"><?= Csrf::field() ?><input type="hidden" name="id" value="<?= $u['id'] ?>"><input type="hidden" name="action" value="role"><button class="btn-ghost btn-sm"><?= $u['role'] === 'admin' ? '↓ user' : '↑ admin' ?></button></form>
-              <form method="post" class="inline" onsubmit="return confirm('Delete this user and all their data?')"><?= Csrf::field() ?><input type="hidden" name="id" value="<?= $u['id'] ?>"><input type="hidden" name="action" value="delete"><button class="btn-ghost btn-sm text-neg">&times;</button></form>
+              <form method="post" class="inline" data-confirm-submit="Delete this user and all their data? This cannot be undone."><?= Csrf::field() ?><input type="hidden" name="id" value="<?= $u['id'] ?>"><input type="hidden" name="action" value="delete"><button class="btn-ghost btn-sm text-neg">&times;</button></form>
             </div>
           <?php else: ?><span class="text-xs text-soft">(you)</span><?php endif; ?>
         </td>

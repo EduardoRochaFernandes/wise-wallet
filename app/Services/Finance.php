@@ -12,13 +12,40 @@ final class Finance
     /* ── Accounts ─────────────────────────────────────────────── */
     public static function accounts(int $uid, bool $includeArchived = false): array
     {
-        $sql = "SELECT * FROM accounts WHERE user_id = ?" . ($includeArchived ? '' : " AND is_archived = 0") . " ORDER BY id";
+        $sql = "SELECT * FROM accounts WHERE user_id = ? AND deleted_at IS NULL" . ($includeArchived ? '' : " AND is_archived = 0") . " ORDER BY id";
         return Database::all($sql, [$uid]);
+    }
+
+    private const TRASH_DAYS = 30;
+
+    /** Soft-delete: account is hidden but recoverable for TRASH_DAYS. */
+    public static function trashAccount(int $uid, int $id): bool
+    {
+        return Database::run("UPDATE accounts SET deleted_at = NOW() WHERE id = ? AND user_id = ? AND deleted_at IS NULL", [$id, $uid]) > 0;
+    }
+
+    public static function restoreAccount(int $uid, int $id): bool
+    {
+        return Database::run("UPDATE accounts SET deleted_at = NULL WHERE id = ? AND user_id = ? AND deleted_at IS NOT NULL", [$id, $uid]) > 0;
+    }
+
+    /** Accounts still within their recovery window, most recently deleted first. */
+    public static function trashedAccounts(int $uid): array
+    {
+        // Opportunistic cleanup: permanently remove anything past the window.
+        Database::run("DELETE FROM accounts WHERE user_id = ? AND deleted_at IS NOT NULL AND deleted_at < (NOW() - INTERVAL " . self::TRASH_DAYS . " DAY)", [$uid]);
+
+        $rows = Database::all(
+            "SELECT * FROM accounts WHERE user_id = ? AND deleted_at IS NOT NULL ORDER BY deleted_at DESC", [$uid]);
+        foreach ($rows as &$r) {
+            $r['days_left'] = max(0, self::TRASH_DAYS - (int) floor((time() - strtotime($r['deleted_at'])) / 86400));
+        }
+        return $rows;
     }
 
     public static function netWorth(int $uid): float
     {
-        return (float) (Database::scalar("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE user_id = ? AND is_archived = 0", [$uid]) ?? 0);
+        return (float) (Database::scalar("SELECT COALESCE(SUM(balance),0) FROM accounts WHERE user_id = ? AND is_archived = 0 AND deleted_at IS NULL", [$uid]) ?? 0);
     }
 
     /* ── Categories (system + user) ───────────────────────────── */
@@ -132,8 +159,8 @@ final class Finance
 
     private static function assertOwnsAccount(int $uid, int $accId): void
     {
-        $ok = Database::scalar("SELECT id FROM accounts WHERE id = ? AND user_id = ?", [$accId, $uid]);
-        if (!$ok) { throw new RuntimeException('Conta inválida.'); }
+        $ok = Database::scalar("SELECT id FROM accounts WHERE id = ? AND user_id = ? AND deleted_at IS NULL", [$accId, $uid]);
+        if (!$ok) { throw new RuntimeException('Invalid account.'); }
     }
 
     /* ── Dashboard summary ────────────────────────────────────── */

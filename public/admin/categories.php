@@ -49,7 +49,7 @@ require __DIR__ . '/../../app/views/partials/admin_nav.php';
           <td class="font-medium"><?= e($c['name']) ?></td>
           <td><span class="badge <?= $c['type'] === 'income' ? 'badge-pos' : 'badge-warn' ?>"><?= e($c['type']) ?></span></td>
           <td><span class="inline-block w-5 h-5 rounded-sm" style="background:<?= e($c['color']) ?>"></span></td>
-          <td class="text-right"><form method="post" class="inline" onsubmit="return confirm('Delete?')"><?= Csrf::field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= $c['id'] ?>"><button class="btn-ghost btn-sm text-neg">&times;</button></form></td>
+          <td class="text-right"><form method="post" class="inline" data-confirm-submit="Delete this category? This cannot be undone."><?= Csrf::field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= $c['id'] ?>"><button class="btn-ghost btn-sm text-neg">&times;</button></form></td>
         </tr>
       <?php endforeach; ?>
       </tbody>

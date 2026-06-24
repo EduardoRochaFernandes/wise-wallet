@@ -106,7 +106,7 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
         <?= icon('bell', 'w-4 h-4') ?>
         <?php if ($unread > 0): ?><span class="absolute -top-1 -right-1 w-4 h-4 text-[10px] grid place-items-center rounded-full text-white" style="background:rgb(var(--neg))"><?= $unread ?></span><?php endif; ?>
       </a>
-      <button id="quick-add" class="btn-primary btn-sm"><?= icon('plus', 'w-4 h-4') ?><span class="hidden sm:inline">Add</span></button>
+      <button class="js-quick-add btn-primary btn-sm"><?= icon('plus', 'w-4 h-4') ?><span class="hidden sm:inline">Add transaction</span></button>
     </header>
 
     <main class="flex-1 p-4 sm:p-6 max-w-[1280px] w-full mx-auto animate-fade-up">

@@ -2,6 +2,20 @@
   </div>
 </div>
 
+<!-- Custom confirm dialog (replaces the native browser confirm()) -->
+<div id="confirm-modal" class="hidden modal-backdrop">
+  <div class="modal max-w-sm">
+    <div class="flex items-start gap-3">
+      <div class="w-9 h-9 rounded grid place-items-center shrink-0" style="background:rgb(var(--neg) / .12);color:rgb(var(--neg))"><?= icon('alert-triangle', 'w-5 h-5') ?></div>
+      <p id="confirm-message" class="text-sm pt-1.5">Are you sure?</p>
+    </div>
+    <div class="flex gap-2 pt-5">
+      <button type="button" id="confirm-yes" class="btn-danger flex-1">Delete</button>
+      <button type="button" id="confirm-no" class="btn-ghost flex-1">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- Command palette -->
 <div id="cmdk" class="hidden fixed inset-0 z-50 p-4 pt-[12vh]" style="background:rgb(26 25 22 / .45)">
   <div class="card max-w-xl mx-auto overflow-hidden shadow-pop animate-fade-up">
@@ -69,7 +83,7 @@
   }
   const open = () => { modal.classList.remove('hidden'); load(); };
   const close = () => modal.classList.add('hidden');
-  document.getElementById('quick-add').addEventListener('click', open);
+  document.querySelectorAll('.js-quick-add').forEach((b) => b.addEventListener('click', open));
   document.getElementById('qa-close').addEventListener('click', close);
   document.getElementById('qa-cancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });

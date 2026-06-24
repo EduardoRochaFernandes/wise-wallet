@@ -98,7 +98,7 @@ final class Recommend
             $out[] = ['%orcamento-base-zero%', 'Your subscriptions add up to ' . number_format($subTotal, 0) . '€/month — zero-based budgeting catches costs like this.'];
         }
 
-        $hasCreditCard = Database::scalar("SELECT id FROM accounts WHERE user_id=? AND type='credit' AND balance < 0 LIMIT 1", [$uid]);
+        $hasCreditCard = Database::scalar("SELECT id FROM accounts WHERE user_id=? AND type='credit' AND balance < 0 AND deleted_at IS NULL LIMIT 1", [$uid]);
         if ($hasCreditCard) {
             $out[] = ['%como-funciona-credit-score%', 'You are carrying a credit card balance — understanding your score helps you manage it.'];
         }

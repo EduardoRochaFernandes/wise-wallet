@@ -103,6 +103,7 @@ CREATE TABLE `accounts` (
   `currency`    CHAR(3) NOT NULL DEFAULT 'EUR',
   `color`       VARCHAR(20) NULL,
   `is_archived` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at`  DATETIME NULL,
   `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_accounts_user` (`user_id`),

@@ -59,6 +59,25 @@
        </div>`;
   };
 
+  /* ── Custom confirm dialog (replaces native confirm()) ─────── */
+  WW.confirm = (message, onYes) => {
+    const modal = document.getElementById('confirm-modal');
+    if (!modal) { if (window.confirm(message)) onYes(); return; } // fallback if modal isn't present
+    document.getElementById('confirm-message').textContent = message;
+    modal.classList.remove('hidden');
+    const yes = document.getElementById('confirm-yes');
+    const no = document.getElementById('confirm-no');
+    const cleanup = () => {
+      modal.classList.add('hidden');
+      yes.removeEventListener('click', onYesClick);
+      no.removeEventListener('click', onNoClick);
+    };
+    const onYesClick = () => { cleanup(); onYes(); };
+    const onNoClick = () => cleanup();
+    yes.addEventListener('click', onYesClick);
+    no.addEventListener('click', onNoClick);
+  };
+
   /* ── CSRF-aware fetch helper for the JSON API ─────────────── */
   WW.csrf = () => ($('meta[name="csrf-token"]') || {}).content || '';
   WW.api = async (url, { method = 'GET', body = null, json = true } = {}) => {
@@ -177,16 +196,31 @@
     });
 
     // Delete: <button data-del="/api/x.php" data-id="7" data-confirm="...">
-    document.addEventListener('click', async (e) => {
+    // Uses the custom confirm modal (#confirm-modal) instead of the native
+    // browser confirm() dialog.
+    document.addEventListener('click', (e) => {
       const del = e.target.closest('[data-del]');
       if (!del) return;
       e.preventDefault();
-      if (!confirm(del.dataset.confirm || 'Are you sure you want to delete this?')) return;
-      try {
-        await WW.api(del.dataset.del, { method: 'DELETE', body: { id: del.dataset.id } });
-        WW.toast('Deleted', 'success');
-        setTimeout(() => location.reload(), 400);
-      } catch (err) { WW.toast(err.message || 'Could not delete', 'error'); }
+      WW.confirm(del.dataset.confirm || 'Are you sure you want to delete this? This cannot be undone.', async () => {
+        try {
+          await WW.api(del.dataset.del, { method: 'DELETE', body: { id: del.dataset.id } });
+          WW.toast('Deleted', 'success');
+          setTimeout(() => location.reload(), 400);
+        } catch (err) { WW.toast(err.message || 'Could not delete', 'error'); }
+      });
+    });
+
+    // Confirm-then-submit a plain server-rendered form (e.g. admin delete
+    // forms): <form data-confirm-submit="Delete this user?">
+    document.addEventListener('submit', (e) => {
+      const form = e.target.closest('[data-confirm-submit]');
+      if (!form || form.dataset.confirmed) return;
+      e.preventDefault();
+      WW.confirm(form.dataset.confirmSubmit, () => {
+        form.dataset.confirmed = '1';
+        form.submit();
+      });
     });
 
     // API forms: <form data-api-form="/api/x.php" data-method="POST">

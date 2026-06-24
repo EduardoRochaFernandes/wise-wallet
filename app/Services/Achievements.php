@@ -55,7 +55,7 @@ final class Achievements
         if ($txCount >= 10)  { $unlock('ten_transactions'); }
         if ($txCount >= 100) { $unlock('hundred_transactions'); }
 
-        if ((int) Database::scalar("SELECT COUNT(*) FROM accounts WHERE user_id=?", [$uid]) >= 1) { $unlock('first_account'); }
+        if ((int) Database::scalar("SELECT COUNT(*) FROM accounts WHERE user_id=? AND deleted_at IS NULL", [$uid]) >= 1) { $unlock('first_account'); }
         if ((int) Database::scalar("SELECT COUNT(*) FROM budgets WHERE user_id=?", [$uid]) >= 1)  { $unlock('first_budget'); }
         if ((int) Database::scalar("SELECT COUNT(*) FROM goals WHERE user_id=?", [$uid]) >= 1)    { $unlock('first_goal'); }
 
@@ -77,7 +77,7 @@ final class Achievements
         $summary = Finance::summary($uid);
         if ($summary['savings_rate'] >= 25) { $unlock('saver_25'); }
 
-        if ((int) Database::scalar("SELECT COUNT(*) FROM accounts WHERE user_id=?", [$uid]) >= 3) { $unlock('multi_account'); }
+        if ((int) Database::scalar("SELECT COUNT(*) FROM accounts WHERE user_id=? AND deleted_at IS NULL", [$uid]) >= 3) { $unlock('multi_account'); }
         if ($nw >= 50000) { $unlock('big_saver'); }
         if ((int) Database::scalar("SELECT COUNT(*) FROM goals WHERE user_id=? AND status='completed'", [$uid]) >= 3) { $unlock('goal_master'); }
         if ((int) Database::scalar("SELECT COUNT(*) FROM bills WHERE user_id=? AND status='paid'", [$uid]) >= 10) { $unlock('bill_payer'); }

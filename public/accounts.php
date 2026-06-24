@@ -3,6 +3,7 @@ require __DIR__ . '/../app/bootstrap.php';
 Auth::requireAuth();
 $uid = Auth::id();
 $accounts = Finance::accounts($uid);
+$trashed = Finance::trashedAccounts($uid);
 $total = Finance::netWorth($uid);
 $typeLabels = ['checking' => 'Checking', 'savings' => 'Savings', 'credit' => 'Credit card', 'cash' => 'Cash', 'crypto' => 'Crypto', 'investment' => 'Investment'];
 
@@ -27,12 +28,33 @@ require __DIR__ . '/../app/views/partials/app_head.php';
           <div class="font-medium truncate"><?= e($a['name']) ?></div>
           <div class="text-xs text-soft"><?= e($typeLabels[$a['type']] ?? $a['type']) ?></div>
         </div>
-        <button class="btn-ghost btn-sm p-1.5" data-del="/api/accounts.php" data-id="<?= $a['id'] ?>" data-confirm="Delete this account and its transactions?" title="Delete">&times;</button>
+        <button class="btn-ghost btn-sm p-1.5" data-del="/api/accounts.php" data-id="<?= $a['id'] ?>" data-confirm="Delete this account? It will be kept for 30 days and can be restored from here before it's permanently removed." title="Delete">&times;</button>
       </div>
       <div class="font-display text-2xl font-semibold mt-4 amount sensitive <?= $neg ? 'text-neg' : '' ?>"><?= money($a['balance']) ?></div>
     </div>
   <?php endforeach; ?>
 </div>
+
+<?php if ($trashed): ?>
+  <div class="mt-8">
+    <h2 class="font-display font-semibold text-lg mb-3 text-soft">Recently deleted</h2>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <?php foreach ($trashed as $t): ?>
+        <div class="card card-pad opacity-75 flex items-center justify-between gap-3">
+          <div class="min-w-0">
+            <div class="font-medium truncate"><?= e($t['name']) ?></div>
+            <div class="text-xs text-soft"><?= $t['days_left'] ?> day<?= $t['days_left'] === 1 ? '' : 's' ?> left to restore</div>
+          </div>
+          <form data-api-form="/api/accounts.php" data-method="PATCH">
+            <input type="hidden" name="id" value="<?= $t['id'] ?>">
+            <input type="hidden" name="action" value="restore">
+            <button class="btn-outline btn-sm whitespace-nowrap">Restore</button>
+          </form>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+<?php endif; ?>
 
 <div id="m-account" class="hidden modal-backdrop">
   <div class="modal">

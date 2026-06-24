@@ -79,7 +79,7 @@ require __DIR__ . '/../../app/views/partials/admin_nav.php';
           <td class="text-soft"><?= (int) $a['views'] ?></td>
           <td class="text-right whitespace-nowrap">
             <a href="/admin/articles?edit=<?= $a['id'] ?>" class="btn-ghost btn-sm">Edit</a>
-            <form method="post" class="inline" onsubmit="return confirm('Delete?')"><?= Csrf::field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= $a['id'] ?>"><button class="btn-ghost btn-sm text-neg">&times;</button></form>
+            <form method="post" class="inline" data-confirm-submit="Delete this article? This cannot be undone."><?= Csrf::field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= $a['id'] ?>"><button class="btn-ghost btn-sm text-neg">&times;</button></form>
           </td>
         </tr>
       <?php endforeach; ?>

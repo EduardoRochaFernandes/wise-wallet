@@ -48,7 +48,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
     <div class="flex gap-2">
       <a href="/api/export.php?format=csv" class="btn-ghost btn-sm">Export CSV</a>
       <a href="/api/export.php?format=pdf" class="btn-ghost btn-sm">Export PDF</a>
-      <button id="quick-add" class="btn-primary btn-sm"><?= icon('plus','w-4 h-4') ?> New</button>
+      <button class="js-quick-add btn-primary btn-sm"><?= icon('plus','w-4 h-4') ?> New</button>
     </div>
   </div>
   <div class="overflow-x-auto">
