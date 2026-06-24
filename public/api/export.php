@@ -6,6 +6,8 @@ $u = Auth::user();
 
 $format = strtolower((string) ($_GET['format'] ?? 'csv'));
 $rows = Finance::transactions($uid, [], 1000, 0);
+Audit::log('export', $uid, ['format' => $format]);
+Achievements::evaluate($uid);
 
 if ($format === 'pdf') {
     require WW_ROOT . '/vendor/fpdf/SimplePdf.php';

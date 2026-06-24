@@ -30,6 +30,7 @@ $navGroups = [
         ['simulators', 'Simulators', 'calculator', '/simulators'],
     ],
     'Learn' => [
+        ['tutorial', 'How it works', 'help-circle', '/tutorial'],
         ['achievements', 'Achievements', 'trophy', '/achievements'],
         ['news', 'Market news', 'newspaper', '/news'],
         ['blog', 'Guides', 'book-open', '/blog'],

@@ -518,6 +518,18 @@ INSERT INTO `achievements` (`id`,`code`,`name`,`description`,`icon`,`rarity`,`po
 (16,'debt_free','Debt-Free','You cleared all pending bills.','badge-check','rare',40),
 (17,'streak_30','Unstoppable','30 days of logging in a row.','calendar-check','legendary',120);
 
+
+-- Additional achievements (more milestones to unlock).
+INSERT INTO `achievements` (`id`,`code`,`name`,`description`,`icon`,`rarity`,`points`) VALUES
+(18,'multi_account','Multi-Banker','Track three or more accounts at once.','landmark','common',15),
+(19,'big_saver','High Roller','Net worth above 50,000 EUR.','gem','legendary',180),
+(20,'goal_master','Goal Master','Completed three goals.','trophy','epic',100),
+(21,'bill_payer','On Top of It','Paid ten bills on time.','badge-check','rare',45),
+(22,'security_pro','Security Pro','Enabled two-factor authentication.','shield-check','epic',70),
+(23,'subscription_trimmed','Vampire Slayer','Paused at least one subscription.','ghost','rare',25),
+(24,'exporter','Record Keeper','Exported your data at least once.','newspaper','common',15),
+(25,'investor_5','Portfolio Builder','Tracked five or more investments.','line-chart','epic',65);
+
 -- Blog categories.
 INSERT INTO `article_categories` (`id`,`name`,`slug`) VALUES
 (1,'Budgeting','orcamento'),

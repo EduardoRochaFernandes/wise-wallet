@@ -103,6 +103,7 @@
   /* ── Command palette (Ctrl/⌘ + K) ─────────────────────────── */
   const COMMANDS = [
     ['Dashboard', '/dashboard'],
+    ['How it works', '/tutorial'],
     ['Transactions', '/transactions'],
     ['Accounts', '/accounts'],
     ['Budgets', '/budgets'],

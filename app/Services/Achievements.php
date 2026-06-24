@@ -80,6 +80,15 @@ final class Achievements
         $summary = Finance::summary($uid);
         if ($summary['savings_rate'] >= 25) { $unlock('saver_25'); }
 
+        if ((int) Database::scalar("SELECT COUNT(*) FROM accounts WHERE user_id=?", [$uid]) >= 3) { $unlock('multi_account'); }
+        if ($nw >= 50000) { $unlock('big_saver'); }
+        if ((int) Database::scalar("SELECT COUNT(*) FROM goals WHERE user_id=? AND status='completed'", [$uid]) >= 3) { $unlock('goal_master'); }
+        if ((int) Database::scalar("SELECT COUNT(*) FROM bills WHERE user_id=? AND status='paid'", [$uid]) >= 10) { $unlock('bill_payer'); }
+        if (Database::scalar("SELECT id FROM audit_log WHERE user_id=? AND action='2fa_enabled' LIMIT 1", [$uid])) { $unlock('security_pro'); }
+        if ((int) Database::scalar("SELECT COUNT(*) FROM subscriptions WHERE user_id=? AND is_active=0", [$uid]) >= 1) { $unlock('subscription_trimmed'); }
+        if (Database::scalar("SELECT id FROM audit_log WHERE user_id=? AND action='export' LIMIT 1", [$uid])) { $unlock('exporter'); }
+        if ((int) Database::scalar("SELECT COUNT(*) FROM investments WHERE user_id=?", [$uid]) >= 5) { $unlock('investor_5'); }
+
         return $newly;
     }
 }
