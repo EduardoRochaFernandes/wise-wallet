@@ -677,3 +677,132 @@ INSERT INTO `news_cache` (`source`,`title`,`url`,`summary`,`published_at`,`fetch
 -- ════════════════════════════════════════════════════════════════════════
 --  End of WiseWallet 2.0 schema + seed
 -- ════════════════════════════════════════════════════════════════════════
+
+-- Expanded article bodies (more in-depth educational content).
+UPDATE `articles` SET `body` = '<p>The <strong>50/30/20 rule</strong> is a budgeting framework popularised by Senator Elizabeth Warren in <em>All Your Worth</em>. It splits your after-tax income into three buckets, and the appeal is its simplicity: you only need three categories, not thirty.</p>
+<h3>The three buckets</h3>
+<ul>
+<li><strong>50% Needs</strong> - rent or mortgage, groceries, utilities, transport, minimum debt payments, insurance. These are costs you cannot easily avoid without changing your living situation.</li>
+<li><strong>30% Wants</strong> - dining out, streaming subscriptions, hobbies, travel, upgraded gadgets. Anything that improves quality of life but is not strictly necessary.</li>
+<li><strong>20% Savings &amp; debt payoff</strong> - emergency fund contributions, retirement investing, and extra (above-minimum) debt repayments.</li>
+</ul>
+<h3>A worked example</h3>
+<p>On a 2,000&euro; monthly take-home income: 1,000&euro; covers needs, 600&euro; covers wants, and 400&euro; goes to savings and extra debt payments. If your rent alone eats 50% of your income, the "needs" bucket is already full before groceries or transport - that is a signal the ratio itself is the diagnostic, not just the destination.</p>
+<h3>Where it breaks down</h3>
+<p>The rule assumes a stable income and a cost of living where 50% genuinely covers necessities. In high-rent cities, or for variable freelance income, the percentages need adjusting - some financial planners suggest 60/20/20 or even tracking a four-week rolling average instead of a single fixed split. The principle that matters more than the exact numbers is <em>paying yourself first</em>: decide the savings percentage before the month starts, and automate the transfer so spending cannot quietly eat into it.</p>
+<h3>How WiseWallet helps</h3>
+<p>Set up a <a href="/budgets">budget</a> per category and tag transactions so you can see, at a glance, what share of last month actually went to needs versus wants. The Insights page breaks this down automatically once you have a few weeks of data.</p>' WHERE `id` = 1;
+UPDATE `articles` SET `body` = '<p>Albert Einstein is often (probably apocryphally) credited with calling compound interest the eighth wonder of the world. Whether he said it or not, the maths backs up the sentiment.</p>
+<h3>The formula</h3>
+<p><code>FV = C &times; (1 + i)^n</code></p>
+<p>Where <code>C</code> is your starting capital, <code>i</code> is the interest rate per period, and <code>n</code> is the number of periods. The key difference from simple interest is that each period, you earn interest <em>on the interest already earned</em>, not just on the original capital.</p>
+<h3>Why time beats timing</h3>
+<p>Consider two savers, both investing at 7% annual return: Saver A invests 200&euro;/month starting at age 25 and stops at 35 (10 years, then lets it sit). Saver B invests the same 200&euro;/month starting at age 35 and never stops, investing for 30 years straight. By age 65, Saver A - who invested for only 10 years - typically ends up with <em>more</em> money than Saver B, who invested for three times as long, purely because of the extra decade of compounding. This is one of the most counter-intuitive and most important lessons in personal finance: the early years matter disproportionately.</p>
+<h3>The flip side: compounding debt</h3>
+<p>The same maths works against you with credit card debt. At a typical 20% APR, an unpaid 1,000&euro; balance does not grow linearly - it compounds monthly, meaning the "interest on interest" effect can roughly double an unpaid balance in under four years if only minimum payments are made.</p>
+<h3>Try it yourself</h3>
+<p>The <a href="/simulators">savings simulator</a> lets you change the starting amount, the monthly contribution, the rate, and the number of years, and instantly see how the balance grows - a faster way to build intuition than reading any formula.</p>' WHERE `id` = 2;
+UPDATE `articles` SET `body` = '<p>An emergency fund is money set aside specifically for events you cannot predict: a job loss, an unexpected medical bill, a car or home repair, or a sudden drop in income. Its entire purpose is to exist so that an emergency does not become a debt spiral.</p>
+<h3>How much is enough?</h3>
+<p>The standard guidance is <strong>3 to 6 months</strong> of essential expenses - not your full lifestyle spending, just rent, food, utilities, insurance, and minimum debt payments. Freelancers, single-income households, or anyone in a volatile industry should lean toward 6 months or more; dual-income households with very stable jobs can reasonably lean toward 3.</p>
+<h3>Building it without it feeling impossible</h3>
+<p>Trying to save 6 months of expenses in one go is discouraging. Breaking it into milestones helps: WiseWallet automatically marks 25%, 50%, and 75% progress on any goal, which turns one big intimidating number into four achievable ones. Even 25&euro;/week adds up to 1,300&euro; in a year - often enough to cover a first real emergency (a flat tyre, a broken laptop, a vet bill) without touching a credit card.</p>
+<h3>What it is not for</h3>
+<p>An emergency fund is not for a planned vacation, a predictable annual expense (like car insurance renewal - that deserves its own "sinking fund"), or "I really want this" purchases. Mixing the two defeats the purpose: the day a real emergency hits, the money needs to still be there.</p>
+<h3>Next step</h3>
+<p>Once you know your target, the companion article on <a href="/article?slug=onde-guardar-fundo-emergencia">where to actually keep this money</a> covers the trade-off between easy access and earning a return.</p>' WHERE `id` = 3;
+UPDATE `articles` SET `body` = '<p>Portuguese personal income tax (IRS - Imposto sobre o Rendimento das Pessoas Singulares) is <strong>progressive and bracketed</strong>, which is a detail that confuses more people than almost any other tax concept.</p>
+<h3>Progressive does not mean "your whole income jumps brackets"</h3>
+<p>Each bracket only taxes the slice of income that falls within it. If the first 7,703&euro; is taxed at roughly 13.25% and the next slice up to 11,623&euro; at 18%, earning one extra euro that pushes you into the higher bracket does <em>not</em> retroactively tax your first 7,703&euro; at the higher rate - only the new marginal euro is taxed at the new rate. This is why a raise can never make your net pay go down, despite the common myth.</p>
+<h3>Gross vs. net vs. taxable income</h3>
+<p>Before brackets are applied, a "specific deduction" (a flat allowance for employment-related costs) reduces your taxable base. Social security contributions are calculated separately and are not part of IRS itself. The number that actually lands in your bank account every month already has IRS withholding (retencao na fonte) deducted in advance, based on estimated annual brackets - which is why many people get a refund (or owe a balance) when they file their annual return.</p>
+<h3>Effective rate vs. marginal rate</h3>
+<p>Your <em>marginal rate</em> is the rate on your last euro earned; your <em>effective rate</em> is total tax divided by total income, and is always lower than the marginal rate because of how brackets stack. Quoting "I am in the 37% bracket" without distinguishing the two is a common source of confusion in casual conversation.</p>
+<h3>Estimate your own numbers</h3>
+<p>The <a href="/simulators">income tax simulator</a> applies the current mainland brackets to your gross income and shows the estimated tax, net annual income, and your effective rate side by side.</p>' WHERE `id` = 4;
+UPDATE `articles` SET `body` = '<p>A credit score condenses your borrowing history into a single number that tells a lender, in seconds, how risky you look. Although the exact algorithm is proprietary to each scoring model, the weighting of the inputs is broadly published and consistent across most systems.</p>
+<h3>The five inputs, roughly weighted</h3>
+<ul>
+<li><strong>Payment history (~35%)</strong> - have you paid what you owed, on time, consistently? A single 30-day-late payment can stay visible for years.</li>
+<li><strong>Amounts owed / utilisation (~30%)</strong> - what share of your available credit are you actually using? Maxing out a card, even if you pay it off in full monthly, can hurt your score because the snapshot reported to the bureau may catch you at a high balance.</li>
+<li><strong>Length of credit history (~15%)</strong> - older accounts in good standing build trust over time; this is one reason closing your oldest credit card is not always a good idea.</li>
+<li><strong>New credit (~10%)</strong> - several applications in a short window look like financial distress, even if each application is harmless on its own.</li>
+<li><strong>Credit mix (~10%)</strong> - a blend of revolving credit (cards) and instalment credit (loans) reads as more "experienced" than just one type.</li>
+</ul>
+<h3>The one habit that moves the needle most</h3>
+<p>Because payment history and utilisation together make up roughly two-thirds of most models, the single highest-leverage habit is: automate every minimum payment so you never miss one, and keep utilisation under roughly 30% of each card''s limit. Everything else is secondary optimisation.</p>
+<h3>Common myths</h3>
+<p>Checking your own score (a "soft" inquiry) does not hurt it. Carrying a small balance does not help your score "build credit" - paying in full does not hurt it either; that is a persistent myth that benefits no one but the card issuer collecting interest.</p>' WHERE `id` = 5;
+UPDATE `articles` SET `body` = '<p>When you are paying off more than one debt at a time - say a credit card, a personal loan, and a car loan - the order in which you attack them changes both how much interest you pay in total and how motivated you stay along the way.</p>
+<h3>The avalanche method</h3>
+<p>Pay the minimum on every debt, then direct every spare euro at whichever debt has the <strong>highest interest rate</strong>, regardless of its balance. Once that one is cleared, roll its payment into the next-highest-rate debt. This is mathematically optimal: it minimises the total interest paid over the life of all the debts.</p>
+<h3>The snowball method</h3>
+<p>Pay the minimum on every debt, then direct every spare euro at whichever debt has the <strong>smallest balance</strong>, regardless of its rate. You clear individual debts faster, which produces visible wins early - a real and well-documented motivational effect, even though it usually costs slightly more in total interest than the avalanche method.</p>
+<h3>Which one should you actually use?</h3>
+<p>If the interest-rate gap between your debts is large (e.g. a 22% credit card next to a 6% car loan), avalanche''s savings are substantial and worth the extra discipline it demands. If your debts have similar rates, or if you have struggled to stick with a debt payoff plan before, the early psychological wins of snowball are often worth the small extra cost - a plan you actually finish beats a theoretically optimal plan you abandon in month four.</p>
+<h3>A third option: hybrid</h3>
+<p>Some people snowball the two or three smallest debts first for quick momentum, then switch to avalanche for the remainder. There is no rule against mixing strategies - the only real mistake is paying only minimums on everything indefinitely.</p>' WHERE `id` = 6;
+UPDATE `articles` SET `body` = '<p>The defining requirement of an emergency fund is not return - it is <strong>availability</strong>. Money you cannot access within a day or two when you actually need it has failed at the one job an emergency fund has.</p>
+<h3>Ranking the options by liquidity</h3>
+<ul>
+<li><strong>Current/checking account</strong> - instant, but typically pays no interest and is too easy to "borrow from" for non-emergencies since it is the same account you spend from daily.</li>
+<li><strong>High-interest savings account</strong> - same-day or next-day access in most cases, modest but real interest, and being a separate account creates a small but useful psychological barrier against casual spending.</li>
+<li><strong>Easy-access term deposit</strong> - slightly better rates than a savings account, sometimes with a short notice period (a few days) before withdrawal.</li>
+<li><strong>Short-term government bond funds</strong> - better expected return, but day-to-day value can fluctuate slightly and a sale can take longer to settle. Reasonable only for the portion of the fund you are confident you will not need on short notice.</li>
+</ul>
+<h3>A practical split</h3>
+<p>Many planners suggest splitting the fund itself: one month of expenses in something instantly accessible (even your current account), and the remaining months in a separate high-interest savings account specifically so it is mentally and practically separated from day-to-day spending money.</p>
+<h3>What to avoid entirely</h3>
+<p>Stocks, cryptocurrency, and anything that can lose 10 to 20% of its value in a bad week are unsuitable for an emergency fund - by definition, emergencies often coincide with bad economic periods, which is exactly when those assets tend to be down the most.</p>' WHERE `id` = 7;
+UPDATE `articles` SET `body` = '<p>"Don''t put all your eggs in one basket" is the entire idea behind diversification, but turning that into an actual portfolio takes a bit more precision.</p>
+<h3>What diversification actually buys you</h3>
+<p>It does not increase your expected return - in fact a perfectly diversified portfolio will, by definition, never match the single best-performing asset in any given year. What it buys you is a <strong>narrower range of outcomes</strong>: fewer catastrophic drops, at the cost of also giving up some spectacular gains. For most people saving for retirement or a long-term goal, that trade is exactly right.</p>
+<h3>Three dimensions worth diversifying across</h3>
+<ul>
+<li><strong>Asset class</strong> - stocks, bonds, real estate, and cash all respond differently to the same economic news (e.g. bonds often rise when stocks fall in a recession).</li>
+<li><strong>Geography</strong> - a portfolio concentrated entirely in one country carries that country''s specific political and economic risk, however unlikely it feels at the time.</li>
+<li><strong>Number of holdings</strong> - three individual stocks is a concentrated bet on three companies; a broad global index fund holding 1,500+ companies behaves much more like "the market" as a whole.</li>
+</ul>
+<h3>The one-fund shortcut</h3>
+<p>A single, low-cost, globally diversified equity ETF can achieve most of the geography and number-of-holdings diversification in one purchase. This is precisely why so many long-term, hands-off investors deliberately keep their portfolio to one or two funds rather than juggling dozens of individual positions - simplicity is itself a feature, not a compromise.</p>
+<h3>Check your own spread</h3>
+<p>The <a href="/investments">Investments</a> page shows a diversification breakdown by asset type automatically once you have logged a few holdings.</p>' WHERE `id` = 8;
+UPDATE `articles` SET `body` = '<p>Zero-based budgeting is a stricter, more deliberate alternative to percentage-based rules like 50/30/20. Instead of broad bands, every single euro of income is assigned a specific job before the month even begins.</p>
+<h3>How it actually works</h3>
+<p>At the start of the month, list your expected income, then allocate it across categories - rent, groceries, transport, savings, entertainment, even "miscellaneous" - until income minus all allocations equals exactly zero. Nothing is left sitting unassigned to be spent on autopilot later.</p>
+<h3>Why "zero" does not mean "spend everything"</h3>
+<p>Savings and investing are categories too, and are allocated <em>before</em> discretionary spending, not left as whatever happens to remain at month''s end. A month where 300&euro; was assigned to "investing" and 0&euro; is left unassigned is a successful zero-based budget - the goal is intentional assignment, not literal spending of every euro.</p>
+<h3>What it is good at catching</h3>
+<p>Because every category needs a conscious number each month, zero-based budgeting tends to surface costs that quietly grow over time without anyone deciding they should - subscriptions are the classic example, but so are "occasional" takeaway orders that have become a weekly habit.</p>
+<h3>The trade-off</h3>
+<p>It takes more monthly effort than a simple percentage rule. It tends to pay off most in two situations: right after an income change (so spending does not just expand to match), and when working aggressively toward a specific savings goal with a deadline.</p>' WHERE `id` = 9;
+UPDATE `articles` SET `body` = '<p>Lifestyle inflation is the tendency for spending to rise automatically alongside income - a bigger flat after a raise, more frequent takeaways, the newest phone every upgrade cycle - until the extra income has quietly vanished into a new, slightly more expensive "normal."</p>
+<h3>Why it is so easy to miss</h3>
+<p>None of the individual decisions feel reckless in the moment. Each one is a small, reasonable-seeming upgrade. The problem is cumulative: a series of individually-justifiable 50&euro;/month increases can add up to several hundred euros of new fixed costs within a couple of years, with no single purchase ever feeling like "the" overspend.</p>
+<h3>The reference-point problem</h3>
+<p>Humans adapt quickly to a new standard of living and then measure happiness against <em>that</em> new baseline, not the old one - a well-documented effect sometimes called the "hedonic treadmill." This is precisely why a raise so rarely produces the lasting boost in financial comfort people expect from it.</p>
+<h3>The practical countermeasure</h3>
+<p>The fix is not asceticism - it is sequencing. When income rises, decide what share goes to savings and investing <em>before</em> any spending has the chance to expand to fill the gap, and ideally automate that transfer on payday itself. Lifestyle improvements funded out of what is left over, after that automatic transfer, are sustainable; lifestyle improvements that come first and savings "later" rarely survive contact with a full bank account.</p>
+<h3>A useful gut-check</h3>
+<p>Before any new recurring cost (a subscription, a bigger car payment, a pricier gym), ask: would this still feel worth it if I had to keep paying it during a month with no extra income? If the answer is no, it is lifestyle inflation, not a genuine upgrade.</p>' WHERE `id` = 10;
+UPDATE `articles` SET `body` = '<p>Cash sitting in a 0%-interest account is often described as "safe," but that framing hides a real, ongoing cost: <strong>inflation quietly erodes its purchasing power every single year</strong>, even though the number on the screen never goes down.</p>
+<h3>The mechanics</h3>
+<p>If inflation runs at 3% annually and your account pays 0%, your money has not "stood still" - it can buy roughly 3% less in real terms after one year, and the effect compounds: after 10 years at 3% inflation, a fixed sum of money loses roughly a quarter of its original purchasing power, without a single euro physically leaving the account.</p>
+<h3>Nominal return vs. real return</h3>
+<p>A savings account paying 2% interest while inflation runs at 3% has a <em>negative real return</em> of about -1%, even though the nominal balance is visibly growing every month. This distinction - nominal (the number you see) versus real (what it can actually buy) - is one of the most consistently overlooked ideas in everyday personal finance.</p>
+<h3>So is holding cash a mistake?</h3>
+<p>No - for money you may need within the next year or two (an emergency fund, a known upcoming expense), the certainty of cash is worth more than a few percentage points of inflation protection; you cannot eat a stock certificate during a job loss. The mistake is treating cash as the default home for <em>all</em> your savings, including money you realistically will not touch for five, ten, or twenty years. That long-horizon money has time to recover from short-term volatility and benefits from being invested somewhere with a realistic chance of beating inflation over time.</p>
+<h3>Putting numbers on it</h3>
+<p>The <a href="/simulators">investment simulator</a> shows nominal versus inflation-adjusted real value side by side for any time horizon you choose - seeing the gap visually tends to land harder than reading the percentage.</p>' WHERE `id` = 11;
+UPDATE `articles` SET `body` = '<p>Both ETFs and individual stocks let you participate in the stock market, but they demand very different amounts of research, time, and emotional resilience - and conflating the two is a common beginner mistake.</p>
+<h3>What an ETF actually is</h3>
+<p>An exchange-traded fund bundles many companies into a single security that trades on an exchange just like a regular stock. Buying one share of a globally diversified equity ETF can give you proportional exposure to hundreds or thousands of companies across many countries and sectors, instantly, with no need to research any single one of them individually.</p>
+<h3>What buying an individual stock actually commits you to</h3>
+<p>You are betting on the specific future of one company: its management decisions, its competitors, its industry''s regulatory environment, and its ability to keep growing earnings. Professional fund managers who do this full-time, with research teams and decades of experience, frequently fail to beat a simple low-cost index fund over long periods - which is not a reason individual investors should never pick stocks, but it is a reason to be honest about the odds.</p>
+<h3>Cost and effort, compared honestly</h3>
+<ul>
+<li><strong>ETFs</strong>: low ongoing fee (often well under 0.5%/year for broad index funds), little to no ongoing research required, returns track the market.</li>
+<li><strong>Individual stocks</strong>: no ongoing fund fee, but real time investment in research, higher potential for both outsized gains and outsized losses, and a genuine risk of emotional decision-making during a single company''s bad news cycle.</li>
+</ul>
+<h3>A sensible middle ground</h3>
+<p>A common, reasonable approach: build the core of a long-term portfolio from one or two low-cost, broadly diversified ETFs, and - only with money you have explicitly decided you can afford to lose without changing your life plans - allocate a small "satellite" portion to individual companies you have genuinely researched and want to hold for the long run. This way, a single bad pick on the satellite side cannot derail the overall plan.</p>' WHERE `id` = 12;
