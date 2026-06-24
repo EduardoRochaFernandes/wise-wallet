@@ -13,6 +13,7 @@ if ($catSlug !== '') { $sql .= " AND ac.slug = ?"; $params[] = $catSlug; }
 $sql .= " ORDER BY a.published_at DESC";
 $articles = Database::all($sql, $params);
 $cats = Database::all("SELECT * FROM article_categories ORDER BY name");
+$recommended = $inApp && $catSlug === '' ? Recommend::articlesFor(Auth::id(), 3) : [];
 
 if ($inApp) {
     $title = 'Guides'; $nav = 'blog';
@@ -29,6 +30,21 @@ if ($inApp) {
       <p class="eyebrow mb-3">Learn as you go</p>
       <h1 class="font-display text-4xl font-semibold">Money, explained simply.</h1>
       <p class="text-soft mt-3 max-w-xl">Practical financial education — the more you understand, the better you decide.</p>
+    </div>
+  <?php endif; ?>
+
+  <?php if ($recommended): ?>
+    <div class="mb-10">
+      <p class="eyebrow mb-4">Recommended for you</p>
+      <div class="grid sm:grid-cols-3 gap-4">
+        <?php foreach ($recommended as $r): ?>
+          <a href="/article?slug=<?= e($r['slug']) ?>" class="card card-pad lift block">
+            <h3 class="font-display font-semibold leading-snug"><?= e($r['title']) ?></h3>
+            <p class="text-soft text-xs mt-2"><?= e($r['reason']) ?></p>
+            <span class="text-accent text-xs font-medium mt-3 inline-block"><?= (int) $r['reading_minutes'] ?> min read</span>
+          </a>
+        <?php endforeach; ?>
+      </div>
     </div>
   <?php endif; ?>
 
