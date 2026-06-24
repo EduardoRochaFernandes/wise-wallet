@@ -83,7 +83,7 @@
           value: { offsetY: -16, color: cssVar('--ink'), fontSize: '40px', fontWeight: 700, formatter: (v) => Math.round(v) },
         },
       } },
-      labels: ['Saúde Financeira'],
+      labels: ['Financial Health'],
       fill: { type: 'gradient', gradient: { shade: 'light', shadeIntensity: 0.3, gradientToColors: ['#2f6f4f'], stops: [0, 100] } },
     });
 

@@ -61,7 +61,6 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-[244px] h-screen lg:h-screen -translate-x-full lg:translate-x-0 transition-transform duration-300 border-r flex flex-col" style="background:rgb(var(--surface));border-color:rgb(var(--line))">
     <div class="flex items-center gap-2.5 px-5 h-16 border-b" style="border-color:rgb(var(--line))">
-      <?= logo_mark('w-8 h-8') ?>
       <span class="font-display text-lg font-semibold">WiseWallet</span>
     </div>
     <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-4">

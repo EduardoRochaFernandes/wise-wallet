@@ -2,7 +2,7 @@
 <footer class="border-t mt-24" style="border-color:rgb(var(--line));background:rgb(var(--surface))">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid gap-8 md:grid-cols-4">
     <div class="md:col-span-2">
-      <a href="/" class="flex items-center gap-2.5 mb-3"><?= logo_mark('w-8 h-8') ?><span class="font-display text-lg font-semibold">WiseWallet</span></a>
+      <a href="/" class="flex items-center gap-2.5 mb-3"><span class="font-display text-lg font-semibold">WiseWallet</span></a>
       <p class="text-soft text-sm max-w-sm">A complete ledger for your personal finances — record it, understand it, plan it, and learn from it.</p>
     </div>
     <div>

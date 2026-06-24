@@ -22,7 +22,6 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
 <header class="sticky top-0 z-30 border-b" style="background:rgb(var(--paper));border-color:rgb(var(--line))">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-5">
     <a href="/" class="flex items-center gap-2.5">
-      <?= logo_mark('w-8 h-8') ?>
       <span class="font-display text-lg font-semibold">WiseWallet</span>
     </a>
     <nav class="hidden md:flex items-center gap-5 ml-4 text-sm text-soft">
