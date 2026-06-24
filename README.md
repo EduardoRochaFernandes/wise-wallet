@@ -32,7 +32,25 @@ créditos. A WiseWallet faz o **ciclo inteiro**, com três prioridades equilibra
 
 ---
 
-## 🚀 Demo em 1 clique
+## 🌐 Live preview — zero install
+
+<!-- TODO: replace OWNER/REPO below with the real GitHub path once published -->
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/OWNER/REPO?quickstart=1)
+
+Click the badge above to launch a **fully working, always-available preview** of
+WiseWallet in your browser — nothing to install on your own machine. GitHub
+Codespaces builds the container (`Dockerfile` + `docker-compose.yml`: PHP 8.2 +
+Apache + MariaDB), then `.devcontainer/setup.sh` installs dependencies, builds
+the CSS, and imports the database automatically. After a minute or two, the
+app opens on the forwarded port with the same demo data described below —
+sign in with `demo@wisewallet.local` / `Demo@WiseWallet2026`.
+
+> Codespaces is part of every free GitHub account; you only need to be signed
+> in. No PHP, MySQL, or Node installation required on your computer.
+
+---
+
+## 🚀 One-click local start
 
 ### Pré-requisitos
 - **PHP 8.0+** com extensões `pdo_mysql`, `openssl`, `curl`, `mbstring`
