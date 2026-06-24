@@ -1,0 +1,22 @@
+{
+  "name": "WiseWallet 2.0 (live preview)",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "app",
+  "workspaceFolder": "/var/www/html",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+  },
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "WiseWallet",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["bmewburn.vscode-intelephense-client"]
+    }
+  }
+}

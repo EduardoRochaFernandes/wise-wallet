@@ -1,0 +1,38 @@
+# ── Secrets & environment ──────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+storage/logs/*.log
+
+# ── Dependencies / build output ────────────────────────────────
+/node_modules/
+/public/assets/css/app.css
+/public/assets/css/app.css.map
+
+# ── Local data / caches ────────────────────────────────────────
+/data/*.json
+!/data/.gitkeep
+/data/*.db
+/data/*.sqlite
+
+# ── OS / editor noise ──────────────────────────────────────────
+Thumbs.db
+desktop.ini
+.DS_Store
+.idea/
+.vscode/
+.claude/
+*.log
+*.tmp
+
+# ── XAMPP / runtime artifacts ──────────────────────────────────
+/storage/sessions/
+
+# Scratch / test artifacts
+/d.txt
+/l.html
+/*.cookie
+jar*.txt
+/storage/cacert.pem

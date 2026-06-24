@@ -1,0 +1,64 @@
+<?php
+require __DIR__ . '/../app/bootstrap.php';
+Auth::requireAuth();
+$uid = Auth::id();
+$sub = Finance::subscriptions($uid);
+$cats = Finance::categories($uid, 'expense');
+
+$title = 'Subscriptions';
+$nav = 'subscriptions';
+require __DIR__ . '/../app/views/partials/app_head.php';
+?>
+<div class="grid sm:grid-cols-2 gap-px mb-5 rounded-lg overflow-hidden border" style="border-color:rgb(var(--line))">
+  <div class="card-pad" style="background:rgb(var(--surface))"><div class="text-soft text-xs uppercase tracking-wide">Monthly cost · active</div><div class="font-display text-2xl font-semibold mt-1 amount sensitive"><?= money($sub['monthly']) ?></div></div>
+  <div class="card-pad" style="background:rgb(var(--surface))"><div class="text-soft text-xs uppercase tracking-wide">Normalised annual cost</div><div class="font-display text-2xl font-semibold mt-1 text-neg amount sensitive"><?= money($sub['yearly']) ?></div><div class="text-xs text-soft mt-1">The silent drain on your finances</div></div>
+</div>
+
+<div class="flex justify-between items-center mb-4">
+  <h2 class="font-display font-semibold text-lg">Your subscriptions</h2>
+  <button class="btn-primary" data-modal-open="#m-sub"><?= icon('plus','w-4 h-4') ?> New subscription</button>
+</div>
+
+<div class="card overflow-hidden">
+  <table class="table">
+    <thead><tr><th>Service</th><th>Cycle</th><th class="text-right">Amount</th><th class="text-right">Monthly eq.</th><th>Next</th><th></th></tr></thead>
+    <tbody>
+    <?php foreach ($sub['items'] as $s): $m = $s['billing_cycle'] === 'yearly' ? $s['amount'] / 12 : $s['amount']; ?>
+      <tr class="<?= $s['is_active'] ? '' : 'opacity-50' ?>">
+        <td class="font-medium"><?= e($s['name']) ?> <?php if (!$s['is_active']): ?><span class="badge ml-1">paused</span><?php endif; ?></td>
+        <td class="text-soft text-sm"><?= $s['billing_cycle'] === 'yearly' ? 'Yearly' : 'Monthly' ?></td>
+        <td class="text-right font-medium amount sensitive"><?= money($s['amount']) ?></td>
+        <td class="text-right text-soft amount sensitive"><?= money($m) ?></td>
+        <td class="text-soft text-sm"><?= $s['next_renewal'] ? date('d M Y', strtotime($s['next_renewal'])) : '—' ?></td>
+        <td class="text-right whitespace-nowrap">
+          <form data-api-form="/api/subscriptions.php" data-method="PATCH" class="inline">
+            <input type="hidden" name="id" value="<?= $s['id'] ?>"><input type="hidden" name="is_active" value="<?= $s['is_active'] ? 0 : 1 ?>">
+            <button class="btn-ghost btn-sm"><?= $s['is_active'] ? 'Pause' : 'Resume' ?></button>
+          </form>
+          <button class="btn-ghost btn-sm p-1.5" data-del="/api/subscriptions.php" data-id="<?= $s['id'] ?>">&times;</button>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+    <?php if (!$sub['items']): ?><tr><td colspan="6" class="text-center text-soft py-10">No subscriptions yet.</td></tr><?php endif; ?>
+    </tbody>
+  </table>
+</div>
+
+<div id="m-sub" class="hidden modal-backdrop">
+  <div class="modal">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-display text-lg font-semibold">New subscription</h3><button class="btn-ghost btn-sm p-2" data-modal-close>&times;</button></div>
+    <form data-api-form="/api/subscriptions.php" class="space-y-3">
+      <div><label class="label">Service</label><input name="name" required class="input" placeholder="e.g. Netflix"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="label">Amount (&euro;)</label><input name="amount" type="number" step="0.01" min="0" required class="input"></div>
+        <div><label class="label">Cycle</label><select name="billing_cycle" class="select"><option value="monthly">Monthly</option><option value="yearly">Yearly</option></select></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="label">Next renewal</label><input name="next_renewal" type="date" class="input"></div>
+        <div><label class="label">Category</label><select name="category_id" class="select"><option value="">—</option><?php foreach ($cats as $c): ?><option value="<?= $c['id'] ?>"><?= e($c['name']) ?></option><?php endforeach; ?></select></div>
+      </div>
+      <div class="flex gap-2 pt-1"><button type="submit" class="btn-primary flex-1">Create</button><button type="button" class="btn-ghost" data-modal-close>Cancel</button></div>
+    </form>
+  </div>
+</div>
+<?php require __DIR__ . '/../app/views/partials/app_foot.php';

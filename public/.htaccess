@@ -1,0 +1,35 @@
+# WiseWallet 2.0 — Apache config (used when served via XAMPP/Apache).
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Canonical: redirect /page.php → /page (GET only, skip the JSON API).
+  RewriteCond %{REQUEST_METHOD} GET
+  RewriteCond %{THE_REQUEST} \s/(?!api/)([^?\s]+)\.php[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # Map a clean URL to its .php file when no real file/dir matches.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI}.php -f
+  RewriteRule ^(.+)$ $1.php [L]
+
+  # Directory → index.php
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.php -f
+  RewriteRule ^(.*)$ $1/index.php [L]
+</IfModule>
+
+# Block access to dotfiles (.env, .git, etc.)
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+Options -Indexes
+AddDefaultCharset UTF-8
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

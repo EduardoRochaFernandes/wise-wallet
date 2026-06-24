@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  php-lint:
+    name: Lint PHP (8.0 & 8.2)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.0', '8.2']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_mysql, mbstring, curl, openssl
+          coverage: none
+      - name: Syntax-check every PHP file
+        run: |
+          find app public scripts vendor -name "*.php" -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+  build-assets:
+    name: Build CSS & vendor assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Ensure CSS was produced
+        run: test -s public/assets/css/app.css
+
+  validate-sql:
+    name: Validate SQL import
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s --health-timeout=5s --health-retries=5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import schema + seed
+        run: mysql -h 127.0.0.1 -u root < database/wisewallet.sql
+      - name: Verify tables & seed
+        run: |
+          COUNT=$(mysql -h 127.0.0.1 -u root -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='wisewallet';")
+          echo "Tables created: $COUNT"
+          test "$COUNT" -ge 20
+          mysql -h 127.0.0.1 -u root -e "SELECT COUNT(*) AS users FROM wisewallet.users;"

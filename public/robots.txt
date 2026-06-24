@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /$
+Allow: /
+Allow: /blog
+Allow: /article
+Allow: /news
+Allow: /assets/
+# Keep the authenticated app & API out of the index
+Disallow: /dashboard
+Disallow: /transactions
+Disallow: /accounts
+Disallow: /budgets
+Disallow: /goals
+Disallow: /bills
+Disallow: /subscriptions
+Disallow: /investments
+Disallow: /analytics
+Disallow: /simulators
+Disallow: /achievements
+Disallow: /settings
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: http://localhost:8000/sitemap.xml
