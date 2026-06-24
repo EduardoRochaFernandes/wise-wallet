@@ -245,6 +245,13 @@ final class Finance
             $b['spent'] = round($spent, 2);
             $b['pct'] = $b['amount'] > 0 ? min(100, round($spent / $b['amount'] * 100)) : 0;
             $b['status'] = $b['pct'] >= 100 ? 'over' : ($b['pct'] >= 80 ? 'warn' : 'ok');
+            if ($b['status'] === 'over') {
+                Notifier::send($uid, 'budget', 'Budget exceeded: ' . $b['category_name'],
+                    "You've spent " . number_format($spent, 2) . "€ of your " . number_format((float) $b['amount'], 2) . "€ {$b['category_name']} budget this month.", 'alert-triangle');
+            } elseif ($b['status'] === 'warn') {
+                Notifier::send($uid, 'budget', 'Budget warning: ' . $b['category_name'],
+                    "You've used {$b['pct']}% of your {$b['category_name']} budget this month.", 'alert-triangle');
+            }
         }
         return $rows;
     }
@@ -264,9 +271,20 @@ final class Finance
     public static function bills(int $uid): array
     {
         Database::run("UPDATE bills SET status='overdue' WHERE user_id=? AND status='pending' AND due_date < CURDATE()", [$uid]);
-        return Database::all(
+        $rows = Database::all(
             "SELECT b.*, c.name category_name FROM bills b LEFT JOIN categories c ON c.id=b.category_id
               WHERE b.user_id=? ORDER BY FIELD(b.status,'overdue','pending','paid'), b.due_date", [$uid]);
+
+        foreach ($rows as $b) {
+            if ($b['status'] === 'overdue') {
+                Notifier::send($uid, 'bill', 'Bill overdue: ' . $b['name'],
+                    $b['name'] . ' (' . number_format((float) $b['amount'], 2) . '€) was due on ' . date('d M Y', strtotime($b['due_date'])) . ' and is now overdue.', 'calendar');
+            } elseif ($b['status'] === 'pending' && strtotime($b['due_date']) <= strtotime('+2 days')) {
+                Notifier::send($uid, 'bill', 'Bill due soon: ' . $b['name'],
+                    $b['name'] . ' (' . number_format((float) $b['amount'], 2) . '€) is due on ' . date('d M Y', strtotime($b['due_date'])) . '.', 'calendar');
+            }
+        }
+        return $rows;
     }
 
     /* ── Subscriptions (normalized monthly/yearly) ────────────── */

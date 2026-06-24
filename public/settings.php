@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $v->in('theme', ['dark', 'light'], 'Theme');
         $v->in('currency', ['EUR', 'USD', 'GBP', 'BRL'], 'Currency');
         if ($v->passes()) {
-            Database::run("UPDATE users SET name=?, currency=?, theme=?, privacy_mode=? WHERE id=?",
-                [$v->get('name'), input('currency', 'EUR'), input('theme', 'light'), input('privacy_mode') ? 1 : 0, $uid]);
+            Database::run("UPDATE users SET name=?, currency=?, theme=?, privacy_mode=?, email_notifications=? WHERE id=?",
+                [$v->get('name'), input('currency', 'EUR'), input('theme', 'light'), input('privacy_mode') ? 1 : 0, input('email_notifications') ? 1 : 0, $uid]);
             Audit::log('settings_profile', $uid);
             $ok = 'Profile updated.';
         } else { $err = $v->firstError(); }
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ok = 'Two-step verification disabled.';
         } else { $err = 'Incorrect password.'; }
     }
-    $u = Database::one("SELECT id,name,email,role,currency,theme,privacy_mode,points,is_active,created_at FROM users WHERE id=?", [$uid]);
+    $u = Database::one("SELECT id,name,email,role,currency,theme,privacy_mode,email_notifications,points,is_active,created_at FROM users WHERE id=?", [$uid]);
 }
 
 $twofa = (int) (Database::scalar("SELECT totp_enabled FROM users WHERE id=?", [$uid]) ?? 0);
@@ -87,6 +87,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
         </select></div>
       </div>
       <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="privacy_mode" value="1" <?= $u['privacy_mode'] ? 'checked' : '' ?>> Enable private mode by default (blur amounts)</label>
+      <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="email_notifications" value="1" <?= ($u['email_notifications'] ?? 1) ? 'checked' : '' ?>> Email me about logins, bills due, budgets, and achievements</label>
       <button class="btn-primary">Save profile</button>
     </form>
   </div>

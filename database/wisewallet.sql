@@ -57,6 +57,7 @@ CREATE TABLE `users` (
   `currency`      CHAR(3) NOT NULL DEFAULT 'EUR',
   `theme`         ENUM('dark','light') NOT NULL DEFAULT 'light',
   `privacy_mode`  TINYINT(1) NOT NULL DEFAULT 0,
+  `email_notifications` TINYINT(1) NOT NULL DEFAULT 1,
   `points`        INT NOT NULL DEFAULT 0,
   `is_active`     TINYINT(1) NOT NULL DEFAULT 1,
   `last_login_at` DATETIME NULL,

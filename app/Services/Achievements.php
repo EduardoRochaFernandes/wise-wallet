@@ -32,10 +32,7 @@ final class Achievements
 
         Database::run("INSERT INTO user_achievements (user_id, achievement_id, unlocked_at) VALUES (?,?,NOW())", [$uid, $a['id']]);
         Database::run("UPDATE users SET points = points + ? WHERE id = ?", [(int) $a['points'], $uid]);
-        Database::run(
-            "INSERT INTO notifications (user_id, type, title, body, icon, created_at) VALUES (?,?,?,?,?,NOW())",
-            [$uid, 'achievement', 'Conquista desbloqueada!', $a['name'] . ' — ' . $a['description'], 'trophy']
-        );
+        Notifier::send($uid, 'achievement', 'Achievement unlocked: ' . $a['name'], $a['name'] . ' — ' . $a['description'] . ' (+' . (int) $a['points'] . ' points)', 'trophy');
         return $a;
     }
 

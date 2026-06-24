@@ -25,6 +25,8 @@ require __DIR__ . '/Security/Audit.php';
 require __DIR__ . '/Security/Totp.php';
 require __DIR__ . '/Security/Pwned.php';
 require __DIR__ . '/Security/Auth.php';
+require __DIR__ . '/Services/Mailer.php';
+require __DIR__ . '/Services/Notifier.php';
 
 // Services / models are loaded on demand.
 spl_autoload_register(static function (string $class): void {

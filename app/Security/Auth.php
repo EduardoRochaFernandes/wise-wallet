@@ -45,7 +45,7 @@ final class Auth
             return self::$cached;
         }
         self::$cached = Database::one(
-            "SELECT id, name, email, role, currency, theme, privacy_mode, points, is_active, created_at
+            "SELECT id, name, email, role, currency, theme, privacy_mode, email_notifications, points, is_active, created_at
                FROM users WHERE id = ? LIMIT 1",
             [self::id()]
         );
@@ -161,9 +161,7 @@ final class Auth
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         $seen = Database::scalar("SELECT id FROM audit_log WHERE user_id=? AND action='login_success' AND ip=? LIMIT 1", [$user['id'], $ip]);
         if (!$seen) {
-            Database::run(
-                "INSERT INTO notifications (user_id,type,title,body,icon,created_at) VALUES (?,?,?,?,?,NOW())",
-                [$user['id'], 'security', 'Novo início de sessão', 'Sessão iniciada a partir de um novo dispositivo/IP (' . $ip . ').', 'shield']);
+            Notifier::send((int) $user['id'], 'security', 'New sign-in detected', 'Your account was signed into from a new device or IP address (' . $ip . '). If this was not you, change your password immediately.', 'shield');
         }
         Database::run("UPDATE users SET last_login_at = NOW(), locked_until = NULL WHERE id = ?", [$user['id']]);
         Audit::log('login_success', (int) $user['id']);
