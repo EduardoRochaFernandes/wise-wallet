@@ -2,7 +2,7 @@
 require __DIR__ . '/../app/bootstrap.php';
 
 if (Auth::check()) {
-    redirect('/dashboard.php');
+    redirect('/dashboard');
 }
 
 $allowReg = (string) (Database::scalar("SELECT `value` FROM settings WHERE `key`='allow_registration'") ?? '1') === '1';
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             [$ok, $res] = Auth::register((string) $v->get('name'), (string) $v->get('email'), (string) input('password'));
             if ($ok) {
                 Auth::attempt((string) $v->get('email'), (string) input('password'));
-                redirect('/dashboard.php');
+                redirect('/dashboard');
             }
             $errors['email'] = $res;
         } else {
@@ -70,7 +70,7 @@ require __DIR__ . '/../app/views/partials/public_head.php';
       <button class="btn-primary w-full">Create account</button>
     </form>
 
-    <p class="text-center text-sm text-soft mt-5">Already have an account? <a href="/login.php" class="text-accent font-medium">Sign in</a></p>
+    <p class="text-center text-sm text-soft mt-5">Already have an account? <a href="/login" class="text-accent font-medium">Sign in</a></p>
   </div>
 </section>
 <?php clear_old(); require __DIR__ . '/../app/views/partials/public_foot.php';

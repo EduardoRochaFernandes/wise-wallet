@@ -2,7 +2,7 @@
 require __DIR__ . '/../app/bootstrap.php';
 
 if (Auth::check()) {
-    redirect('/dashboard.php');
+    redirect('/dashboard');
 }
 
 $error = flash('error');
@@ -11,14 +11,14 @@ $stage = isset($_SESSION['pending_2fa']) ? '2fa' : 'login';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (input('code') !== null && isset($_SESSION['pending_2fa'])) {
         [$ok, $msg] = Auth::verify2fa((string) input('code'));
-        if ($ok) { redirect('/dashboard.php'); }
+        if ($ok) { redirect('/dashboard'); }
         $error = $msg;
         $stage = '2fa';
     } else {
         $email = (string) input('email', '');
         $password = (string) input('password', '');
         [$ok, $msg] = Auth::attempt($email, $password);
-        if ($ok) { redirect('/dashboard.php'); }
+        if ($ok) { redirect('/dashboard'); }
         if ($msg === '__2FA__') {
             $stage = '2fa';
         } else {
@@ -53,7 +53,7 @@ require __DIR__ . '/../app/views/partials/public_head.php';
         </div>
         <button class="btn-primary w-full">Verify and sign in</button>
       </form>
-      <p class="text-center text-sm text-soft mt-5"><a href="/logout.php" class="text-accent">Cancel</a></p>
+      <p class="text-center text-sm text-soft mt-5"><a href="/logout" class="text-accent">Cancel</a></p>
     <?php else: ?>
       <form method="post" class="space-y-4" novalidate>
         <?= Csrf::field() ?>
@@ -66,12 +66,12 @@ require __DIR__ . '/../app/views/partials/public_head.php';
           <input id="password" name="password" type="password" required class="input" placeholder="••••••••">
         </div>
         <div class="flex justify-end -mt-1">
-          <a href="/forgot-password.php" class="text-sm text-accent">Forgot your password?</a>
+          <a href="/forgot-password" class="text-sm text-accent">Forgot your password?</a>
         </div>
         <button class="btn-primary w-full">Sign in</button>
       </form>
 
-      <p class="text-center text-sm text-soft mt-5">No account yet? <a href="/register.php" class="text-accent font-medium">Create one free</a></p>
+      <p class="text-center text-sm text-soft mt-5">No account yet? <a href="/register" class="text-accent font-medium">Create one free</a></p>
 
       <div class="mt-6 pt-5 border-t text-xs text-soft" style="border-color:rgb(var(--line))">
         <p class="font-semibold mb-1">Demo account</p>

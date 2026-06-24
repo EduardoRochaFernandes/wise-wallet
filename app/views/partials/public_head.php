@@ -21,23 +21,23 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
 <div id="scroll-progress"></div>
 <header class="sticky top-0 z-30 border-b" style="background:rgb(var(--paper));border-color:rgb(var(--line))">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-5">
-    <a href="/index.php" class="flex items-center gap-2.5">
+    <a href="/" class="flex items-center gap-2.5">
       <?= logo_mark('w-8 h-8') ?>
       <span class="font-display text-lg font-semibold">WiseWallet</span>
     </a>
     <nav class="hidden md:flex items-center gap-5 ml-4 text-sm text-soft">
-      <a href="/index.php#features" class="hover:text-[rgb(var(--ink))]">Features</a>
-      <a href="/index.php#tools" class="hover:text-[rgb(var(--ink))]">Tools</a>
-      <a href="/blog.php" class="hover:text-[rgb(var(--ink))]<?= ($activeNav ?? '')==='blog'?' text-[rgb(var(--ink))] font-medium':'' ?>">Guides</a>
-      <a href="/news.php" class="hover:text-[rgb(var(--ink))]<?= ($activeNav ?? '')==='news'?' text-[rgb(var(--ink))] font-medium':'' ?>">Market news</a>
+      <a href="/#features" class="hover:text-[rgb(var(--ink))]">Features</a>
+      <a href="/#tools" class="hover:text-[rgb(var(--ink))]">Tools</a>
+      <a href="/blog" class="hover:text-[rgb(var(--ink))]<?= ($activeNav ?? '')==='blog'?' text-[rgb(var(--ink))] font-medium':'' ?>">Guides</a>
+      <a href="/news" class="hover:text-[rgb(var(--ink))]<?= ($activeNav ?? '')==='news'?' text-[rgb(var(--ink))] font-medium':'' ?>">Market news</a>
     </nav>
     <div class="flex-1"></div>
     <button data-theme-toggle class="btn-ghost btn-sm p-2" title="Toggle theme" aria-label="Toggle theme"><span data-icon="sun"><?= icon('sun', 'w-4 h-4') ?></span><span data-icon="moon"><?= icon('moon', 'w-4 h-4') ?></span></button>
     <?php if (Auth::check()): ?>
-      <a href="/dashboard.php" class="btn-primary btn-sm">Open app</a>
+      <a href="/dashboard" class="btn-primary btn-sm">Open app</a>
     <?php else: ?>
-      <a href="/login.php" class="btn-ghost btn-sm">Sign in</a>
-      <a href="/register.php" class="btn-primary btn-sm">Get started</a>
+      <a href="/login" class="btn-ghost btn-sm">Sign in</a>
+      <a href="/register" class="btn-primary btn-sm">Get started</a>
     <?php endif; ?>
   </div>
 </header>

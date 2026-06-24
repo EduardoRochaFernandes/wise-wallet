@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../app/bootstrap.php';
-if (Auth::check()) { redirect('/dashboard.php'); }
+if (Auth::check()) { redirect('/dashboard'); }
 
 $sent = false; $error = null; $devLink = null;
 
@@ -55,7 +55,7 @@ require __DIR__ . '/../app/views/partials/public_head.php';
           <a href="<?= e($devLink) ?>" class="text-accent break-all"><?= e($devLink) ?></a>
         </div>
       <?php endif; ?>
-      <p class="text-center text-sm text-soft mt-5"><a href="/login.php" class="text-accent">Back to sign in</a></p>
+      <p class="text-center text-sm text-soft mt-5"><a href="/login" class="text-accent">Back to sign in</a></p>
     <?php else: ?>
       <form method="post" class="space-y-4" novalidate>
         <?= Csrf::field() ?>
@@ -65,7 +65,7 @@ require __DIR__ . '/../app/views/partials/public_head.php';
         </div>
         <button class="btn-primary w-full">Send reset link</button>
       </form>
-      <p class="text-center text-sm text-soft mt-5"><a href="/login.php" class="text-accent">Back</a></p>
+      <p class="text-center text-sm text-soft mt-5"><a href="/login" class="text-accent">Back</a></p>
     <?php endif; ?>
   </div>
 </section>

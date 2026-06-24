@@ -120,10 +120,15 @@ require __DIR__ . '/../app/views/partials/app_head.php';
       <button class="btn-ghost">Disable</button>
     </form>
   <?php elseif (!empty($_SESSION['totp_setup'])): $secret = $_SESSION['totp_setup']; $uri = Totp::uri($secret, $u['email']); ?>
-    <p class="text-soft text-sm mt-2">1) Add this secret key to your app (Google Authenticator, Authy, 1Password…):</p>
-    <div class="kbd my-2 text-base tracking-[0.3em] break-all px-3 py-2"><?= e($secret) ?></div>
-    <p class="text-xs text-soft break-all">otpauth: <?= e($uri) ?></p>
-    <p class="text-soft text-sm mt-3">2) Enter the generated code to confirm:</p>
+    <p class="text-soft text-sm mt-2">1) Scan the QR with your authenticator app (Google Authenticator, Authy, 1Password…), or enter the key manually:</p>
+    <div class="flex flex-col sm:flex-row gap-4 items-start my-3">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=176x176&margin=0&data=<?= rawurlencode($uri) ?>" alt="Two-factor QR code" width="176" height="176" class="rounded border bg-white p-1" style="border-color:rgb(var(--line))">
+      <div class="min-w-0">
+        <div class="text-xs text-soft uppercase tracking-wide mb-1">Setup key</div>
+        <div class="kbd text-base tracking-[0.25em] break-all px-3 py-2"><?= e($secret) ?></div>
+      </div>
+    </div>
+    <p class="text-soft text-sm mt-3">2) Enter the generated 6-digit code to confirm:</p>
     <form method="post" class="flex gap-2 mt-2 max-w-sm">
       <?= Csrf::field() ?><input type="hidden" name="action" value="2fa_confirm">
       <input name="code" inputmode="numeric" maxlength="6" class="input text-center tracking-[0.3em]" placeholder="000000" required>

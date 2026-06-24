@@ -12,28 +12,28 @@ $privacy = (int) ($u['privacy_mode'] ?? 0) === 1;
 
 $navGroups = [
     'Overview' => [
-        ['dashboard', 'Dashboard', 'layout-dashboard', '/dashboard.php'],
+        ['dashboard', 'Dashboard', 'layout-dashboard', '/dashboard'],
     ],
     'Money' => [
-        ['transactions', 'Transactions', 'arrow-left-right', '/transactions.php'],
-        ['accounts', 'Accounts', 'landmark', '/accounts.php'],
-        ['investments', 'Investments', 'trending-up', '/investments.php'],
+        ['transactions', 'Transactions', 'arrow-left-right', '/transactions'],
+        ['accounts', 'Accounts', 'landmark', '/accounts'],
+        ['investments', 'Investments', 'trending-up', '/investments'],
     ],
     'Plan' => [
-        ['budgets', 'Budgets', 'target', '/budgets.php'],
-        ['goals', 'Goals', 'star', '/goals.php'],
-        ['bills', 'Bills', 'calendar', '/bills.php'],
-        ['subscriptions', 'Subscriptions', 'repeat', '/subscriptions.php'],
+        ['budgets', 'Budgets', 'target', '/budgets'],
+        ['goals', 'Goals', 'star', '/goals'],
+        ['bills', 'Bills', 'calendar', '/bills'],
+        ['subscriptions', 'Subscriptions', 'repeat', '/subscriptions'],
     ],
     'Analyze' => [
-        ['analytics', 'Insights', 'brain', '/analytics.php'],
-        ['simulators', 'Simulators', 'calculator', '/simulators.php'],
+        ['analytics', 'Insights', 'brain', '/analytics'],
+        ['simulators', 'Simulators', 'calculator', '/simulators'],
     ],
     'Learn' => [
-        ['achievements', 'Achievements', 'trophy', '/achievements.php'],
-        ['news', 'Market news', 'newspaper', '/news.php'],
-        ['blog', 'Guides', 'book-open', '/blog.php'],
-        ['settings', 'Settings', 'settings', '/settings.php'],
+        ['achievements', 'Achievements', 'trophy', '/achievements'],
+        ['news', 'Market news', 'newspaper', '/news'],
+        ['blog', 'Guides', 'book-open', '/blog'],
+        ['settings', 'Settings', 'settings', '/settings'],
     ],
 ];
 $unread = (int) (Database::scalar("SELECT COUNT(*) FROM notifications WHERE user_id=? AND is_read=0", [Auth::id()]) ?? 0);
@@ -76,7 +76,7 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
       <?php endforeach; ?>
       <?php if (Auth::isAdmin()): ?>
         <div class="pt-2 border-t" style="border-color:rgb(var(--line))">
-          <a href="/admin/index.php" class="nav-link<?= nav_active('admin', $nav) ?>"><?= icon('shield', 'w-4 h-4') ?><span>Admin</span></a>
+          <a href="/admin/index" class="nav-link<?= nav_active('admin', $nav) ?>"><?= icon('shield', 'w-4 h-4') ?><span>Admin</span></a>
         </div>
       <?php endif; ?>
     </nav>
@@ -87,7 +87,7 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
           <div class="text-sm font-medium truncate"><?= e($u['name'] ?? 'User') ?></div>
           <div class="text-xs text-soft truncate"><?= e($u['email'] ?? '') ?></div>
         </div>
-        <a href="/logout.php" title="Sign out" class="text-soft hover:text-[rgb(var(--neg))]"><?= icon('log-out', 'w-4 h-4') ?></a>
+        <a href="/logout" title="Sign out" class="text-soft hover:text-[rgb(var(--neg))]"><?= icon('log-out', 'w-4 h-4') ?></a>
       </div>
     </div>
   </aside>
@@ -101,7 +101,7 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
       <button data-open-cmdk class="btn-ghost btn-sm hidden sm:inline-flex" title="Search"><?= icon('search', 'w-4 h-4') ?><span class="kbd ml-1">Ctrl K</span></button>
       <button data-privacy-toggle class="btn-ghost btn-sm p-2" title="Privacy mode" aria-label="Privacy mode"><span data-icon="eye"><?= icon('eye', 'w-4 h-4') ?></span><span data-icon="eye-off"><?= icon('eye-off', 'w-4 h-4') ?></span></button>
       <button data-theme-toggle class="btn-ghost btn-sm p-2" title="Toggle theme" aria-label="Toggle theme"><span data-icon="sun"><?= icon('sun', 'w-4 h-4') ?></span><span data-icon="moon"><?= icon('moon', 'w-4 h-4') ?></span></button>
-      <a href="/achievements.php" class="btn-ghost btn-sm p-2 relative" title="Notifications" aria-label="Notifications">
+      <a href="/achievements" class="btn-ghost btn-sm p-2 relative" title="Notifications" aria-label="Notifications">
         <?= icon('bell', 'w-4 h-4') ?>
         <?php if ($unread > 0): ?><span class="absolute -top-1 -right-1 w-4 h-4 text-[10px] grid place-items-center rounded-full text-white" style="background:rgb(var(--neg))"><?= $unread ?></span><?php endif; ?>
       </a>

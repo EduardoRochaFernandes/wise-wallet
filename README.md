@@ -42,7 +42,7 @@ créditos. A WiseWallet faz o **ciclo inteiro**, com três prioridades equilibra
 > No Windows o **XAMPP** já inclui PHP + MySQL/MariaDB. Os scripts detetam-no
 > automaticamente em `C:\xampp`.
 
-### Arranque automático
+### One-click start
 ```bash
 # Windows
 setup.bat
@@ -51,27 +51,50 @@ setup.bat
 bash setup.sh
 ```
 
-O script faz **tudo** sem passos manuais:
-1. `npm install` 2. compila CSS + vendoriza ApexCharts 3. cria o `.env` (com `APP_KEY` novo)
-4. arranca o MySQL e aguarda 5. importa `database/wisewallet.sql` 6. gera o `sitemap.xml`,
-arranca o servidor em `http://localhost:8000` e abre o browser.
+The script does **everything**, no manual steps:
+1. `npm install` 2. builds the CSS + vendors ApexCharts 3. creates `.env` (with a fresh `APP_KEY`)
+4. starts MySQL and waits for it 5. imports `database/wisewallet.sql` 6. generates `sitemap.xml`,
+starts the server at `http://localhost:8000` and opens the browser.
 
-### Contas de demonstração
-| Papel | Email | Palavra-passe |
-|-------|-------|----------------|
-| 👑 Admin | `admin@wisewallet.local` | `Admin@WiseWallet2026` |
-| 👤 Demo (com dados) | `demo@wisewallet.local` | `Demo@WiseWallet2026` |
+> This quick-start server uses `php -S` directly, so URLs keep the `.php` extension.
+> For **clean, extension-less URLs** (e.g. `/dashboard` instead of `/dashboard.php`),
+> serve the app through Apache instead — see below.
 
-> ⚠️ **Muda estas credenciais** antes de qualquer uso real (ver [SECURITY.md](SECURITY.md)).
+### Demo accounts
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@wisewallet.local` | `Admin@WiseWallet2026` |
+| Demo (with data) | `demo@wisewallet.local` | `Demo@WiseWallet2026` |
 
-### Arranque manual (alternativa)
+> **Change these credentials** before any real-world use (see [SECURITY.md](SECURITY.md)).
+
+### Manual start (alternative)
 ```bash
 npm install
 npm run build
-cp .env.example .env          # e edita as credenciais de BD
+cp .env.example .env          # then edit the DB credentials
 mysql -u root < database/wisewallet.sql
 php -S localhost:8000 -t public
 ```
+
+### Clean URLs via Apache (recommended for a polished demo)
+`public/.htaccess` already handles the rewriting (mod_rewrite); you only need a
+vhost pointing at this project's `public/` folder. Example for XAMPP — add to
+`xampp/apache/conf/extra/httpd-vhosts.conf` (and `Listen 8080` in `httpd.conf`
+if you pick a new port):
+```apache
+<VirtualHost *:8080>
+    DocumentRoot "C:/path/to/WiseWallet-2.0/public"
+    ServerName localhost
+    <Directory "C:/path/to/WiseWallet-2.0/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+Restart Apache, then open `http://localhost:8080` — every page resolves without
+`.php` (e.g. `/login`, `/dashboard`, `/admin`), and visiting a `.php` URL
+directly 301-redirects to its clean equivalent.
 
 ---
 
@@ -162,7 +185,7 @@ WiseWallet-2.0/
 │   ├── assets/               # CSS compilado, JS, imagens
 │   ├── robots.txt · sitemap.xml · .htaccess
 ├── database/wisewallet.sql   # Esquema + índices + seed + admin pré-criado
-├── scripts/                  # setup-env, wait-mysql, gen-sitemap, vendor-assets
+├── scripts/                  # setup-env, wait-mysql, build-sitemap, vendor-assets
 ├── vendor/fpdf/SimplePdf.php  # Escritor PDF puro PHP
 ├── src/css/app.css           # Fonte Tailwind (design tokens)
 ├── setup.bat · setup.sh      # Automação 1-clique

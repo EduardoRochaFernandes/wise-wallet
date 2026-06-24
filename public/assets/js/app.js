@@ -102,23 +102,23 @@
 
   /* ── Command palette (Ctrl/⌘ + K) ─────────────────────────── */
   const COMMANDS = [
-    ['Dashboard', '/dashboard.php'],
-    ['Transactions', '/transactions.php'],
-    ['Accounts', '/accounts.php'],
-    ['Budgets', '/budgets.php'],
-    ['Goals', '/goals.php'],
-    ['Bills', '/bills.php'],
-    ['Subscriptions', '/subscriptions.php'],
-    ['Investments', '/investments.php'],
-    ['Insights', '/analytics.php'],
-    ['Simulators', '/simulators.php'],
-    ['Achievements', '/achievements.php'],
-    ['Market news', '/news.php'],
-    ['Guides', '/blog.php'],
-    ['Settings', '/settings.php'],
+    ['Dashboard', '/dashboard'],
+    ['Transactions', '/transactions'],
+    ['Accounts', '/accounts'],
+    ['Budgets', '/budgets'],
+    ['Goals', '/goals'],
+    ['Bills', '/bills'],
+    ['Subscriptions', '/subscriptions'],
+    ['Investments', '/investments'],
+    ['Insights', '/analytics'],
+    ['Simulators', '/simulators'],
+    ['Achievements', '/achievements'],
+    ['Market news', '/news'],
+    ['Guides', '/blog'],
+    ['Settings', '/settings'],
     ['Toggle theme', 'action:theme'],
     ['Privacy mode', 'action:privacy'],
-    ['Sign out', '/logout.php'],
+    ['Sign out', '/logout'],
   ];
 
   function initPalette() {

@@ -65,13 +65,13 @@ final class Auth
                 json_out(['error' => 'Not authenticated.'], 401);
             }
             flash('error', 'Please sign in to continue.');
-            redirect('/login.php');
+            redirect('/login');
         }
         // Account could have been deactivated mid-session.
         $u = self::user();
         if (!$u || (int) $u['is_active'] !== 1) {
             self::logout();
-            redirect('/login.php');
+            redirect('/login');
         }
     }
 
@@ -262,7 +262,7 @@ final class Auth
             Audit::log('session_fp_mismatch', (int) $_SESSION['user_id']);
             self::logout();
             if (self::wantsJson()) { json_out(['error' => 'Invalid session.'], 401); }
-            redirect('/login.php');
+            redirect('/login');
         }
     }
 

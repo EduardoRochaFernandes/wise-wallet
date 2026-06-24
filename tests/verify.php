@@ -15,7 +15,7 @@
 declare(strict_types=1);
 error_reporting(E_ALL & ~E_DEPRECATED);
 
-const BASE = 'http://localhost:8000';
+const BASE = 'http://localhost:8080';
 $DB = ['dsn' => 'mysql:host=127.0.0.1;dbname=wisewallet;charset=utf8mb4', 'u' => 'root', 'p' => ''];
 
 $pass = 0; $fail = 0; $fails = [];
@@ -34,9 +34,9 @@ function http(string $method, string $url, array $o = []): array {
     $body = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
     return [$code, (string) $body];
 }
-function formCsrf(string $jar): string { [, $b] = http('GET', BASE . '/login.php', ['jar' => $jar]); return preg_match('/name="csrf_token" value="([^"]+)"/', $b, $m) ? $m[1] : ''; }
-function apiCsrf(string $jar): string { [, $b] = http('GET', BASE . '/dashboard.php', ['jar' => $jar]); return preg_match('/name="csrf-token" content="([^"]+)"/', $b, $m) ? $m[1] : ''; }
-function login(string $jar, string $email, string $pw): array { return http('POST', BASE . '/login.php', ['jar' => $jar, 'form' => ['csrf_token' => formCsrf($jar), 'email' => $email, 'password' => $pw]]); }
+function formCsrf(string $jar): string { [, $b] = http('GET', BASE . '/login', ['jar' => $jar]); return preg_match('/name="csrf_token" value="([^"]+)"/', $b, $m) ? $m[1] : ''; }
+function apiCsrf(string $jar): string { [, $b] = http('GET', BASE . '/dashboard', ['jar' => $jar]); return preg_match('/name="csrf-token" content="([^"]+)"/', $b, $m) ? $m[1] : ''; }
+function login(string $jar, string $email, string $pw): array { return http('POST', BASE . '/login', ['jar' => $jar, 'form' => ['csrf_token' => formCsrf($jar), 'email' => $email, 'password' => $pw]]); }
 function jar(): string { return tempnam(sys_get_temp_dir(), 'wwjar'); }
 
 $ATTACK = [
@@ -54,14 +54,14 @@ echo "WiseWallet security & functional checks\n=================================
 section('Authentication & CSRF');
 $demo = jar();
 ok('valid login redirects (302)', login($demo, 'demo@wisewallet.local', 'Demo@WiseWallet2026')[0] === 302);
-ok('login without CSRF token rejected (419)', http('POST', BASE . '/login.php', ['jar' => jar(), 'form' => ['email' => 'demo@wisewallet.local', 'password' => 'Demo@WiseWallet2026']])[0] === 419);
+ok('login without CSRF token rejected (403)', http('POST', BASE . '/login', ['jar' => jar(), 'form' => ['email' => 'demo@wisewallet.local', 'password' => 'Demo@WiseWallet2026']])[0] === 403);
 ok('wrong password stays on login (200)', login(jar(), 'demo@wisewallet.local', 'nope-nope')[0] === 200);
 
 section('Functional CRUD (isolated test user)');
 $u2 = jar();
 $email2 = 'qa_' . time() . '@test.local';
-$t = preg_match('/name="csrf_token" value="([^"]+)"/', http('GET', BASE . '/register.php', ['jar' => $u2])[1], $m) ? $m[1] : '';
-http('POST', BASE . '/register.php', ['jar' => $u2, 'form' => ['csrf_token' => $t, 'name' => 'QA User', 'email' => $email2, 'password' => 'Qa9rTzePlmWx', 'password_confirm' => 'Qa9rTzePlmWx']]);
+$t = preg_match('/name="csrf_token" value="([^"]+)"/', http('GET', BASE . '/register', ['jar' => $u2])[1], $m) ? $m[1] : '';
+http('POST', BASE . '/register', ['jar' => $u2, 'form' => ['csrf_token' => $t, 'name' => 'QA User', 'email' => $email2, 'password' => 'Qa9rTzePlmWx', 'password_confirm' => 'Qa9rTzePlmWx']]);
 $tok2 = apiCsrf($u2);
 ok('registered + auto-logged-in', strlen($tok2) > 10);
 $H = ['X-CSRF-Token: ' . $tok2];
@@ -90,14 +90,14 @@ foreach ([
 }
 
 section('CSRF / auth / IDOR / RBAC');
-ok('API POST without CSRF rejected (419)', http('POST', BASE . '/api/transactions.php', ['jar' => $u2, 'json' => ['type' => 'expense', 'amount' => 1, 'account_id' => $acc]])[0] === 419);
+ok('API POST without CSRF rejected (403)', http('POST', BASE . '/api/transactions.php', ['jar' => $u2, 'json' => ['type' => 'expense', 'amount' => 1, 'account_id' => $acc]])[0] === 403);
 ok('unauthenticated API GET blocked (401)', http('GET', BASE . '/api/accounts.php', ['jar' => jar()])[0] === 401);
 $demoTok = apiCsrf($demo);
 ok('cross-account delete blocked (404)', http('DELETE', BASE . '/api/accounts.php', ['jar' => $demo, 'headers' => ['X-CSRF-Token: ' . $demoTok], 'json' => ['id' => $acc]])[0] === 404);
 ok('target account untouched', (int) $pdo->query("SELECT COUNT(*) FROM accounts WHERE id = $acc")->fetchColumn() === 1);
-ok('non-admin blocked from admin (403)', http('GET', BASE . '/admin/index.php', ['jar' => $demo])[0] === 403);
+ok('non-admin blocked from admin (403)', http('GET', BASE . '/admin/', ['jar' => $demo])[0] === 403);
 $admin = jar(); login($admin, 'admin@wisewallet.local', 'Admin@WiseWallet2026');
-ok('admin can access admin (200)', http('GET', BASE . '/admin/index.php', ['jar' => $admin])[0] === 200);
+ok('admin can access admin (200)', http('GET', BASE . '/admin/', ['jar' => $admin])[0] === 200);
 
 section('WAF-lite signature blocking');
 ok('XSS script tag blocked (403)', http('GET', BASE . '/api/accounts.php?q=' . rawurlencode($ATTACK['xss']), ['jar' => $u2])[0] === 403);
@@ -106,7 +106,7 @@ ok('path traversal blocked (403)', http('GET', BASE . '/api/accounts.php?q=' . r
 
 section('Output escaping + CSV-injection-safe export');
 http('POST', BASE . '/api/transactions.php', ['jar' => $u2, 'headers' => $H, 'json' => ['type' => 'expense', 'amount' => 3, 'account_id' => $acc, 'description' => $ATTACK['img'], 'occurred_on' => date('Y-m-d')]]);
-$page = http('GET', BASE . '/transactions.php', ['jar' => $u2])[1];
+$page = http('GET', BASE . '/transactions', ['jar' => $u2])[1];
 ok('stored value HTML-escaped on render', strpos($page, 'ZZ&lt;img') !== false && strpos($page, $ATTACK['img']) === false);
 http('POST', BASE . '/api/transactions.php', ['jar' => $u2, 'headers' => $H, 'json' => ['type' => 'expense', 'amount' => 2, 'account_id' => $acc, 'description' => $ATTACK['csv'], 'occurred_on' => date('Y-m-d')]]);
 ok('CSV formula cell neutralized', strpos(http('GET', BASE . '/api/export.php?format=csv', ['jar' => $u2])[1], "'" . $ATTACK['csv']) !== false);
@@ -117,7 +117,7 @@ for ($i = 0; $i < 270; $i++) { if (http('GET', BASE . '/api/accounts.php', ['jar
 ok('API throttles excessive requests (429)', $got429);
 
 section('Security headers');
-$ch = curl_init(BASE . '/login.php');
+$ch = curl_init(BASE . '/login');
 curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_HEADER => true, CURLOPT_NOBODY => true]);
 $head = (string) curl_exec($ch); curl_close($ch);
 ok('Content-Security-Policy present', stripos($head, 'content-security-policy:') !== false);

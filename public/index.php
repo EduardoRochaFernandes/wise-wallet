@@ -44,8 +44,8 @@ $tools = [
       real simulations — in one fast, private place. Free, and yours.
     </p>
     <div class="flex flex-wrap items-center gap-4 mt-8">
-      <a href="/register.php" class="btn-primary px-5 py-2.5">Start keeping the books</a>
-      <a href="/login.php" class="text-sm font-medium text-accent hover:underline">Try the demo account &rarr;</a>
+      <a href="/register" class="btn-primary px-5 py-2.5">Start keeping the books</a>
+      <a href="/login" class="text-sm font-medium text-accent hover:underline">Try the demo account &rarr;</a>
     </div>
     <p class="text-xs text-soft mt-6">Eight simulators · twelve-month analysis · Argon2id, CSRF &amp; CSP security.</p>
   </div>
@@ -115,7 +115,7 @@ $tools = [
         <p class="eyebrow mb-4">Decide with numbers</p>
         <h2 class="text-3xl sm:text-4xl">Eight honest simulators.</h2>
         <p class="text-soft mt-4 max-w-md">Test the "what if" before you commit — real formulas, plain results, a chart for each.</p>
-        <a href="/simulators.php" class="btn-outline btn-sm mt-6">Open the simulators</a>
+        <a href="/simulators" class="btn-outline btn-sm mt-6">Open the simulators</a>
       </div>
       <div class="grid grid-cols-2 gap-px" data-reveal-stagger>
         <?php foreach ($tools as $tname): ?>
@@ -133,11 +133,11 @@ $tools = [
       <p class="eyebrow mb-3">Learn as you go</p>
       <h2 class="text-3xl sm:text-4xl">Guides</h2>
     </div>
-    <a href="/blog.php" class="text-sm font-medium text-accent hover:underline">All guides &rarr;</a>
+    <a href="/blog" class="text-sm font-medium text-accent hover:underline">All guides &rarr;</a>
   </div>
   <div class="divide-y" data-reveal-stagger style="border-color:rgb(var(--line))">
     <?php foreach ($articles as $a): ?>
-      <a href="/article.php?slug=<?= e($a['slug']) ?>" class="grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-8 py-5 group" style="border-color:rgb(var(--line))">
+      <a href="/article?slug=<?= e($a['slug']) ?>" class="grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-8 py-5 group" style="border-color:rgb(var(--line))">
         <div>
           <h3 class="font-display text-lg font-semibold group-hover:text-accent"><?= e($a['title']) ?></h3>
           <p class="text-soft text-sm mt-1 max-w-2xl"><?= e($a['excerpt']) ?></p>
@@ -155,7 +155,7 @@ $tools = [
       <h2 class="text-2xl sm:text-3xl">Start keeping the books.</h2>
       <p class="text-soft mt-2">Free forever. No card. Your data stays yours.</p>
     </div>
-    <a href="/register.php" class="btn-primary px-5 py-2.5 whitespace-nowrap">Create your account</a>
+    <a href="/register" class="btn-primary px-5 py-2.5 whitespace-nowrap">Create your account</a>
   </div>
 </section>
 

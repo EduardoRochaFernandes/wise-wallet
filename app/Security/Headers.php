@@ -26,7 +26,8 @@ final class Headers
             "object-src 'none'",
             "frame-ancestors 'none'",
             "form-action 'self'",
-            "img-src 'self' data:",
+            "img-src 'self' data: https://api.qrserver.com https://images.unsplash.com",
+            "media-src 'self' https://cdn.coverr.co https://videos.pexels.com https://assets.mixkit.co",
             "font-src 'self'",
             "connect-src 'self'",
             // Inline scripts must carry the per-request nonce.

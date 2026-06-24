@@ -40,6 +40,20 @@ spl_autoload_register(static function (string $class): void {
 Session::start();
 Headers::send(Session::nonce());
 
+// Canonical URL: redirect direct GET hits on *.php (outside /api/) to the
+// extension-less path. Internal links already use clean paths; this is a
+// safety net for bookmarks/typed URLs and keeps a single canonical address.
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
+    $reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
+    if (substr($reqPath, -4) === '.php' && strpos($reqPath, '/api/') !== 0) {
+        $clean = substr($reqPath, 0, -4);
+        if (substr($clean, -6) === '/index') { $clean = substr($clean, 0, -6) ?: '/'; }
+        $qs = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY);
+        header('Location: ' . $clean . ($qs ? '?' . $qs : ''), true, 301);
+        exit;
+    }
+}
+
 // Request firewall: IP filtering, API rate limiting, WAF-lite signatures.
 Firewall::guard();
 // Bind the session to the device fingerprint (token-theft defence).

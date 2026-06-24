@@ -52,7 +52,7 @@ $delta = function (float $v): string {
   <div class="card card-pad lg:col-span-2">
     <div class="flex items-center justify-between mb-4">
       <h2 class="font-display font-semibold text-lg">Cash flow · 12 months</h2>
-      <a href="/analytics.php" class="btn-ghost btn-sm">View insights</a>
+      <a href="/analytics" class="btn-ghost btn-sm">View insights</a>
     </div>
     <div id="chart-cashflow"></div>
   </div>
@@ -74,7 +74,7 @@ $delta = function (float $v): string {
   <div class="card card-pad lg:col-span-2">
     <div class="flex items-center justify-between mb-3">
       <h2 class="font-display font-semibold text-lg">Recent transactions</h2>
-      <a href="/transactions.php" class="btn-ghost btn-sm">View all</a>
+      <a href="/transactions" class="btn-ghost btn-sm">View all</a>
     </div>
     <div class="overflow-x-auto">
       <table class="table">
@@ -105,17 +105,17 @@ $delta = function (float $v): string {
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
   <div class="card card-pad">
-    <div class="flex items-center justify-between mb-3"><h2 class="font-display font-semibold text-lg">Budgets</h2><a href="/budgets.php" class="btn-ghost btn-sm">Manage</a></div>
+    <div class="flex items-center justify-between mb-3"><h2 class="font-display font-semibold text-lg">Budgets</h2><a href="/budgets" class="btn-ghost btn-sm">Manage</a></div>
     <?php foreach ($budgets as $b): $col = $b['status'] === 'over' ? 'var(--neg)' : ($b['status'] === 'warn' ? 'var(--warn)' : 'var(--accent)'); ?>
       <div class="mb-3">
         <div class="flex justify-between text-sm mb-1"><span><?= e($b['category_name']) ?></span><span class="text-soft amount sensitive"><?= money($b['spent']) ?> / <?= money($b['amount']) ?></span></div>
         <div class="progress"><span style="width:<?= $b['pct'] ?>%;background:rgb(<?= $col ?>)"></span></div>
       </div>
     <?php endforeach; ?>
-    <?php if (!$budgets): ?><p class="text-soft text-sm py-4">No budgets yet. <a href="/budgets.php" class="text-accent">Create your first</a>.</p><?php endif; ?>
+    <?php if (!$budgets): ?><p class="text-soft text-sm py-4">No budgets yet. <a href="/budgets" class="text-accent">Create your first</a>.</p><?php endif; ?>
   </div>
   <div class="card card-pad">
-    <div class="flex items-center justify-between mb-3"><h2 class="font-display font-semibold text-lg">Goals</h2><a href="/goals.php" class="btn-ghost btn-sm">Manage</a></div>
+    <div class="flex items-center justify-between mb-3"><h2 class="font-display font-semibold text-lg">Goals</h2><a href="/goals" class="btn-ghost btn-sm">Manage</a></div>
     <?php foreach ($goals as $g): ?>
       <div class="mb-3">
         <div class="flex justify-between text-sm mb-1"><span><?= e($g['name']) ?></span><span class="text-soft amount"><?= $g['pct'] ?>%</span></div>
@@ -123,7 +123,7 @@ $delta = function (float $v): string {
         <div class="text-xs text-soft mt-1 sensitive"><?= money($g['current_amount']) ?> of <?= money($g['target_amount']) ?><?= $g['days_left'] !== null ? ' · ' . max(0, $g['days_left']) . ' days left' : '' ?></div>
       </div>
     <?php endforeach; ?>
-    <?php if (!$goals): ?><p class="text-soft text-sm py-4">No active goals. <a href="/goals.php" class="text-accent">Set one</a>.</p><?php endif; ?>
+    <?php if (!$goals): ?><p class="text-soft text-sm py-4">No active goals. <a href="/goals" class="text-accent">Set one</a>.</p><?php endif; ?>
   </div>
 </div>
 

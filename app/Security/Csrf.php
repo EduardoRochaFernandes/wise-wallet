@@ -37,7 +37,7 @@ final class Csrf
 
     /**
      * Guard a mutating request. Accepts the token from the form field or the
-     * `X-CSRF-Token` header (used by fetch/JSON calls). Aborts with 419 on fail.
+     * `X-CSRF-Token` header (used by fetch/JSON calls). Aborts with 403 on fail.
      */
     public static function check(): void
     {
@@ -49,7 +49,7 @@ final class Csrf
             ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? null);
 
         if (!self::validate($token)) {
-            http_response_code(419);
+            http_response_code(403);
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode(['error' => 'Invalid or missing CSRF token.']);
             exit;

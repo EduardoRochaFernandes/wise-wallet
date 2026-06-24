@@ -39,7 +39,7 @@ require __DIR__ . '/../app/views/partials/app_head.php';
     <?php foreach ($accounts as $a): ?><option value="<?= $a['id'] ?>" <?= ($filters['account_id'] ?? '') == $a['id'] ? 'selected' : '' ?>><?= e($a['name']) ?></option><?php endforeach; ?>
   </select></div>
   <div><label class="label">From</label><input type="date" name="from" value="<?= e($filters['from'] ?? '') ?>" class="input"></div>
-  <div class="flex items-end gap-2"><button class="btn-primary flex-1">Filter</button><a href="/transactions.php" class="btn-ghost">Clear</a></div>
+  <div class="flex items-end gap-2"><button class="btn-primary flex-1">Filter</button><a href="/transactions" class="btn-ghost">Clear</a></div>
 </form>
 
 <div class="card overflow-hidden">

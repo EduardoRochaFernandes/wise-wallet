@@ -39,10 +39,10 @@ if ($inApp) {
   <?php if (!$a): ?>
     <div class="text-center py-20">
       <h1 class="font-display text-3xl font-semibold">Article not found</h1>
-      <a href="/blog.php" class="btn-primary mt-6 inline-flex">Back to guides</a>
+      <a href="/blog" class="btn-primary mt-6 inline-flex">Back to guides</a>
     </div>
   <?php else: ?>
-    <a href="/blog.php" class="text-accent text-sm">&larr; Back to guides</a>
+    <a href="/blog" class="text-accent text-sm">&larr; Back to guides</a>
     <div class="flex items-center gap-2 mt-4 mb-3">
       <?php if ($a['cat_name']): ?><span class="badge-brand"><?= e($a['cat_name']) ?></span><?php endif; ?>
       <span class="text-xs text-soft"><?= (int) $a['reading_minutes'] ?> min read · <?= (int) $a['views'] ?> views</span>

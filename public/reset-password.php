@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../app/bootstrap.php';
-if (Auth::check()) { redirect('/dashboard.php'); }
+if (Auth::check()) { redirect('/dashboard'); }
 
 $token = (string) input('token', '');
 $valid = strlen($token) >= 32 && ctype_xdigit($token);
@@ -40,9 +40,9 @@ require __DIR__ . '/../app/views/partials/public_head.php';
 
     <?php if ($done): ?>
       <div class="badge-pos rounded px-4 py-3 text-sm mb-4">Your password was reset successfully.</div>
-      <a href="/login.php" class="btn-primary w-full">Sign in</a>
+      <a href="/login" class="btn-primary w-full">Sign in</a>
     <?php elseif (!$valid): ?>
-      <div class="badge-neg rounded px-4 py-3 text-sm mb-4">Invalid link. <a href="/forgot-password.php" class="underline">Request a new one</a>.</div>
+      <div class="badge-neg rounded px-4 py-3 text-sm mb-4">Invalid link. <a href="/forgot-password" class="underline">Request a new one</a>.</div>
     <?php else: ?>
       <?php if ($error): ?><div class="badge-neg rounded px-4 py-3 text-sm mb-4"><?= e($error) ?></div><?php endif; ?>
       <form method="post" class="space-y-4" novalidate>

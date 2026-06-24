@@ -65,7 +65,7 @@ require __DIR__ . '/../../app/views/partials/admin_nav.php';
         <div><label class="label">Status</label><select name="status" class="select"><option value="published" <?= ($edit['status'] ?? '') === 'published' ? 'selected' : '' ?>>Published</option><option value="draft" <?= ($edit['status'] ?? '') === 'draft' ? 'selected' : '' ?>>Draft</option></select></div>
         <div><label class="label">Min read</label><input name="reading_minutes" type="number" min="1" class="input" value="<?= e((string) ($edit['reading_minutes'] ?? 5)) ?>"></div>
       </div>
-      <div class="flex gap-2"><button class="btn-primary flex-1"><?= $edit ? 'Save changes' : 'Create article' ?></button><?php if ($edit): ?><a href="/admin/articles.php" class="btn-ghost">Cancel</a><?php endif; ?></div>
+      <div class="flex gap-2"><button class="btn-primary flex-1"><?= $edit ? 'Save changes' : 'Create article' ?></button><?php if ($edit): ?><a href="/admin/articles" class="btn-ghost">Cancel</a><?php endif; ?></div>
     </form>
   </div>
   <div class="card overflow-hidden">
@@ -78,7 +78,7 @@ require __DIR__ . '/../../app/views/partials/admin_nav.php';
           <td><span class="badge <?= $a['status'] === 'published' ? 'badge-pos' : 'badge-warn' ?>"><?= e($a['status']) ?></span></td>
           <td class="text-soft"><?= (int) $a['views'] ?></td>
           <td class="text-right whitespace-nowrap">
-            <a href="/admin/articles.php?edit=<?= $a['id'] ?>" class="btn-ghost btn-sm">Edit</a>
+            <a href="/admin/articles?edit=<?= $a['id'] ?>" class="btn-ghost btn-sm">Edit</a>
             <form method="post" class="inline" onsubmit="return confirm('Delete?')"><?= Csrf::field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= $a['id'] ?>"><button class="btn-ghost btn-sm text-neg">&times;</button></form>
           </td>
         </tr>

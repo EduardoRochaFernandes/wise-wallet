@@ -33,15 +33,15 @@ if ($inApp) {
   <?php endif; ?>
 
   <div class="flex flex-wrap gap-2 mb-6">
-    <a href="/blog.php" class="btn-sm <?= $catSlug === '' ? 'btn-primary' : 'btn-ghost' ?>">All</a>
+    <a href="/blog" class="btn-sm <?= $catSlug === '' ? 'btn-primary' : 'btn-ghost' ?>">All</a>
     <?php foreach ($cats as $c): ?>
-      <a href="/blog.php?cat=<?= e($c['slug']) ?>" class="btn-sm <?= $catSlug === $c['slug'] ? 'btn-primary' : 'btn-ghost' ?>"><?= e($c['name']) ?></a>
+      <a href="/blog?cat=<?= e($c['slug']) ?>" class="btn-sm <?= $catSlug === $c['slug'] ? 'btn-primary' : 'btn-ghost' ?>"><?= e($c['name']) ?></a>
     <?php endforeach; ?>
   </div>
 
   <div class="divide-y" style="border-color:rgb(var(--line))">
     <?php foreach ($articles as $a): ?>
-      <a href="/article.php?slug=<?= e($a['slug']) ?>" class="grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-8 py-6 group" style="border-color:rgb(var(--line))">
+      <a href="/article?slug=<?= e($a['slug']) ?>" class="grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-8 py-6 group" style="border-color:rgb(var(--line))">
         <div>
           <div class="flex items-center gap-2 mb-1.5">
             <?php if ($a['cat_name']): ?><span class="badge-brand text-xs"><?= e($a['cat_name']) ?></span><?php endif; ?>

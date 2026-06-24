@@ -52,7 +52,7 @@ echo Base de dados importada.
 
 echo.
 echo [6/6] Gerar sitemap e arrancar o servidor...
-"%PHP%" scripts\gen-sitemap.php
+"%PHP%" scripts\make-sitemap.php
 echo.
 echo ===================================================
 echo  Pronto! A abrir http://localhost:8000
