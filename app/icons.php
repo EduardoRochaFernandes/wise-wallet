@@ -62,7 +62,13 @@ function icon(string $name, string $class = 'w-5 h-5'): string
 }
 
 /** Brand logo mark (flat accent square with a crisp serif monogram). */
+/** Brand mark: a simple geometric ledger/fold glyph, no letterform. */
 function logo_mark(string $class = 'w-8 h-8'): string
 {
-    return '<span class="inline-grid place-items-center rounded font-display font-semibold text-white leading-none ' . e($class) . '" style="background:rgb(var(--accent))">W</span>';
+    return '<span class="inline-grid place-items-center rounded ' . e($class) . '" style="background:rgb(var(--accent))">'
+        . '<svg viewBox="0 0 24 24" width="58%" height="58%" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        . '<path d="M4 7a2 2 0 0 1 2-2h11a1 1 0 0 1 1 1v2"/>'
+        . '<path d="M4 7v10a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H6a2 2 0 0 1-2-2Z"/>'
+        . '<circle cx="16" cy="13" r="1.4" fill="white" stroke="none"/>'
+        . '</svg></span>';
 }

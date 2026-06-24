@@ -82,13 +82,15 @@ document.documentElement.classList.add('js');(function(){try{var t=localStorage.
       <?php endif; ?>
     </nav>
     <div class="p-3 border-t" style="border-color:rgb(var(--line))">
-      <div class="flex items-center gap-3 rounded p-2" style="background:rgb(var(--surface-2))">
-        <div class="w-8 h-8 rounded grid place-items-center text-white text-sm font-semibold" style="background:rgb(var(--accent))"><?= e(strtoupper(substr($u['name'] ?? 'U', 0, 1))) ?></div>
-        <div class="min-w-0 flex-1">
-          <div class="text-sm font-medium truncate"><?= e($u['name'] ?? 'User') ?></div>
-          <div class="text-xs text-soft truncate"><?= e($u['email'] ?? '') ?></div>
-        </div>
-        <a href="/logout" title="Sign out" class="text-soft hover:text-[rgb(var(--neg))]"><?= icon('log-out', 'w-4 h-4') ?></a>
+      <div class="flex items-center gap-3 rounded p-2 hover:bg-[rgb(var(--surface))] transition-colors" style="background:rgb(var(--surface-2))">
+        <a href="/settings" class="flex items-center gap-3 min-w-0 flex-1" title="Go to settings">
+          <div class="w-8 h-8 rounded grid place-items-center text-white text-sm font-semibold shrink-0" style="background:rgb(var(--accent))"><?= e(strtoupper(substr($u['name'] ?? 'U', 0, 1))) ?></div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-medium truncate"><?= e($u['name'] ?? 'User') ?></div>
+            <div class="text-xs text-soft truncate"><?= e($u['email'] ?? '') ?></div>
+          </div>
+        </a>
+        <a href="/logout" title="Sign out" class="text-soft hover:text-[rgb(var(--neg))] shrink-0"><?= icon('log-out', 'w-4 h-4') ?></a>
       </div>
     </div>
   </aside>
