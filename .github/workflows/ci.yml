@@ -5,26 +5,35 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   php-lint:
-    name: Lint PHP (8.0 & 8.2)
+    name: PHP lint (${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php: ['8.0', '8.2']
+        php: ['8.0', '8.2', '8.4']
     steps:
       - uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: pdo_mysql, mbstring, curl, openssl
+          extensions: pdo_mysql, mbstring, curl, openssl, zip
           coverage: none
       - name: Syntax-check every PHP file
         run: |
-          find app public scripts vendor -name "*.php" -print0 \
-            | xargs -0 -n1 -P4 php -l
+          find app public scripts tests vendor -name "*.php" -print0 \
+            | xargs -0 -n1 -P4 php -l > /dev/null
 
   build-assets:
     name: Build CSS & vendor assets
@@ -41,7 +50,7 @@ jobs:
         run: test -s public/assets/css/app.css
 
   validate-sql:
-    name: Validate SQL import
+    name: Validate SQL import (MySQL 8)
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -62,3 +71,49 @@ jobs:
           echo "Tables created: $COUNT"
           test "$COUNT" -ge 20
           mysql -h 127.0.0.1 -u root -e "SELECT COUNT(*) AS users FROM wisewallet.users;"
+
+  # Builds the Docker image, starts the full stack exactly as a stranger would
+  # (`docker compose up`), smoke-tests it over HTTP and runs the functional +
+  # security test-suite against it.
+  docker-stack:
+    name: Docker Compose stack + tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start the stack (waits for health checks)
+        run: docker compose up --build --detach --wait --wait-timeout 300
+      - name: Smoke test
+        run: |
+          curl -fsS -o /dev/null -w "GET /          -> %{http_code}\n" http://localhost:8080/
+          curl -fsS -o /dev/null -w "GET /login     -> %{http_code}\n" http://localhost:8080/login
+          curl -fsS -o /dev/null -w "GET /simulators-> %{http_code}\n" http://localhost:8080/simulators
+          curl -fsS -o /dev/null -w "GET /assets/css/app.css -> %{http_code}\n" http://localhost:8080/assets/css/app.css
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/.env)" = "403"
+          curl -fsSI http://localhost:8080/login | grep -i "^content-security-policy:"
+      - name: Functional + security test-suite
+        run: docker compose exec -T -e WW_TEST_BASE=http://localhost web php tests/security-checks.php
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=200
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
+
+  # Proves the Codespaces / dev-container definition builds and boots.
+  devcontainer:
+    name: Dev container (Codespaces) builds & boots
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dev container, run postCreateCommand, probe the app
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            set -e
+            test -s public/assets/css/app.css
+            for i in $(seq 1 30); do curl -fsS -o /dev/null http://localhost/login && break; sleep 2; done
+            curl -fsS -o /dev/null -w "GET /login -> %{http_code}\n" http://localhost/login
+            php -r '$p=new PDO("mysql:host=db;dbname=wisewallet","wisewallet","wisewallet-demo-only"); echo "users in DB: ", $p->query("SELECT COUNT(*) FROM users")->fetchColumn(), PHP_EOL;'
