@@ -1,0 +1,6 @@
+# Dev-container overlay on top of ../docker-compose.yml: mount the working tree
+# so edits show up immediately (Apache reads PHP from disk on every request).
+services:
+  web:
+    volumes:
+      - ..:/var/www/html:cached

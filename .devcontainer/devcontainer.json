@@ -1,16 +1,18 @@
 {
-  "name": "WiseWallet 2.0 (live preview)",
-  "dockerComposeFile": ["../docker-compose.yml"],
-  "service": "app",
+  "name": "WiseWallet (PHP + Apache + MariaDB)",
+  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
+  "service": "web",
   "workspaceFolder": "/var/www/html",
+  "overrideCommand": false,
+  "shutdownAction": "stopCompose",
   "features": {
     "ghcr.io/devcontainers/features/node:1": { "version": "20" }
   },
-  "forwardPorts": [8080],
+  "forwardPorts": [80],
   "portsAttributes": {
-    "8080": {
+    "80": {
       "label": "WiseWallet",
-      "onAutoForward": "openPreview"
+      "onAutoForward": "openBrowser"
     }
   },
   "postCreateCommand": "bash .devcontainer/setup.sh",
