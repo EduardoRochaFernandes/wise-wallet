@@ -10,13 +10,23 @@
  * you want to keep/run it locally.)
  *
  * Usage:  php tests/security-checks.php     (server must be running on BASE)
+ *
+ * Environment overrides (defaults match a local XAMPP setup):
+ *   WW_TEST_BASE   base URL of the running app          (default http://localhost:8080)
+ *   DB_HOST DB_PORT DB_NAME DB_USER DB_PASS             (default 127.0.0.1:3306 / wisewallet / root / empty)
+ * In CI the suite runs inside the `web` container, where the DB_* variables are already set:
+ *   docker compose exec -T -e WW_TEST_BASE=http://localhost web php tests/security-checks.php
  */
 
 declare(strict_types=1);
 error_reporting(E_ALL & ~E_DEPRECATED);
 
-const BASE = 'http://localhost:8080';
-$DB = ['dsn' => 'mysql:host=127.0.0.1;dbname=wisewallet;charset=utf8mb4', 'u' => 'root', 'p' => ''];
+define('BASE', rtrim((string) (getenv('WW_TEST_BASE') ?: 'http://localhost:8080'), '/'));
+$DB = [
+    'dsn' => sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', getenv('DB_HOST') ?: '127.0.0.1', getenv('DB_PORT') ?: '3306', getenv('DB_NAME') ?: 'wisewallet'),
+    'u'   => getenv('DB_USER') ?: 'root',
+    'p'   => getenv('DB_PASS') !== false ? getenv('DB_PASS') : '',
+];
 
 $pass = 0; $fail = 0; $fails = [];
 function ok(string $name, bool $cond): void {
