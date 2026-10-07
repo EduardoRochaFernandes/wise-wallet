@@ -3,9 +3,16 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule: { interval: monthly }
+    # Major bumps (Tailwind 4, ApexCharts 5) need a manual migration.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }
   - package-ecosystem: docker
     directory: /
     schedule: { interval: monthly }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
