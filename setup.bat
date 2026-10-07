@@ -65,7 +65,7 @@ echo  Demo:  demo@wisewallet.local  / Demo@WiseWallet2026
 echo  (Ctrl+C para parar o servidor)
 echo ===================================================
 start "" http://localhost:8000
-"%PHP%" -S localhost:8000 -t public
+"%PHP%" -S localhost:8000 -t public scripts/router.php
 goto :eof
 
 :err

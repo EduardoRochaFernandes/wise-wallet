@@ -57,4 +57,4 @@ echo "==================================================="
 ( command -v open >/dev/null && open http://localhost:8000 ) || \
 ( command -v start >/dev/null && start http://localhost:8000 ) || true
 
-"$PHP" -S localhost:8000 -t public
+"$PHP" -S localhost:8000 -t public scripts/router.php
