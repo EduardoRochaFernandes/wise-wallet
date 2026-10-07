@@ -2,7 +2,7 @@
 # WiseWallet -- PHP 8.2 + Apache image. Used by `docker compose up` and the Codespaces dev container.
 
 # ── Stage 1: build the Tailwind CSS bundle and vendor ApexCharts ──────────────
-FROM node:20-alpine AS assets
+FROM node:26-alpine AS assets
 WORKDIR /build
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
