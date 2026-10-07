@@ -25,7 +25,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Capture
         run: node scripts/screenshots.js
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: screenshots
           path: docs/screenshots/*.png
