@@ -1,33 +1,50 @@
+# One command:  docker compose up --build        then open http://localhost:8080
+#
+#   web -- PHP 8.2 + Apache serving public/ (assets are built inside the image)
+#   db  -- MariaDB; database/wisewallet.sql (schema + DEMO seed data) is imported
+#          automatically the first time the data volume is created.
+#
+# Reset the database to the seed state:  docker compose down -v
+# Optional overrides (all have working defaults): see the "Docker Compose" section of .env.example.
+
 services:
-  app:
+  web:
     build: .
-    volumes:
-      - .:/var/www/html
     ports:
-      - "8080:80"
+      # Bound to loopback on purpose: the demo accounts have publicly documented passwords.
+      - "127.0.0.1:${WW_PORT:-8080}:80"
     depends_on:
       db:
         condition: service_healthy
     environment:
+      APP_ENV: local
+      APP_DEBUG: "false"
+      APP_URL: http://localhost:${WW_PORT:-8080}
+      APP_KEY: ${WW_APP_KEY:-}            # empty -> a random key is generated per container start
       DB_HOST: db
       DB_PORT: "3306"
       DB_NAME: wisewallet
-      DB_USER: root
-      DB_PASS: wisewallet
+      DB_USER: wisewallet
+      DB_PASS: ${WW_DB_PASSWORD:-wisewallet-demo-only}
+      MAIL_DRIVER: log
 
   db:
     image: mariadb:10.11
     restart: unless-stopped
     environment:
-      MARIADB_ROOT_PASSWORD: wisewallet
+      MARIADB_ROOT_PASSWORD: ${WW_DB_ROOT_PASSWORD:-root-demo-only}
       MARIADB_DATABASE: wisewallet
+      MARIADB_USER: wisewallet
+      MARIADB_PASSWORD: ${WW_DB_PASSWORD:-wisewallet-demo-only}
     volumes:
       - db_data:/var/lib/mysql
+      # Runs once, on first start of an empty data volume.
+      - ./database/wisewallet.sql:/docker-entrypoint-initdb.d/01-wisewallet.sql:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 5s
       timeout: 5s
-      retries: 20
+      retries: 30
 
 volumes:
   db_data:

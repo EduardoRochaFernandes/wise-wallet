@@ -1,0 +1,13 @@
+.git
+.github
+.devcontainer
+.env
+.env.*
+!.env.example
+node_modules
+public/assets/css/app.css
+storage/logs/*.log
+storage/cacert.pem
+data/*.json
+*.md
+docker-compose*.yml
