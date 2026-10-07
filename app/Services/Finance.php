@@ -222,7 +222,7 @@ final class Finance
     public static function byCategory(int $uid, string $type, int $days = 30): array
     {
         $rows = Database::all(
-            "SELECT COALESCE(c.name,'Sem categoria') name, c.color, SUM(t.amount) total
+            "SELECT COALESCE(c.name,'Uncategorised') name, c.color, SUM(t.amount) total
                FROM transactions t LEFT JOIN categories c ON c.id=t.category_id
               WHERE t.user_id=? AND t.type=? AND t.occurred_on >= (CURDATE() - INTERVAL ? DAY)
               GROUP BY t.category_id ORDER BY total DESC", [$uid, $type, $days]);

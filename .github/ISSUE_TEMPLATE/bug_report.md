@@ -1,30 +1,30 @@
 ---
-name: 🐛 Bug report
-about: Reportar um comportamento incorreto
+name: Bug report
+about: Report incorrect behaviour
 title: "[Bug] "
 labels: bug
 assignees: ''
 ---
 
-## Descrição
-Uma descrição clara e concisa do problema.
+## Description
+A clear and concise description of the problem.
 
-## Passos para reproduzir
-1. Ir a '...'
-2. Clicar em '...'
-3. Ver o erro
+## Steps to reproduce
+1. Go to '...'
+2. Click '...'
+3. See the error
 
-## Comportamento esperado
-O que deveria acontecer.
+## Expected behaviour
+What should happen.
 
-## Capturas de ecrã
-Se aplicável, adiciona screenshots.
+## Screenshots
+If applicable.
 
-## Ambiente
-- SO: [ex.: Windows 11]
-- Browser: [ex.: Chrome 126]
-- PHP: [ex.: 8.0.30 (XAMPP)]
-- Versão da WiseWallet: [ex.: 2.0.0]
+## Environment
+- OS: [e.g. Windows 11]
+- Browser: [e.g. Chrome 126]
+- Run mode: [Docker Compose / Codespaces / XAMPP / php -S]
+- WiseWallet version: [e.g. 2.0.0]
 
-## Contexto adicional
-Logs (sem segredos), `.env` redigido, etc.
+## Additional context
+Logs (without secrets), redacted `.env`, etc.

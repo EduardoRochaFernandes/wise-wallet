@@ -28,4 +28,4 @@ switch ($method) {
         Database::run("DELETE FROM categories WHERE id=? AND user_id=?", [$id, $uid]);
         json_out(['ok' => true]);
 }
-json_out(['error' => 'Método não suportado'], 405);
+json_out(['error' => 'Method not supported'], 405);

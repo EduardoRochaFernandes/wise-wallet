@@ -28,11 +28,11 @@ switch ($method) {
             $id = Finance::createTransaction($uid, $body);
             json_out(['ok' => true, 'id' => $id]);
         } catch (Throwable $e) {
-            json_out(['error' => WW_DEBUG ? $e->getMessage() : 'Não foi possível guardar a transação.'], 422);
+            json_out(['error' => WW_DEBUG ? $e->getMessage() : 'Could not save the transaction.'], 422);
         }
 
     case 'DELETE':
         $id = (int) ($body['id'] ?? $_GET['id'] ?? 0);
         json_out(['ok' => Finance::deleteTransaction($uid, $id)]);
 }
-json_out(['error' => 'Método não suportado'], 405);
+json_out(['error' => 'Method not supported'], 405);

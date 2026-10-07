@@ -1,34 +1,34 @@
-# Código de Conduta — Contributor Covenant
+# Code of Conduct
 
-## A nossa promessa
+This project follows the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.
 
-No interesse de promover um ambiente aberto e acolhedor, nós, como
-contribuidores e mantenedores, comprometemo-nos a fazer da participação no nosso
-projeto e na nossa comunidade uma experiência livre de assédio para todos,
-independentemente de idade, tamanho corporal, deficiência, etnia, identidade e
-expressão de género, nível de experiência, nacionalidade, aparência pessoal,
-raça, religião ou identidade e orientação sexual.
+## Our pledge
 
-## Os nossos padrões
+In the interest of fostering an open and welcoming environment, contributors and
+maintainers pledge to make participation in this project a harassment-free
+experience for everyone, regardless of age, body size, disability, ethnicity,
+gender identity and expression, level of experience, nationality, personal
+appearance, race, religion, or sexual identity and orientation.
 
-Exemplos de comportamento que contribuem para um ambiente positivo:
+## Our standards
 
-- Usar linguagem acolhedora e inclusiva
-- Respeitar pontos de vista e experiências diferentes
-- Aceitar críticas construtivas com elegância
-- Focar no que é melhor para a comunidade
+Behaviour that contributes to a positive environment:
 
-Exemplos de comportamento inaceitável:
+- Using welcoming and inclusive language
+- Respecting differing viewpoints and experiences
+- Accepting constructive criticism gracefully
+- Focusing on what is best for the community
 
-- Uso de linguagem ou imagens sexualizadas
-- Comentários insultuosos/depreciativos e ataques pessoais ou políticos
-- Assédio público ou privado
-- Publicar informação privada de terceiros sem permissão
+Unacceptable behaviour:
 
-## Aplicação
+- Sexualised language or imagery
+- Insulting or derogatory comments, and personal or political attacks
+- Public or private harassment
+- Publishing others' private information without permission
 
-Casos de comportamento abusivo podem ser reportados à equipa do projeto. Todas
-as queixas serão analisadas e investigadas, resultando numa resposta
-considerada necessária e apropriada às circunstâncias.
+## Enforcement
 
-Este Código de Conduta é adaptado do [Contributor Covenant](https://www.contributor-covenant.org), versão 2.1.
+Instances of abusive behaviour may be reported privately to the maintainer through
+GitHub (see [SECURITY.md](SECURITY.md) for the private reporting channel). All
+complaints will be reviewed and investigated, and will result in a response that is
+deemed necessary and appropriate to the circumstances.

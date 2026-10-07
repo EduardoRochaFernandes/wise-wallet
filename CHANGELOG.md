@@ -8,7 +8,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 - Complete rewrite as **WiseWallet 2.0**: the full personal-finance lifecycle
-  (registar → entender → planear → simular → aprender).
+  (record → understand → plan → simulate → learn).
 - Transactions (income / expense / transfer) with categories, tags, notes and
   multi-account balances kept in sync automatically.
 - Budgets with green/amber/red alerts, goals with automatic 25/50/75% milestones.

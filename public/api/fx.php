@@ -22,6 +22,6 @@ if ($data && !empty($data['rates'])) {
 $stale = Cache::stale($key);
 if ($stale) { json_out($stale + ['stale' => true]); }
 json_out([
-    'base' => 'EUR', 'date' => date('Y-m-d'), 'source' => 'Fallback estático', 'stale' => true,
+    'base' => 'EUR', 'date' => date('Y-m-d'), 'source' => 'Static fallback', 'stale' => true,
     'rates' => ['USD' => 1.08, 'GBP' => 0.85, 'BRL' => 5.45, 'CHF' => 0.97, 'JPY' => 169.5, 'CAD' => 1.47, 'AUD' => 1.63, 'CNY' => 7.82],
 ]);

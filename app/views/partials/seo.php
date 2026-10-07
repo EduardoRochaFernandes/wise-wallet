@@ -4,8 +4,8 @@
  *   title, description, url, type, image, noindex(bool), jsonld(array|null)
  */
 $seo = array_merge([
-    'title'       => WW_NAME . ' — Finanças pessoais inteligentes',
-    'description' => 'WiseWallet: regista, entende, planeia, simula e aprende sobre o teu dinheiro num só lugar.',
+    'title'       => WW_NAME . ' — Smart personal finance',
+    'description' => 'WiseWallet: record, understand, plan, simulate and learn about your money in one place.',
     'url'         => WW_URL . ($_SERVER['REQUEST_URI'] ?? '/'),
     'type'        => 'website',
     'image'       => WW_URL . '/assets/img/og-cover.svg',

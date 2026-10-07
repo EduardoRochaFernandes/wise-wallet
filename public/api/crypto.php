@@ -25,7 +25,7 @@ if ($data) {
 $stale = Cache::stale($key);
 if ($stale) { json_out($stale + ['stale' => true]); }
 json_out([
-    'source' => 'Fallback estático', 'stale' => true,
+    'source' => 'Static fallback', 'stale' => true,
     'coins' => [
         ['id' => 'bitcoin', 'name' => 'Bitcoin', 'price' => 42500, 'change' => 1.2],
         ['id' => 'ethereum', 'name' => 'Ethereum', 'price' => 2350, 'change' => -0.6],

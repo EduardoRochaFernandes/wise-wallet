@@ -50,11 +50,11 @@ final class Firewall
         $ip = self::ip();
         $deny = self::list('IP_DENYLIST');
         if ($deny && in_array($ip, $deny, true)) {
-            self::block('ip_denied', 403, 'Acesso bloqueado.', $ip);
+            self::block('ip_denied', 403, 'Access blocked.', $ip);
         }
         $allow = self::list('ADMIN_IP_ALLOWLIST');
         if ($allow && str_starts_with($_SERVER['REQUEST_URI'] ?? '', '/admin') && !in_array($ip, $allow, true)) {
-            self::block('admin_ip_blocked', 403, 'Área de administração restrita por IP.', $ip);
+            self::block('admin_ip_blocked', 403, 'Admin area restricted by IP.', $ip);
         }
     }
 
@@ -77,7 +77,7 @@ final class Firewall
             $hits = (int) Database::scalar("SELECT hits FROM rate_limits WHERE rl_key=?", [$key]);
             if ($hits > $max) {
                 header('Retry-After: ' . $window);
-                self::block('rate_limited', 429, 'Demasiados pedidos. Tente novamente em instantes.', "hits=$hits");
+                self::block('rate_limited', 429, 'Too many requests. Please try again shortly.', "hits=$hits");
             }
         } catch (Throwable $e) {
             // Never let the limiter take down the app.
@@ -101,7 +101,7 @@ final class Firewall
 
         foreach (self::SIGNATURES as $re) {
             if (preg_match($re, $hay)) {
-                self::block('waf_block', 403, 'Pedido bloqueado por motivos de segurança.', substr($re, 1, 24));
+                self::block('waf_block', 403, 'Request blocked for security reasons.', substr($re, 1, 24));
             }
         }
     }

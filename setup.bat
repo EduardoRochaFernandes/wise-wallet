@@ -20,15 +20,15 @@ echo Usando PHP:   %PHP%
 echo Usando MySQL: %MYSQL%
 echo.
 
-echo [1/6] Instalar dependencias npm...
+echo [1/6] Installing npm dependencies...
 call npm install --no-audit --no-fund || goto :err
 
 echo.
-echo [2/6] Compilar assets (ApexCharts + Tailwind CSS)...
+echo [2/6] Building assets (ApexCharts + Tailwind CSS)...
 call npm run build || goto :err
 
 echo.
-echo [3/6] Configurar ambiente (.env)...
+echo [3/6] Configuring environment (.env)...
 "%PHP%" scripts\setup-env.php || goto :err
 
 echo.
@@ -36,33 +36,33 @@ echo Updating CA bundle for live news/FX/crypto (skips gracefully if offline)...
 "%PHP%" scripts\refresh-ca-bundle.php
 
 echo.
-echo [4/6] Arrancar MySQL e aguardar...
+echo [4/6] Starting MySQL and waiting...
 for /f %%R in ('"%PHP%" -r "echo @fsockopen('127.0.0.1',3306,$e,$s,1)?1:0;"') do set "DBUP=%%R"
 if "!DBUP!"=="0" (
   if defined MYSQLD (
-    echo Iniciando mysqld...
+    echo Starting mysqld...
     start "" /b "!MYSQLD!" --defaults-file="C:\xampp\mysql\bin\my.ini"
     "%PHP%" scripts\wait-mysql.php || goto :err
   ) else (
-    echo MySQL nao esta a correr. Inicie-o no painel do XAMPP e volte a executar.
+    echo MySQL is not running. Start it from the XAMPP control panel and run this script again.
     goto :err
   )
-) else ( echo MySQL ja esta a correr. )
+) else ( echo MySQL is already running. )
 
 echo.
-echo [5/6] Importar base de dados (database\wisewallet.sql)...
+echo [5/6] Importing database (database\wisewallet.sql)...
 "%MYSQL%" -u root --default-character-set=utf8mb4 < "database\wisewallet.sql" || goto :err
-echo Base de dados importada.
+echo Database imported.
 
 echo.
-echo [6/6] Gerar sitemap e arrancar o servidor...
+echo [6/6] Generating sitemap and starting the server...
 "%PHP%" scripts\make-sitemap.php
 echo.
 echo ===================================================
-echo  Pronto! A abrir http://localhost:8000
+echo  Done! Opening http://localhost:8000
 echo  Admin: admin@wisewallet.local / Admin@WiseWallet2026
 echo  Demo:  demo@wisewallet.local  / Demo@WiseWallet2026
-echo  (Ctrl+C para parar o servidor)
+echo  (Press Ctrl+C to stop the server)
 echo ===================================================
 start "" http://localhost:8000
 "%PHP%" -S localhost:8000 -t public scripts/router.php
@@ -70,6 +70,6 @@ goto :eof
 
 :err
 echo.
-echo *** Ocorreu um erro durante o setup. Verifique as mensagens acima. ***
+echo *** Setup failed. Check the messages above. ***
 pause
 exit /b 1

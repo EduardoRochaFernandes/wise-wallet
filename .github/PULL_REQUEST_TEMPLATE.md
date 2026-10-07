@@ -1,24 +1,24 @@
-## Descrição
-O que muda este PR e **porquê**?
+## Description
+What does this PR change, and **why**?
 
 Fixes #(issue)
 
-## Tipo de alteração
-- [ ] 🐛 Correção de bug
-- [ ] ✨ Nova funcionalidade
-- [ ] ♻️ Refactor
-- [ ] 📝 Documentação
-- [ ] 🔒 Segurança
+## Type of change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Refactor
+- [ ] Documentation
+- [ ] Security
 
 ## Checklist
-- [ ] `php -l` passa em todos os ficheiros alterados
-- [ ] `npm run build` corre sem erros
-- [ ] Endpoints novos validam input, respeitam CSRF e verificam posse (anti-IDOR)
-- [ ] Todo o output dinâmico é escapado com `e()`
-- [ ] Sem segredos commitados (`.env` continua ignorado)
-- [ ] Documentação/CHANGELOG atualizados se necessário
+- [ ] `php -l` passes on all changed files
+- [ ] `npm run build` succeeds
+- [ ] New endpoints validate input, enforce CSRF and verify ownership (anti-IDOR)
+- [ ] All dynamic output is escaped with `e()`
+- [ ] No secrets committed (`.env` stays ignored)
+- [ ] Docs / CHANGELOG updated if needed
 
-## Como testar
-Passos para o revisor validar a alteração.
+## How to test
+Steps for the reviewer.
 
-## Screenshots (se UI)
+## Screenshots (if UI)

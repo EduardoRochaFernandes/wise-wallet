@@ -1,29 +1,29 @@
 ---
-name: 💡 Feature request
-about: Sugerir uma ideia para a WiseWallet
+name: Feature request
+about: Suggest an idea for WiseWallet
 title: "[Feature] "
 labels: enhancement
 assignees: ''
 ---
 
-## Problema relacionado
-O teu pedido está relacionado com um problema? Descreve-o.
-"Fico frustrado quando [...]"
+## Related problem
+Is your request related to a problem? Describe it.
+"I get frustrated when [...]"
 
-## Solução que gostarias
-Descrição clara do que queres que aconteça.
+## Proposed solution
+A clear description of what you would like to happen.
 
-## Alternativas consideradas
-Outras soluções ou funcionalidades que ponderaste.
+## Alternatives considered
+Other solutions or features you have considered.
 
-## Módulo afetado
-- [ ] Transações / Contas
-- [ ] Orçamentos / Objetivos
-- [ ] Faturas / Subscrições
-- [ ] Investimentos / Análise
-- [ ] Simuladores
-- [ ] Blog / Notícias
-- [ ] Admin / Segurança
+## Affected module
+- [ ] Transactions / Accounts
+- [ ] Budgets / Goals
+- [ ] Bills / Subscriptions
+- [ ] Investments / Analytics
+- [ ] Simulators
+- [ ] Blog / News
+- [ ] Admin / Security
 
-## Contexto adicional
-Mockups, links, exemplos.
+## Additional context
+Mockups, links, examples.

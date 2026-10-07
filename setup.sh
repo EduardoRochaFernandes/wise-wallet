@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 
 echo "==================================================="
-echo "   WiseWallet 2.0 — Instalação automática"
+echo "   WiseWallet 2.0 — Automated installation"
 echo "==================================================="
 
 # ---- Locate PHP / MySQL (prefer XAMPP on Windows) ----
@@ -16,40 +16,40 @@ PHP="php"; MYSQL="mysql"; MYSQLD=""
 echo "PHP:   $PHP"
 echo "MySQL: $MYSQL"
 
-echo; echo "[1/6] Instalar dependências npm..."
+echo; echo "[1/6] Installing npm dependencies..."
 npm install --no-audit --no-fund
 
-echo; echo "[2/6] Compilar assets (ApexCharts + Tailwind)..."
+echo; echo "[2/6] Building assets (ApexCharts + Tailwind)..."
 npm run build
 
-echo; echo "[3/6] Configurar ambiente (.env)..."
+echo; echo "[3/6] Configuring environment (.env)..."
 "$PHP" scripts/setup-env.php
 
 echo; echo "Updating CA bundle for live news/FX/crypto (skips gracefully if offline)..."
 "$PHP" scripts/refresh-ca-bundle.php || true
 
-echo; echo "[4/6] Arrancar MySQL e aguardar..."
+echo; echo "[4/6] Starting MySQL and waiting..."
 if [ "$("$PHP" -r "echo @fsockopen('127.0.0.1',3306,\$e,\$s,1)?1:0;")" = "0" ]; then
   if [ -n "$MYSQLD" ]; then
     "$MYSQLD" --defaults-file="/c/xampp/mysql/bin/my.ini" --console >/dev/null 2>&1 &
     "$PHP" scripts/wait-mysql.php
   else
     # Generic Linux: assume a running mysqld/service
-    "$PHP" scripts/wait-mysql.php || { echo "Inicie o serviço MySQL e tente novamente."; exit 1; }
+    "$PHP" scripts/wait-mysql.php || { echo "Start the MySQL service and try again."; exit 1; }
   fi
 else
-  echo "MySQL já está a correr."
+  echo "MySQL is already running."
 fi
 
-echo; echo "[5/6] Importar base de dados..."
+echo; echo "[5/6] Importing database..."
 "$MYSQL" -u root --default-character-set=utf8mb4 < database/wisewallet.sql
-echo "Base de dados importada."
+echo "Database imported."
 
-echo; echo "[6/6] Gerar sitemap e arrancar o servidor..."
+echo; echo "[6/6] Generating sitemap and starting the server..."
 "$PHP" scripts/make-sitemap.php
 
 echo "==================================================="
-echo " Pronto! A abrir http://localhost:8000"
+echo " Done! Opening http://localhost:8000"
 echo " Admin: admin@wisewallet.local / Admin@WiseWallet2026"
 echo " Demo:  demo@wisewallet.local  / Demo@WiseWallet2026"
 echo "==================================================="

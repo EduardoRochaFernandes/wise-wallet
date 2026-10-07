@@ -1,46 +1,47 @@
-# Contribuir para a WiseWallet
+# Contributing to WiseWallet
 
-Obrigado pelo interesse! Contribuições são bem-vindas — código, documentação,
-reporte de bugs ou ideias.
+Thanks for your interest! Bug reports, ideas, docs fixes and code are all welcome.
 
-## Como começar
+## Getting started
 
-1. Faz **fork** e clona o repositório.
-2. Garante os pré-requisitos: **PHP 8.0+** (com `pdo_mysql`, `openssl`, `curl`,
-   `mbstring`), **MySQL/MariaDB**, **Node 18+**. (No Windows, o XAMPP já traz tudo.)
-3. Corre o setup de 1 clique:
-   - Windows: `setup.bat`
-   - Linux/macOS/Git Bash: `bash setup.sh`
-4. Abre `http://localhost:8000`.
+The quickest path is a container (no local PHP or MySQL needed):
 
-## Fluxo de trabalho
+- **Codespaces:** click *Code -> Codespaces -> Create codespace on main* (see the README).
+- **Docker:** `docker compose up --build`, then open <http://localhost:8080>.
 
-1. Cria um branch a partir de `main`: `git checkout -b feat/o-meu-recurso`.
-2. Faz as alterações seguindo o estilo existente (ver abaixo).
-3. Garante que o CI passa localmente:
+Native alternative: PHP 8.0+ (`pdo_mysql`, `openssl`, `curl`, `mbstring`, `zip`),
+MySQL/MariaDB and Node 18+, then `bash setup.sh` (or `setup.bat` on Windows) and open
+<http://localhost:8000>.
+
+## Workflow
+
+1. Create a branch from `main`: `git checkout -b feat/my-change`.
+2. Make your change in the existing style (see below).
+3. Run the same checks as CI:
    ```bash
-   # Lint de todos os ficheiros PHP
-   find app public scripts -name "*.php" -print0 | xargs -0 -n1 php -l
-   # Build dos assets
-   npm run build
+   find app public scripts tests vendor -name "*.php" -print0 | xargs -0 -n1 php -l   # PHP lint
+   npm run build                                                                       # CSS bundle
+   docker compose up --build -d --wait
+   docker compose exec -T -e WW_TEST_BASE=http://localhost web php tests/security-checks.php
    ```
-4. Faz commit com mensagens claras (recomendado: [Conventional Commits](https://www.conventionalcommits.org/)).
-5. Abre um Pull Request usando o template e descreve o "porquê".
+4. Commit with clear messages ([Conventional Commits](https://www.conventionalcommits.org/) recommended).
+5. Open a pull request using the template and explain the *why*.
 
-## Estilo de código
+## Code style
 
-- **PHP**: `declare(strict_types=1)`, PSR-12 aproximado, sempre **prepared
-  statements** via a classe `Database`, e **escapar todo o output** com `e()`.
-- **Segurança primeiro**: qualquer endpoint que altere dados tem de validar
-  input (classe `Validator`), respeitar CSRF (automático no bootstrap) e
-  verificar a posse do recurso (`Auth::ownOr404`).
-- **JS**: ES6 vanilla, sem dependências pesadas. Nada de inline scripts sem nonce.
-- **CSS**: usar tokens/utilitários do Tailwind; cores via variáveis de tema.
+- **PHP:** `declare(strict_types=1)`, roughly PSR-12, always use **prepared statements**
+  through the `Database` class, and **escape all output** with `e()`.
+- **Security first:** any endpoint that changes data must validate input (`Validator`),
+  be covered by CSRF (automatic through the bootstrap) and verify resource ownership
+  (`Auth::ownOr404`).
+- **JavaScript:** vanilla ES6, no heavy dependencies, no inline scripts without the CSP nonce.
+- **CSS:** Tailwind utilities and theme tokens.
 
-## Estrutura
+## Structure
 
-Ver a secção *Arquitetura* no [README](README.md).
+See *Project structure* in the [README](README.md).
 
-## Reportar bugs / pedir features
+## Reporting bugs and requesting features
 
-Usa os templates em **Issues**. Inclui passos de reprodução e ambiente.
+Use the issue templates. For security problems follow [SECURITY.md](SECURITY.md) instead
+of opening a public issue.

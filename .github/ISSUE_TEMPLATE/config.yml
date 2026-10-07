@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 🔒 Reportar vulnerabilidade de segurança
-    url: https://github.com/your-user/wisewallet/security/advisories/new
-    about: Por favor reporta problemas de segurança em privado (ver SECURITY.md).
+  - name: Report a security vulnerability
+    url: https://github.com/EduardoRochaFernandes/wise-wallet/security/advisories/new
+    about: Please report security problems privately (see SECURITY.md).

@@ -88,7 +88,7 @@
     }
     const res = await fetch(url, opts);
     const data = json ? await res.json().catch(() => ({})) : await res.text();
-    if (!res.ok) throw Object.assign(new Error(data.error || 'Erro de pedido'), { status: res.status, data });
+    if (!res.ok) throw Object.assign(new Error(data.error || 'Request failed'), { status: res.status, data });
     return data;
   };
 

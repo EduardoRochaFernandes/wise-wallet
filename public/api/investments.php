@@ -15,7 +15,7 @@ switch ($method) {
         $v->required('name', 'Nome')->max('name', 150, 'Nome');
         $v->required('type', 'Tipo')->in('type', $types, 'Tipo');
         $v->required('quantity', 'Quantidade')->numeric('quantity', 'Quantidade');
-        $v->required('buy_price', 'Preço de compra')->numeric('buy_price', 'Preço de compra');
+        $v->required('buy_price', 'Purchase price')->numeric('buy_price', 'Purchase price');
         if ($v->fails()) { json_out(['error' => $v->firstError()], 422); }
         $id = Database::insert(
             "INSERT INTO investments (user_id,name,symbol,type,quantity,buy_price,current_price,currency,purchased_on,created_at)
@@ -41,4 +41,4 @@ switch ($method) {
         Database::run("DELETE FROM investments WHERE id=? AND user_id=?", [$id, $uid]);
         json_out(['ok' => true]);
 }
-json_out(['error' => 'Método não suportado'], 405);
+json_out(['error' => 'Method not supported'], 405);

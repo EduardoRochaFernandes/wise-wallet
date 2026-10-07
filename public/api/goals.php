@@ -31,7 +31,7 @@ switch ($method) {
         $id = (int) ($body['id'] ?? 0);
         Auth::ownOr404(Database::scalar("SELECT user_id FROM goals WHERE id=?", [$id]));
         $amount = round((float) ($body['amount'] ?? 0), 2);
-        if ($amount <= 0) { json_out(['error' => 'Valor inválido.'], 422); }
+        if ($amount <= 0) { json_out(['error' => 'Invalid amount.'], 422); }
         Database::begin();
         try {
             Database::run("INSERT INTO goal_contributions (goal_id,user_id,amount,note,contributed_on,created_at) VALUES (?,?,?,?,CURDATE(),NOW())",
@@ -39,7 +39,7 @@ switch ($method) {
             Database::run("UPDATE goals SET current_amount = current_amount + ? WHERE id=? AND user_id=?", [$amount, $id, $uid]);
             Database::run("UPDATE goals SET status='completed' WHERE id=? AND current_amount>=target_amount AND status<>'completed'", [$id]);
             Database::commit();
-        } catch (Throwable $e) { Database::rollback(); json_out(['error' => 'Erro ao contribuir.'], 422); }
+        } catch (Throwable $e) { Database::rollback(); json_out(['error' => 'Could not add the contribution.'], 422); }
         Achievements::evaluate($uid);
         json_out(['ok' => true]);
 
@@ -49,4 +49,4 @@ switch ($method) {
         Database::run("DELETE FROM goals WHERE id=? AND user_id=?", [$id, $uid]);
         json_out(['ok' => true]);
 }
-json_out(['error' => 'Método não suportado'], 405);
+json_out(['error' => 'Method not supported'], 405);
